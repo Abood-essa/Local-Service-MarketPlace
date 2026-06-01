@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Local_Service_marketPlace.Models.Booking>
+@{
+    ViewData["Title"] = "Bookings";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <h4 class="mb-4">Bookings</h4>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Provider</th>
+                        <th>Service</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Customer.FirstName @item.Customer.LastName</td>
+                            <td>@item.ProviderProfile.User.FirstName @item.ProviderProfile.User.LastName</td>
+                            <td>@item.ServiceRequest.Title</td>
+                            <td>@item.ServiceRequest.Category.Name</td>
+                            <td>@item.FinalConfirmedPrice JD</td>
+                            <td>
+                                @{
+                                    var badgeColor = item.BookingStatus.ToString() switch
+                                    {
+                                        "Active" => "bg-primary",
+                                        "InProgress" => "bg-warning",
+                                        "PendingCompletion" => "bg-info",
+                                        "Completed" => "bg-success",
+                                        "Cancelled" => "bg-danger",
+                                        "Disputed" => "bg-dark",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @badgeColor">@item.BookingStatus</span>
+                            </td>
+                            <td>@item.CreatedAt.ToShortDateString()</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

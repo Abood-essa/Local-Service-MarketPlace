@@ -1,0 +1,79 @@
+﻿@model Local_Service_marketPlace.Models.Complaint
+@using Local_Service_marketPlace.Models.Enums
+
+@{
+    ViewData["Title"] = "Complaint Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>Complaint #@Model.Id</h4>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back
+        </a>
+    </div>
+
+    <div class="row">
+        <!-- Complaint Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-secondary h-100">
+                <div class="card-header"><h6 class="mb-0">Complaint Info</h6></div>
+                <div class="card-body">
+                    <p><strong>Reported By:</strong> @Model.ReportedByUser.FirstName @Model.ReportedByUser.LastName</p>
+                    <p><strong>Email:</strong> @Model.ReportedByUser.Email</p>
+                    <p><strong>Reason:</strong> @Model.Reason</p>
+                    <p><strong>Description:</strong> @Model.Description</p>
+                    <p><strong>Submitted:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                    @if (Model.ResolvedAt != null)
+                    {
+                        <p><strong>Resolved:</strong> @Model.ResolvedAt.Value.ToString("MMM dd, yyyy")</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-secondary h-100">
+                <div class="card-header"><h6 class="mb-0">Related Booking</h6></div>
+                <div class="card-body">
+                    <p><strong>Booking #:</strong> @Model.Booking.Id</p>
+                    <p><strong>Customer:</strong> @Model.Booking.Customer.FirstName @Model.Booking.Customer.LastName</p>
+                    <p><strong>Provider:</strong> @Model.Booking.ProviderProfile.User.FirstName @Model.Booking.ProviderProfile.User.LastName</p>
+                    <p><strong>Price:</strong> @Model.Booking.FinalConfirmedPrice JD</p>
+                    <p><strong>Booking Status:</strong> <span class="badge bg-info">@Model.Booking.BookingStatus</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Status -->
+    <div class="card bg-secondary mb-4">
+        <div class="card-header"><h6 class="mb-0">Update Complaint Status</h6></div>
+        <div class="card-body">
+            <form asp-action="UpdateStatus" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            @foreach (ComplaintStatus s in Enum.GetValues(typeof(ComplaintStatus)))
+                            {
+                                <option value="@s" selected="@(Model.Status == s)">@s</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3">
+                        <label class="form-label">Admin Notes</label>
+                        <textarea name="adminNotes" class="form-control" rows="2">@Model.AdminNotes</textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save me-1"></i> Update Status
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

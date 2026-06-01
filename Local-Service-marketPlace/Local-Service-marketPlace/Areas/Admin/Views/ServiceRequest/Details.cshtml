@@ -1,0 +1,128 @@
+﻿@model Local_Service_marketPlace.Models.ServiceRequest
+@using Local_Service_marketPlace.Models.Enums
+
+@{
+    ViewData["Title"] = "Request Details";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4>Service Request #@Model.Id</h4>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-1"></i> Back
+        </a>
+    </div>
+
+    <div class="row">
+
+        <!-- Request Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-secondary h-100">
+                <div class="card-header"><h6 class="mb-0">Request Info</h6></div>
+                <div class="card-body">
+                    <p><strong>Title:</strong> @Model.Title</p>
+                    <p><strong>Description:</strong> @Model.Description</p>
+                    <p><strong>Category:</strong> @Model.Category.Name</p>
+                    <p><strong>City:</strong> @Model.City</p>
+                    <p><strong>Address:</strong> @Model.Address</p>
+                    <p><strong>Preferred Date:</strong> @Model.PreferredDate.ToShortDateString()</p>
+                    <p><strong>Posted:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")</p>
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="badge bg-info">@Model.Status</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-secondary h-100">
+                <div class="card-header"><h6 class="mb-0">Customer Info</h6></div>
+                <div class="card-body">
+                    <p><strong>Name:</strong> @Model.Customer.FirstName @Model.Customer.LastName</p>
+                    <p><strong>Email:</strong> @Model.Customer.Email</p>
+                    <p><strong>Phone:</strong> @Model.Customer.PhoneNumber</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Images -->
+    @if (Model.Images != null && Model.Images.Any())
+    {
+        <div class="card bg-secondary mb-4">
+            <div class="card-header"><h6 class="mb-0">Attached Images</h6></div>
+            <div class="card-body d-flex flex-wrap gap-3">
+                @foreach (var img in Model.Images)
+                {
+                    <img src="@img.ImageUrl" style="width:120px; height:120px; object-fit:cover;"
+                         class="rounded border" />
+                }
+            </div>
+        </div>
+    }
+
+    <!-- Offers -->
+    <div class="card bg-secondary mb-4">
+        <div class="card-header"><h6 class="mb-0">Submitted Offers (@Model.Offers.Count)</h6></div>
+        <div class="card-body">
+            @if (!Model.Offers.Any())
+            {
+                <p class="text-muted">No offers submitted yet.</p>
+            }
+            else
+            {
+                <table class="table table-bordered table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Provider</th>
+                            <th>Min Price</th>
+                            <th>Max Price</th>
+                            <th>Final Price</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var offer in Model.Offers)
+                        {
+                            <tr>
+                                <td>@offer.ProviderProfile.User.FirstName @offer.ProviderProfile.User.LastName</td>
+                                <td>@offer.EstimatedMinPrice JD</td>
+                                <td>@offer.EstimatedMaxPrice JD</td>
+                                <td>@(offer.FinalPrice.HasValue? offer.FinalPrice + " JD" : "-")</td>
+                                <td><span class="badge bg-info">@offer.Status</span></td>
+                                <td>@offer.Notes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+
+    <!-- Update Status -->
+    <div class="card bg-secondary mb-4">
+        <div class="card-header"><h6 class="mb-0">Update Request Status</h6></div>
+        <div class="card-body">
+            <form asp-action="UpdateStatus" method="post" class="d-flex gap-3 align-items-end">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div>
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        @foreach (ServiceRequestStatus s in Enum.GetValues(typeof(ServiceRequestStatus)))
+                        {
+                            <option value="@s" selected="@(Model.Status == s)">@s</option>
+                        }
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-save me-1"></i> Update
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

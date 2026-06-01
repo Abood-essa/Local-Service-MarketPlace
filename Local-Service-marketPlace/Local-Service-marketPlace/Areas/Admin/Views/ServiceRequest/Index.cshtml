@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Local_Service_marketPlace.Models.ServiceRequest>
+@using Local_Service_marketPlace.Models.Enums
+
+@{
+    ViewData["Title"] = "Service Requests";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <h4 class="mb-4">Service Requests Management</h4>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th>#</th>
+                        <th>Customer</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>City</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Customer.FirstName @item.Customer.LastName</td>
+                            <td>@item.Title</td>
+                            <td>@item.Category.Name</td>
+                            <td>@item.City</td>
+                            <td>
+                                @{
+                                    var badge = item.Status switch
+                                    {
+                                        ServiceRequestStatus.Pending => "bg-warning text-dark",
+                                        ServiceRequestStatus.OfferReceived => "bg-info",
+                                        ServiceRequestStatus.WaitingForConfirmation => "bg-primary",
+                                        ServiceRequestStatus.Confirmed => "bg-primary",
+                                        ServiceRequestStatus.InProgress => "bg-warning",
+                                        ServiceRequestStatus.Completed => "bg-success",
+                                        ServiceRequestStatus.Cancelled => "bg-danger",
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @badge">@item.Status</span>
+                            </td>
+                            <td>@item.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye me-1"></i> View
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@item.Id"
+                                      method="post" class="d-inline"
+                                      onsubmit="return confirm('Delete this request?')">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

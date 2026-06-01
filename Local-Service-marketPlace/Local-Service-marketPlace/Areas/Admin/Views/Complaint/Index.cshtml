@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Local_Service_marketPlace.Models.Complaint>
+@using Local_Service_marketPlace.Models.Enums
+
+@{
+    ViewData["Title"] = "Complaints";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-secondary text-center rounded p-4">
+        <h4 class="mb-4">Customer Complaints & Disputes</h4>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                <thead>
+                    <tr class="text-white">
+                        <th>#</th>
+                        <th>Reported By</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.ReportedByUser.FirstName @item.ReportedByUser.LastName</td>
+                            <td>@item.Reason</td>
+                            <td>
+                                @{
+                                    var badge = item.Status switch
+                                    {
+                                        ComplaintStatus.Open => "bg-warning text-dark",
+                                        ComplaintStatus.UnderReview => "bg-info",
+                                        ComplaintStatus.Resolved => "bg-success",
+                                        ComplaintStatus.Dismissed => "bg-secondary",
+                                        _ => "bg-dark"
+                                    };
+                                }
+                                <span class="badge @badge">@item.Status</span>
+                            </td>
+                            <td>@item.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.Id"
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye me-1"></i> Review
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
