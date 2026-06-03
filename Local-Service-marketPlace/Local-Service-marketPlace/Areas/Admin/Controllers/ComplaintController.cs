@@ -12,51 +12,86 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public ComplaintController(ApplicationDbContext context) => _context = context;
-
-        public async Task<IActionResult> Index()
+        public ComplaintController(ApplicationDbContext context)
         {
-            var complaints = await _context.Complaints
-                .Include(c => c.Booking)
+            _context = context;
+        }
+
+        // GET: Admin/Complaint/Index
+        public async Task<IActionResult> Index(string? filter)
+        {
+            var query = _context.Complaints
                 .Include(c => c.ReportedByUser)
+                .Include(c => c.Booking)
+                    .ThenInclude(b => b.ServiceRequest)
+                .AsQueryable();
+
+            if (filter == "open")
+                query = query.Where(c => c.Status == ComplaintStatus.Open);
+            else if (filter == "underreview")
+                query = query.Where(c => c.Status == ComplaintStatus.UnderReview);
+            else if (filter == "resolved")
+                query = query.Where(c => c.Status == ComplaintStatus.Resolved);
+            else if (filter == "dismissed")
+                query = query.Where(c => c.Status == ComplaintStatus.Dismissed);
+
+            ViewBag.Filter = filter;
+
+            // Summary counts
+            ViewBag.TotalComplaints = await _context.Complaints.CountAsync();
+            ViewBag.OpenCount = await _context.Complaints.CountAsync(c => c.Status == ComplaintStatus.Open);
+            ViewBag.UnderReviewCount = await _context.Complaints.CountAsync(c => c.Status == ComplaintStatus.UnderReview);
+            ViewBag.ResolvedCount = await _context.Complaints.CountAsync(c => c.Status == ComplaintStatus.Resolved);
+            ViewBag.DismissedCount = await _context.Complaints.CountAsync(c => c.Status == ComplaintStatus.Dismissed);
+
+            var complaints = await query
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
             return View(complaints);
         }
 
+        // GET: Admin/Complaint/Details/5
         public async Task<IActionResult> Details(int id)
         {
             var complaint = await _context.Complaints
+                .Include(c => c.ReportedByUser)
+                .Include(c => c.Booking)
+                    .ThenInclude(b => b.ServiceRequest)
                 .Include(c => c.Booking)
                     .ThenInclude(b => b.Customer)
                 .Include(c => c.Booking)
                     .ThenInclude(b => b.ProviderProfile)
                         .ThenInclude(p => p.User)
-                .Include(c => c.ReportedByUser)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (complaint == null) return NotFound();
+            if (complaint == null)
+                return NotFound();
 
             return View(complaint);
         }
 
+        // POST: Admin/Complaint/UpdateStatus
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateStatus(int id, ComplaintStatus status, string? adminNotes)
         {
             var complaint = await _context.Complaints.FindAsync(id);
-            if (complaint == null) return NotFound();
+
+            if (complaint == null)
+                return NotFound();
 
             complaint.Status = status;
             complaint.AdminNotes = adminNotes;
 
             if (status == ComplaintStatus.Resolved || status == ComplaintStatus.Dismissed)
                 complaint.ResolvedAt = DateTime.Now;
+            else
+                complaint.ResolvedAt = null;
 
             await _context.SaveChangesAsync();
 
-            TempData["Success"] = "Complaint status updated!";
+            TempData["Success"] = "Complaint updated successfully.";
             return RedirectToAction(nameof(Details), new { id });
         }
     }

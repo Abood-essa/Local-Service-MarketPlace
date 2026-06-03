@@ -15,6 +15,8 @@ namespace Local_Service_marketPlace.Models
         [Column(TypeName = "decimal(18,2)")] public decimal CommissionAmount { get; set; }
         [Column(TypeName = "decimal(18,2)")] public decimal ProviderEarnings { get; set; }
         public BookingStatus BookingStatus { get; set; }
+
+        public PaymentMethod? SelectedPaymentMethod { get; set; }
         public DateTime? StartedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;

@@ -1,0 +1,96 @@
+﻿@model List<Local_Service_marketPlace.Models.Complaint>
+@using Local_Service_marketPlace.Models.Enums
+@{
+    ViewData["Title"] = "My Complaints";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2><i class="fas fa-flag text-danger me-2"></i>My Complaints</h2>
+    <p>Track the status of complaints you have filed.</p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="fas fa-flag"></i>
+        <h5>No Complaints Filed</h5>
+        <p>You haven't filed any complaints yet.</p>
+    </div>
+}
+else
+{
+    @foreach (var complaint in Model)
+    {
+        var (badgeClass, statusIcon) = complaint.Status switch
+        {
+            ComplaintStatus.Open => ("bg-danger", "fa-exclamation-circle"),
+            ComplaintStatus.UnderReview => ("bg-warning text-dark", "fa-search"),
+            ComplaintStatus.Resolved => ("bg-success", "fa-check-circle"),
+            ComplaintStatus.Dismissed => ("bg-secondary", "fa-ban"),
+            _ => ("bg-secondary", "fa-question")
+        };
+
+        <div class="k-card mb-3">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+
+                <div>
+                    <p class="fw-700 mb-1">
+                        <i class="fas fa-tools text-primary me-1"></i>
+                        @complaint.Booking?.ServiceRequest?.Title
+                    </p>
+                    <p class="small text-muted mb-0">
+                        <i class="fas fa-user-hard-hat me-1"></i>
+                        @complaint.Booking?.ProviderProfile?.User?.FirstName
+                        @complaint.Booking?.ProviderProfile?.User?.LastName
+                        &nbsp;·&nbsp;
+                        <i class="fas fa-calendar me-1"></i>
+                        @complaint.CreatedAt.ToString("MMM dd, yyyy")
+                    </p>
+                </div>
+
+                <span class="badge @badgeClass badge-status">
+                    <i class="fas @statusIcon me-1"></i>@complaint.Status
+                </span>
+
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <p class="small text-muted mb-1">Reason</p>
+                    <p class="fw-600 mb-0">@complaint.Reason</p>
+                </div>
+                <div class="col-md-6">
+                    <p class="small text-muted mb-1">Description</p>
+                    <p class="small mb-0">@complaint.Description</p>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrWhiteSpace(complaint.AdminNotes))
+            {
+                <div class="mt-3 p-3" style="background:#f0fdf4; border-radius:8px; border-left: 3px solid #16a34a;">
+                    <p class="small fw-700 text-success mb-1">
+                        <i class="fas fa-comment-dots me-1"></i>Admin Response
+                    </p>
+                    <p class="small mb-0">@complaint.AdminNotes</p>
+                </div>
+            }
+
+            @if (complaint.ResolvedAt.HasValue)
+            {
+                <p class="small text-muted mt-2 mb-0">
+                    <i class="fas fa-check-double me-1 text-success"></i>
+                    Closed on @complaint.ResolvedAt.Value.ToString("MMM dd, yyyy")
+                </p>
+            }
+        </div>
+    }
+}

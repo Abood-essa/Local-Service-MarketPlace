@@ -1,0 +1,217 @@
+﻿@model List<Local_Service_marketPlace.Models.WalletTransaction>
+@using Local_Service_marketPlace.Models
+@{
+    ViewData["Title"] = "Wallet";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    var providerWallets = ViewBag.ProviderWallets as List<Local_Service_marketPlace.Models.ProviderProfile>;
+    var totalCommissions = (decimal)ViewBag.TotalCommissions;
+    var totalTopUps = (decimal)ViewBag.TotalTopUps;
+    var providersInDebt = (int)ViewBag.ProvidersInDebt;
+    string? currentFilter = ViewBag.Filter as string;
+}
+
+<div class="container-fluid pt-4 px-4">
+
+    <!-- Page Header -->
+    <div class="d-flex align-items-center mb-4">
+        <i class="fa fa-wallet fa-2x text-primary me-3"></i>
+        <h4 class="mb-0">Wallet Management</h4>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4">
+
+        <!-- Total Top-Ups -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-arrow-circle-up fa-3x text-success"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Top-Ups</p>
+                    <h6 class="mb-0">@totalTopUps JD</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Commissions -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-percentage fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Commissions</p>
+                    <h6 class="mb-0">@totalCommissions JD</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Providers in Debt -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-exclamation-triangle fa-3x text-danger"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Providers in Debt</p>
+                    <h6 class="mb-0">@providersInDebt</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Transactions -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-exchange-alt fa-3x text-info"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Transactions</p>
+                    <h6 class="mb-0">@Model.Count</h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Provider Wallet Balances -->
+    <div class="row g-4 mt-1">
+        <div class="col-12">
+            <div class="bg-secondary rounded p-4">
+
+                <h5 class="mb-4">Provider Wallet Balances</h5>
+
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                            <tr class="text-white">
+                                <th>Provider</th>
+                                <th>Email</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (providerWallets != null)
+                            {
+                                @foreach (var provider in providerWallets)
+                                {
+                                    <tr>
+                                        <td>@provider.User.FirstName @provider.User.LastName</td>
+                                        <td>@provider.User.Email</td>
+                                        <td class="@(provider.WalletBalance < 0 ? "text-danger" : "text-success")">
+                                            @provider.WalletBalance JD
+                                        </td>
+                                        <td>
+                                            @if (provider.WalletBalance < 0)
+                                            {
+                                                <span class="badge bg-danger">In Debt</span>
+                                            }
+                                            else if (provider.WalletBalance == 0)
+                                            {
+                                                <span class="badge bg-warning">Zero</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Positive</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Log -->
+    <div class="row g-4 mt-1">
+        <div class="col-12">
+            <div class="bg-secondary rounded p-4">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">Transaction Log</h5>
+
+                    <!-- Filter Buttons -->
+                    <div class="d-flex gap-2">
+                        <a asp-area="Admin" asp-controller="Wallet" asp-action="Index"
+                           class="btn btn-sm @(currentFilter == null ? "btn-primary" : "btn-outline-secondary")">
+                            All
+                        </a>
+                        <a asp-area="Admin" asp-controller="Wallet" asp-action="Index"
+                           asp-route-filter="topup"
+                           class="btn btn-sm @(currentFilter == "topup" ? "btn-success" : "btn-outline-success")">
+                            <i class="fa fa-arrow-circle-up me-1"></i>Top-Ups
+                        </a>
+                        <a asp-area="Admin" asp-controller="Wallet" asp-action="Index"
+                           asp-route-filter="commission"
+                           class="btn btn-sm @(currentFilter == "commission" ? "btn-primary" : "btn-outline-primary")">
+                            <i class="fa fa-percentage me-1"></i>Commissions
+                        </a>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                            <tr class="text-white">
+                                <th>Provider</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Booking</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var tx in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @tx.ProviderProfile.User.FirstName
+                                        @tx.ProviderProfile.User.LastName
+                                    </td>
+                                    <td>
+                                        @if (tx.Type == TransactionType.TopUp)
+                                        {
+                                            <span class="badge bg-success">Top-Up</span>
+                                        }
+                                        else if (tx.Type == TransactionType.CommissionDeduction)
+                                        {
+                                            <span class="badge bg-primary">Commission</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@tx.Type</span>
+                                        }
+                                    </td>
+                                    <td class="@(tx.Type == TransactionType.CommissionDeduction ? "text-danger" : "text-success")">
+                                        @(tx.Type == TransactionType.CommissionDeduction ? "-" : "+")@tx.Amount JD
+                                    </td>
+                                    <td>
+                                        @if (tx.Booking != null)
+                                        {
+                                            <span>@tx.Booking.ServiceRequest?.Title</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">—</span>
+                                        }
+                                    </td>
+                                    <td>@tx.CreatedAt.ToShortDateString()</td>
+                                </tr>
+                            }
+
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">
+                                        No transactions found.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

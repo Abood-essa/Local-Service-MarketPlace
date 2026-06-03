@@ -1,0 +1,190 @@
+﻿@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models.Enums
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+
+    var profile = ViewBag.Profile as ProviderProfile;
+    var latestBookings = ViewBag.LatestBookings as List<Booking>;
+    var latestReviews = ViewBag.LatestReviews as List<Review>;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@* Verification warning *@
+@if (profile != null && !profile.IsVerified)
+{
+    <div class="verified-banner mb-4">
+        <i class="fas fa-hourglass-half me-2"></i>
+        <strong>Pending Verification</strong> — Your profile is under review by our admin team.
+        You can browse open requests but cannot submit offers until verified.
+    </div>
+}
+
+@* Stats row *@
+<div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.ActiveBookings</div>
+            <div class="stat-label"><i class="fas fa-play-circle me-1"></i>Active Bookings</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.PendingOffers</div>
+            <div class="stat-label"><i class="fas fa-file-alt me-1"></i>Pending Offers</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-number">@ViewBag.PendingCompletion</div>
+            <div class="stat-label"><i class="fas fa-hourglass-end me-1"></i>Awaiting Confirm</div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="stat-card">
+            <div class="stat-number text-success">@ViewBag.TotalEarnings JD</div>
+            <div class="stat-label"><i class="fas fa-wallet me-1"></i>Total Earnings</div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+
+    @* Profile summary card *@
+    <div class="col-lg-4">
+        <div class="k-card h-100">
+            <h6 class="fw-700 mb-3">
+                <i class="fas fa-user-circle text-primary me-2"></i>My Profile
+            </h6>
+            <div class="text-center mb-3">
+                <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center text-white fw-800 mb-2"
+                     style="width:64px;height:64px;font-size:1.5rem;">
+                    @User.Identity?.Name?.Substring(0, 1).ToUpper()
+                </div>
+                <div class="fw-700">@User.Identity?.Name</div>
+                <div class="mt-1">
+                    @if (profile?.IsVerified == true)
+                    {
+                        <span class="badge bg-success">
+                            <i class="fas fa-shield-alt me-1"></i>Verified
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">
+                            <i class="fas fa-clock me-1"></i>Pending Verification
+                        </span>
+                    }
+                </div>
+            </div>
+            <ul class="list-unstyled small text-muted">
+                <li class="mb-1">
+                    <i class="fas fa-star text-warning me-2"></i>
+                    <strong>@profile?.AverageRating.ToString("0.0")</strong> average rating
+                </li>
+                <li class="mb-1">
+                    <i class="fas fa-briefcase me-2 text-primary"></i>
+                    <strong>@profile?.CompletedJobsCount</strong> jobs completed
+                </li>
+                <li class="mb-1">
+                    <i class="fas fa-clock me-2 text-primary"></i>
+                    Available @profile?.AvailableFrom.ToString(@"hh\:mm") —
+                    @profile?.AvailableTo.ToString(@"hh\:mm")
+                </li>
+            </ul>
+            <a asp-area="Provider" asp-controller="Profile" asp-action="Index"
+               class="btn btn-outline-primary btn-sm w-100 mt-2">
+                <i class="fas fa-eye me-1"></i> View Full Profile
+            </a>
+        </div>
+    </div>
+
+    @* Latest bookings *@
+    <div class="col-lg-8">
+        <div class="k-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="fw-700 mb-0">
+                    <i class="fas fa-calendar-check text-primary me-2"></i>Recent Bookings
+                </h6>
+                <a asp-area="Provider" asp-controller="Booking" asp-action="Index"
+                   class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+
+            @if (latestBookings == null || !latestBookings.Any())
+            {
+                <p class="text-muted small text-center py-3">No bookings yet.</p>
+            }
+            else
+            {
+                @foreach (var b in latestBookings)
+                {
+                    var (badge, _) = b.BookingStatus switch
+                    {
+                        BookingStatus.Active => ("bg-primary", ""),
+                        BookingStatus.InProgress => ("bg-warning text-dark", ""),
+                        BookingStatus.PendingCompletion => ("bg-info text-dark", ""),
+                        BookingStatus.Completed => ("bg-success", ""),
+                        BookingStatus.Cancelled => ("bg-danger", ""),
+                        _ => ("bg-secondary", "")
+                    };
+                    <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                        <div>
+                            <div class="fw-600 small">@b.ServiceRequest?.Title</div>
+                            <div class="text-muted small">
+                                @b.Customer?.FirstName @b.Customer?.LastName
+                                &nbsp;·&nbsp; @b.CreatedAt.ToString("MMM dd")
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge @badge badge-status">@b.BookingStatus</span>
+                            <a asp-area="Provider" asp-controller="Booking"
+                               asp-action="Details" asp-route-id="@b.Id"
+                               class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    @* Latest reviews *@
+    @if (latestReviews != null && latestReviews.Any())
+    {
+        <div class="col-12">
+            <div class="k-card">
+                <h6 class="fw-700 mb-3">
+                    <i class="fas fa-star text-warning me-2"></i>Recent Reviews
+                </h6>
+                <div class="row g-3">
+                    @foreach (var r in latestReviews)
+                    {
+                        <div class="col-md-4">
+                            <div class="border rounded p-3">
+                                <div class="mb-1">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <i class="fas fa-star @(i <= r.Rating ? "text-warning" : "text-muted")" style="font-size:.8rem;"></i>
+                                    }
+                                </div>
+                                <p class="small text-muted mb-1">@r.Comment</p>
+                                <div class="small text-muted">
+                                    — @r.Customer?.FirstName &nbsp;·&nbsp; @r.CreatedAt.ToString("MMM dd")
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

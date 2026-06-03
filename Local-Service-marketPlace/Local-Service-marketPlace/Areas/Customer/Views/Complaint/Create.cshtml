@@ -1,0 +1,114 @@
+﻿@using Local_Service_marketPlace.Models
+@{
+    ViewData["Title"] = "File a Complaint";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+    var booking = ViewBag.Booking as Local_Service_marketPlace.Models.Booking;
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="page-header">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <h2><i class="fas fa-flag text-danger me-2"></i>File a Complaint</h2>
+            <p>Booking #@booking?.Id — @booking?.ServiceRequest?.Title</p>
+        </div>
+        <a asp-area="Customer" asp-controller="Booking" asp-action="Details"
+           asp-route-id="@booking?.Id" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i> Back to Booking
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+
+        <!-- Booking Summary -->
+        <div class="k-card mb-3">
+            <h6 class="fw-700 mb-3">
+                <i class="fas fa-calendar-check text-primary me-2"></i>Booking Summary
+            </h6>
+            <ul class="list-unstyled small text-muted mb-0">
+                <li class="mb-1">
+                    <i class="fas fa-tools me-2 text-primary"></i>
+                    <strong>Service:</strong> @booking?.ServiceRequest?.Title
+                </li>
+                <li class="mb-1">
+                    <i class="fas fa-user-hard-hat me-2 text-primary"></i>
+                    <strong>Provider:</strong>
+                    @booking?.ProviderProfile?.User?.FirstName
+                    @booking?.ProviderProfile?.User?.LastName
+                </li>
+                <li>
+                    <i class="fas fa-money-bill me-2 text-primary"></i>
+                    <strong>Price:</strong> @booking?.FinalConfirmedPrice JD
+                </li>
+            </ul>
+        </div>
+
+        <!-- Complaint Form -->
+        <div class="k-card">
+            <h6 class="fw-700 mb-4">
+                <i class="fas fa-exclamation-triangle text-danger me-2"></i>Complaint Details
+            </h6>
+
+            <form asp-area="Customer" asp-controller="Complaint" asp-action="Create"
+                  method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="bookingId" value="@booking?.Id" />
+
+                <!-- Reason -->
+                <div class="mb-3">
+                    <label class="form-label fw-600">
+                        Reason <span class="text-danger">*</span>
+                    </label>
+                    <select name="reason" class="form-select" required>
+                        <option value="" disabled selected>Select a reason...</option>
+                        <option value="No Show">No Show — Provider did not show up</option>
+                        <option value="Poor Quality">Poor Quality — Work was unsatisfactory</option>
+                        <option value="Overcharge">Overcharge — Charged more than agreed</option>
+                        <option value="Rude Behavior">Rude Behavior — Unprofessional conduct</option>
+                        <option value="Incomplete Work">Incomplete Work — Job was not finished</option>
+                        <option value="Damaged Property">Damaged Property — Caused damage</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                    <label class="form-label fw-600">
+                        Description <span class="text-danger">*</span>
+                    </label>
+                    <textarea name="description" rows="5" class="form-control" required
+                              placeholder="Please describe the issue in detail. The more information you provide, the faster we can resolve it."></textarea>
+                    <div class="form-text text-muted">Minimum 20 characters. Be as specific as possible.</div>
+                </div>
+
+                <!-- Info note -->
+                <div class="alert alert-warning" style="border-radius:10px; border:none; background:#fef9c3; color:#854d0e;">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Our admin team will review your complaint and respond within 24–48 hours.
+                    You can track the status under <strong>My Complaints</strong>.
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-flag me-1"></i> Submit Complaint
+                    </button>
+                    <a asp-area="Customer" asp-controller="Booking" asp-action="Details"
+                       asp-route-id="@booking?.Id" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>

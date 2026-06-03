@@ -1,0 +1,168 @@
+﻿@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models.Enums
+@model Local_Service_marketPlace.Models.ServiceRequest
+@{
+    ViewData["Title"] = "Request Details";
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+
+    var profile = ViewBag.Profile as ProviderProfile;
+    var existingOffer = ViewBag.ExistingOffer as ServiceOffer;
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+        <i class="fas fa-arrow-left me-1"></i> Back to Requests
+    </a>
+</div>
+
+<div class="row g-4">
+
+    @* Request details *@
+    <div class="col-lg-7">
+        <div class="k-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="fw-700 mb-0">@Model.Title</h5>
+                <span class="badge bg-primary badge-status">@Model.Category?.Name</span>
+            </div>
+
+            <p class="text-muted mb-3">@Model.Description</p>
+
+            <ul class="list-unstyled small text-muted mb-3">
+                <li class="mb-1">
+                    <i class="fas fa-user me-2 text-primary"></i>
+                    <strong>Customer:</strong> @Model.Customer?.FirstName @Model.Customer?.LastName
+                </li>
+                <li class="mb-1">
+                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>
+                    <strong>Location:</strong> @Model.Address, @Model.City
+                </li>
+                <li class="mb-1">
+                    <i class="fas fa-calendar me-2 text-primary"></i>
+                    <strong>Preferred Date:</strong> @Model.PreferredDate.ToString("MMMM dd, yyyy")
+                </li>
+                <li>
+                    <i class="fas fa-clock me-2 text-primary"></i>
+                    <strong>Posted:</strong> @Model.CreatedAt.ToString("MMM dd, yyyy")
+                </li>
+            </ul>
+
+            @if (Model.Images != null && Model.Images.Any())
+            {
+                <div class="row g-2 mt-2">
+                    @foreach (var img in Model.Images)
+                    {
+                        <div class="col-3">
+                            <a href="@img.ImageUrl" target="_blank">
+                                <img src="@img.ImageUrl" class="img-fluid rounded"
+                                     style="height:80px;width:100%;object-fit:cover;" />
+                            </a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    @* Offer panel *@
+    <div class="col-lg-5">
+
+        @if (existingOffer != null)
+        {
+            @* Already submitted an offer *@
+            <div class="k-card border-start border-success border-3">
+                <h6 class="fw-700 text-success mb-3">
+                    <i class="fas fa-check-circle me-2"></i>Offer Submitted
+                </h6>
+                <ul class="list-unstyled small text-muted mb-3">
+                    <li class="mb-1">
+                        <strong>Estimated Range:</strong>
+                        @existingOffer.EstimatedMinPrice JD — @existingOffer.EstimatedMaxPrice JD
+                    </li>
+                    @if (!string.IsNullOrEmpty(existingOffer.Notes))
+                    {
+                        <li class="mb-1"><strong>Notes:</strong> @existingOffer.Notes</li>
+                    }
+                    <li>
+                        <strong>Status:</strong>
+                        <span class="badge bg-warning text-dark ms-1">@existingOffer.Status</span>
+                    </li>
+                </ul>
+                <p class="small text-muted mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Waiting for the customer to review your offer. You can submit a final price
+                    once you've inspected the job from your Bookings page.
+                </p>
+            </div>
+        }
+        else if (!profile!.IsVerified)
+        {
+            @* Not verified *@
+            <div class="k-card border-start border-warning border-3">
+                <h6 class="fw-700 text-warning mb-2">
+                    <i class="fas fa-lock me-2"></i>Verification Required
+                </h6>
+                <p class="small text-muted mb-0">
+                    Your account must be verified by an admin before you can submit offers.
+                    This usually takes 1–2 business days after submitting your profile.
+                </p>
+            </div>
+        }
+        else
+        {
+            @* Submit offer form *@
+            <div class="k-card">
+                <h6 class="fw-700 mb-3">
+                    <i class="fas fa-file-alt text-primary me-2"></i>Submit Your Offer
+                </h6>
+                <p class="small text-muted mb-3">
+                    Provide an estimated price range. You'll submit the exact final price
+                    after inspecting the job on-site.
+                </p>
+
+                <form asp-action="SubmitOffer" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="ServiceRequestId" value="@Model.Id" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small">Estimated Min Price (JD)</label>
+                        <input type="number" name="EstimatedMinPrice" step="0.5" min="1"
+                               class="form-control" placeholder="e.g. 20" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small">Estimated Max Price (JD)</label>
+                        <input type="number" name="EstimatedMaxPrice" step="0.5" min="1"
+                               class="form-control" placeholder="e.g. 50" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-600 small">Notes <span class="text-muted fw-400">(optional)</span></label>
+                        <textarea name="Notes" class="form-control" rows="3"
+                              placeholder="Any questions or comments for the customer?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100"
+                            onclick="return confirm('Submit this offer?')">
+                        <i class="fas fa-paper-plane me-1"></i> Submit Offer
+                    </button>
+                </form>
+            </div>
+        }
+
+    </div>
+</div>

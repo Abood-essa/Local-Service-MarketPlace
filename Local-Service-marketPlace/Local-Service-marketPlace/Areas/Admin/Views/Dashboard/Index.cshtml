@@ -1,97 +1,151 @@
 ﻿@model Local_Service_marketPlace.Models.ViewModels.DashboardViewModel
 @{
     ViewData["Title"] = "Dashboard";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml"; 
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
-
-
-
 
 <div class="container-fluid pt-4 px-4">
 
-    <!-- Statistics Cards -->
+    <!-- Row 1: Core Counts -->
     <div class="row g-4">
 
         <!-- Users -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-users fa-3x text-primary"></i>
-
                 <div class="ms-3">
-                    <p class="mb-2">Users</p>
+                    <p class="mb-2">Total Users</p>
                     <h6 class="mb-0">@Model.TotalUsers</h6>
                 </div>
             </div>
         </div>
 
-        <!-- Providers -->
+        <!-- Total Providers -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-user-tie fa-3x text-primary"></i>
-
                 <div class="ms-3">
-                    <p class="mb-2">Providers</p>
+                    <p class="mb-2">Total Providers</p>
                     <h6 class="mb-0">@Model.TotalProviders</h6>
                 </div>
             </div>
         </div>
 
-        <!-- Requests -->
+        <!-- Verified Providers -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-user-check fa-3x text-success"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Verified Providers</p>
+                    <h6 class="mb-0">@Model.VerifiedProviders</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Verification -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-user-clock fa-3x text-warning"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Pending Verification</p>
+                    <h6 class="mb-0">@Model.PendingVerification</h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Row 2: Requests & Bookings -->
+    <div class="row g-4 mt-1">
+
+        <!-- Total Requests -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-list fa-3x text-primary"></i>
-
                 <div class="ms-3">
-                    <p class="mb-2">Requests</p>
+                    <p class="mb-2">Total Requests</p>
                     <h6 class="mb-0">@Model.TotalRequests</h6>
                 </div>
             </div>
         </div>
 
-        <!-- Bookings -->
+        <!-- Total Bookings -->
         <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-calendar-check fa-3x text-primary"></i>
-
                 <div class="ms-3">
-                    <p class="mb-2">Bookings</p>
+                    <p class="mb-2">Total Bookings</p>
                     <h6 class="mb-0">@Model.TotalBookings</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Bookings -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-spinner fa-3x text-info"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Active Bookings</p>
+                    <h6 class="mb-0">@Model.ActiveBookings</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Bookings -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-check-circle fa-3x text-success"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Completed Bookings</p>
+                    <h6 class="mb-0">@Model.CompletedBookings</h6>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <!-- Revenue + Complaints -->
+    <!-- Row 3: Financial & Complaints -->
     <div class="row g-4 mt-1">
 
-        <!-- Revenue -->
-        <div class="col-md-6">
+        <!-- Total Revenue -->
+        <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded p-4">
-                <h5>Total Revenue</h5>
-
-                <h2 class="text-success mt-3">
-                    @Model.TotalRevenue JD
-                </h2>
+                <p class="mb-2">Total Revenue</p>
+                <h4 class="text-success mb-0">@Model.TotalRevenue JD</h4>
             </div>
         </div>
 
-        <!-- Complaints -->
-        <div class="col-md-6">
+        <!-- Wallet Commissions -->
+        <div class="col-sm-6 col-xl-3">
             <div class="bg-secondary rounded p-4">
-                <h5>Pending Complaints</h5>
+                <p class="mb-2">Wallet Commissions</p>
+                <h4 class="text-success mb-0">@Model.TotalWalletCommissions JD</h4>
+            </div>
+        </div>
 
-                <h2 class="text-danger mt-3">
-                    @Model.PendingComplaints
-                </h2>
+        <!-- Providers in Debt -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded p-4">
+                <p class="mb-2">Providers in Debt</p>
+                <h4 class="text-danger mb-0">
+                    @Model.ProvidersInDebt
+                    <span class="fs-6 text-muted ms-1">(@Model.TotalNegativeBalances JD)</span>
+                </h4>
+            </div>
+        </div>
+
+        <!-- Pending Complaints -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded p-4">
+                <p class="mb-2">Pending Complaints</p>
+                <h4 class="text-danger mb-0">@Model.PendingComplaints</h4>
             </div>
         </div>
 
     </div>
 
-    <!-- Latest Requests -->
+    <!-- Latest Service Requests -->
     <div class="row g-4 mt-1">
-
         <div class="col-12">
             <div class="bg-secondary rounded p-4">
 
@@ -101,7 +155,6 @@
 
                 <div class="table-responsive">
                     <table class="table text-start align-middle table-bordered table-hover mb-0">
-
                         <thead>
                             <tr class="text-white">
                                 <th>Title</th>
@@ -111,48 +164,29 @@
                                 <th>Date</th>
                             </tr>
                         </thead>
-
                         <tbody>
-
                             @foreach (var item in Model.LatestRequests)
                             {
                                 <tr>
-
                                     <td>@item.Title</td>
-
-                                    <td>
-                                        @item.Customer.FirstName
-                                        @item.Customer.LastName
-                                    </td>
-
+                                    <td>@item.Customer.FirstName @item.Customer.LastName</td>
                                     <td>@item.City</td>
-
                                     <td>
-                                        <span class="badge bg-warning">
-                                            @item.Status
-                                        </span>
+                                        <span class="badge bg-warning">@item.Status</span>
                                     </td>
-
-                                    <td>
-                                        @item.CreatedAt.ToShortDateString()
-                                    </td>
-
+                                    <td>@item.CreatedAt.ToShortDateString()</td>
                                 </tr>
                             }
-
                         </tbody>
-
                     </table>
                 </div>
 
             </div>
         </div>
-
     </div>
 
     <!-- Latest Bookings -->
     <div class="row g-4 mt-1">
-
         <div class="col-12">
             <div class="bg-secondary rounded p-4">
 
@@ -161,9 +195,7 @@
                 </div>
 
                 <div class="table-responsive">
-
                     <table class="table text-start align-middle table-bordered table-hover mb-0">
-
                         <thead>
                             <tr class="text-white">
                                 <th>Customer</th>
@@ -173,49 +205,25 @@
                                 <th>Date</th>
                             </tr>
                         </thead>
-
                         <tbody>
-
                             @foreach (var item in Model.LatestBookings)
                             {
                                 <tr>
-
+                                    <td>@item.Customer.FirstName @item.Customer.LastName</td>
+                                    <td>@item.ProviderProfile.User.FirstName @item.ProviderProfile.User.LastName</td>
+                                    <td>@item.FinalConfirmedPrice JD</td>
                                     <td>
-                                        @item.Customer.FirstName
-                                        @item.Customer.LastName
+                                        <span class="badge bg-success">@item.BookingStatus</span>
                                     </td>
-
-                                    <td>
-                                        @item.ProviderProfile.User.FirstName
-                                        @item.ProviderProfile.User.LastName
-                                    </td>
-
-                                    <td>
-                                        @item.FinalConfirmedPrice JD
-                                    </td>
-
-                                    <td>
-                                        <span class="badge bg-success">
-                                            @item.BookingStatus
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        @item.CreatedAt.ToShortDateString()
-                                    </td>
-
+                                    <td>@item.CreatedAt.ToShortDateString()</td>
                                 </tr>
                             }
-
                         </tbody>
-
                     </table>
-
                 </div>
 
             </div>
         </div>
-
     </div>
 
 </div>

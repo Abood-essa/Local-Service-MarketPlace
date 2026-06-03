@@ -1,0 +1,85 @@
+﻿@model Local_Service_marketPlace.Models.ViewModels.ServiceRequestCreateViewModel
+@{
+    ViewData["Title"] = "New Request";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+
+        <div class="page-header">
+            <h2><i class="fas fa-plus-circle text-primary me-2"></i>Post a Service Request</h2>
+            <p>Describe your job and providers in matching categories will send you offers.</p>
+        </div>
+
+        <div class="k-card">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="CategoryId" class="form-label fw-600"></label>
+                    <select asp-for="CategoryId" asp-items="Model.Categories"
+                            class="form-select">
+                        <option value="">— Select a category —</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Title" class="form-label fw-600"></label>
+                    <input asp-for="Title" class="form-control"
+                           placeholder="e.g. Fix leaking kitchen sink" />
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Description" class="form-label fw-600"></label>
+                    <textarea asp-for="Description" class="form-control" rows="4"
+                              placeholder="Describe the problem in detail — what's broken, when it started, anything useful for the provider..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger small"></span>
+                </div>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8">
+                        <label asp-for="Address" class="form-label fw-600"></label>
+                        <input asp-for="Address" class="form-control"
+                               placeholder="Street address" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-4">
+                        <label asp-for="City" class="form-label fw-600"></label>
+                        <input asp-for="City" class="form-control" placeholder="City" />
+                        <span asp-validation-for="City" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PreferredDate" class="form-label fw-600"></label>
+                    <input asp-for="PreferredDate" type="date" class="form-control"
+                           min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="PreferredDate" class="text-danger small"></span>
+                    <div class="form-text">Choose a date that works for you — providers will confirm availability.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Images" class="form-label fw-600"></label>
+                    <input asp-for="Images" type="file" class="form-control"
+                           accept="image/*" multiple />
+                    <div class="form-text">Upload photos of the issue (optional, up to 5 images).</div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-paper-plane me-1"></i> Post Request
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

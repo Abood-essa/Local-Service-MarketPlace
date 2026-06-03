@@ -35,10 +35,10 @@ namespace Local_Service_marketPlace.Controllers
 
                 if (roles.Contains("Admin"))
                     return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                else if (roles.Contains("Customer"))
+                    return RedirectToAction("Index", "ServiceRequest", new { area = "Customer" });
                 else if (roles.Contains("Provider"))
-                    return RedirectToAction("Index", "Home");
-                else
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Provider" });
             }
 
             ModelState.AddModelError("", "Invalid email or password.");
@@ -83,9 +83,9 @@ namespace Local_Service_marketPlace.Controllers
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
                 if (model.Role == "Provider")
-                    return RedirectToAction("Index", "Home"); // later → complete profile
+                    return RedirectToAction("Setup", "Profile", new { area = "Provider" });
                 else
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "ServiceRequest", new { area = "Customer" });
             }
 
             foreach (var error in result.Errors)

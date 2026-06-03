@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Khidmati</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --surface: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+        }
+
+        body {
+            background-color: var(--surface);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+
+        .customer-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,.06);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand-text {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+            text-decoration: none;
+        }
+
+            .navbar-brand-text span {
+                color: var(--text);
+            }
+
+        .nav-link-custom {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.4rem 0.75rem;
+            border-radius: 8px;
+            transition: all .2s;
+            font-size: 0.925rem;
+        }
+
+            .nav-link-custom:hover,
+            .nav-link-custom.active {
+                color: var(--primary);
+                background: #eff6ff;
+            }
+
+            .nav-link-custom i {
+                margin-right: 5px;
+                font-size: 0.85rem;
+            }
+
+        .btn-logout {
+            color: var(--danger);
+            background: #fef2f2;
+            border: none;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.925rem;
+            text-decoration: none;
+            transition: all .2s;
+        }
+
+            .btn-logout:hover {
+                background: #fee2e2;
+                color: var(--danger);
+            }
+
+        .page-wrapper {
+            padding: 2rem 0;
+            min-height: calc(100vh - 65px);
+        }
+
+        .k-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,.05);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+            .k-card:hover {
+                box-shadow: 0 4px 12px rgba(0,0,0,.08);
+                transition: box-shadow .2s;
+            }
+
+        .page-header {
+            margin-bottom: 1.75rem;
+        }
+
+            .page-header h2 {
+                font-weight: 700;
+                font-size: 1.6rem;
+                color: var(--text);
+                margin-bottom: 0.25rem;
+            }
+
+            .page-header p {
+                color: var(--muted);
+                margin: 0;
+                font-size: 0.95rem;
+            }
+
+        .badge-status {
+            padding: 0.35em 0.75em;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .alert {
+            border-radius: 10px;
+            border: none;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+            .btn-primary:hover {
+                background: var(--primary-dark);
+                border-color: var(--primary-dark);
+            }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border-color: var(--border);
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+            }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--muted);
+        }
+
+            .empty-state i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                opacity: .4;
+            }
+
+            .empty-state h5 {
+                font-weight: 600;
+                color: var(--text);
+            }
+
+        .fw-600 {
+            font-weight: 600;
+        }
+
+        .fw-700 {
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="customer-navbar">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+
+                <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index"
+                   class="navbar-brand-text">
+                    Khid<span>mati</span>
+                </a>
+
+                <div class="d-flex align-items-center gap-1">
+                    <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index"
+                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "ServiceRequest" ? "active" : "")">
+                        <i class="fas fa-list-alt"></i> My Requests
+                    </a>
+                    <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Create"
+                       class="nav-link-custom">
+                        <i class="fas fa-plus-circle"></i> New Request
+                    </a>
+                    <a asp-area="Customer" asp-controller="Booking" asp-action="Index"
+                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Booking" ? "active" : "")">
+                        <i class="fas fa-calendar-check"></i> My Bookings
+                    </a>
+                    <a asp-area="Customer" asp-controller="Complaint" asp-action="MyComplaints"
+                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
+                        <i class="fas fa-flag"></i> My Complaints
+                    </a>
+                </div>
+
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-muted small fw-500">
+                        <i class="fas fa-user-circle me-1"></i>
+                        @User.Identity?.Name
+                    </span>
+                    <a asp-area="" asp-controller="Account" asp-action="Logout"
+                       class="btn-logout">
+                        <i class="fas fa-sign-out-alt me-1"></i> Logout
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-wrapper">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

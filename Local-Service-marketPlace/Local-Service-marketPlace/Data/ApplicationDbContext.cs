@@ -22,7 +22,7 @@ namespace Local_Service_marketPlace.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
-
+        public DbSet<WalletTransaction> WalletTransactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -110,6 +110,19 @@ namespace Local_Service_marketPlace.Data
                 .HasOne(n => n.User)
                 .WithMany()
                 .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            // WalletTransaction
+            modelBuilder.Entity<WalletTransaction>()
+                .HasOne(w => w.ProviderProfile)
+                .WithMany(p => p.WalletTransactions)
+                .HasForeignKey(w => w.ProviderProfileId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<WalletTransaction>()
+                .HasOne(w => w.Booking)
+                .WithMany()
+                .HasForeignKey(w => w.BookingId)
                 .OnDelete(DeleteBehavior.NoAction);
         }
     }

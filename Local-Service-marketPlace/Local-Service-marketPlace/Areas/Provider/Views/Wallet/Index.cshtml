@@ -1,0 +1,220 @@
+﻿@using Local_Service_marketPlace.Models
+@{
+    ViewData["Title"] = "My Wallet";
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+
+    var profile = ViewBag.Profile as ProviderProfile;
+    var transactions = ViewBag.Transactions as List<WalletTransaction>;
+    bool isNegative = profile?.WalletBalance < 0;
+}
+
+<div class="page-header">
+    <h2><i class="fas fa-wallet text-primary me-2"></i>My Wallet</h2>
+    <p>Manage your balance and track commission deductions.</p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@* Negative balance warning *@
+@if (isNegative)
+{
+    <div class="alert alert-danger border-0 rounded-3 mb-4">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        <strong>Your wallet balance is negative.</strong>
+        Your profile is currently hidden from customers and you cannot submit new offers
+        until you top up your wallet to cover the outstanding balance.
+    </div>
+}
+
+<div class="row g-4 mb-4">
+
+    @* Balance card *@
+    <div class="col-md-4">
+        <div class="k-card text-center h-100">
+            <div class="mb-2 text-muted small fw-600">CURRENT BALANCE</div>
+            <div class="fw-800 mb-1"
+                 style="font-size:2.5rem; color:@(isNegative ? "#dc2626" : "#0f766e")">
+                @profile?.WalletBalance.ToString("0.00") JD
+            </div>
+            @if (isNegative)
+            {
+                <span class="badge bg-danger mb-3">
+                    <i class="fas fa-exclamation-triangle me-1"></i>Negative — Top Up Required
+                </span>
+            }
+            else
+            {
+                <span class="badge bg-success mb-3">
+                    <i class="fas fa-check-circle me-1"></i>Balance OK
+                </span>
+            }
+
+            <hr />
+
+            @* Top up form *@
+            <p class="small fw-600 mb-2">Add Funds</p>
+            <form asp-action="TopUp" method="post">
+                @Html.AntiForgeryToken()
+                <div class="input-group mb-2">
+                    <input type="number" name="amount" step="1" min="1"
+                           class="form-control text-center"
+                           placeholder="Amount in JD" required />
+                    <span class="input-group-text">JD</span>
+                </div>
+                @* Quick amounts *@
+                <div class="d-flex gap-1 justify-content-center mb-3">
+                    @foreach (var q in new[] { 10, 20, 50, 100 })
+                    {
+                        <button type="button" class="btn btn-sm btn-outline-secondary quick-amount"
+                                data-amount="@q">
+                            @q JD
+                        </button>
+                    }
+                </div>
+                <button type="submit" class="btn btn-primary w-100"
+                        onclick="return confirm('Add this amount to your wallet?')">
+                    <i class="fas fa-plus-circle me-1"></i> Top Up Wallet
+                </button>
+            </form>
+        </div>
+    </div>
+
+    @* Stats *@
+    <div class="col-md-8">
+        <div class="row g-3 mb-3">
+            <div class="col-6">
+                <div class="stat-card">
+                    <div class="stat-number text-success">
+                        @(transactions?.Where(t => t.Type == TransactionType.TopUp)
+                                                .Sum(t => t.Amount).ToString("0.00")) JD
+                    </div>
+                    <div class="stat-label">
+                        <i class="fas fa-arrow-up me-1 text-success"></i>Total Topped Up
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="stat-card">
+                    <div class="stat-number text-danger">
+                        @(transactions?.Where(t => t.Type == TransactionType.CommissionDeduction)
+                                                .Sum(t => t.Amount).ToString("0.00")) JD
+                    </div>
+                    <div class="stat-label">
+                        <i class="fas fa-arrow-down me-1 text-danger"></i>Total Commission Paid
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* How it works *@
+        <div class="k-card">
+            <h6 class="fw-700 mb-3">
+                <i class="fas fa-info-circle text-primary me-2"></i>How It Works
+            </h6>
+            <ul class="list-unstyled small text-muted mb-0">
+                <li class="mb-2">
+                    <i class="fas fa-plus-circle text-success me-2"></i>
+                    Add funds to your wallet anytime using the top-up form.
+                </li>
+                <li class="mb-2">
+                    <i class="fas fa-minus-circle text-danger me-2"></i>
+                    When a job is completed, the platform commission is automatically
+                    deducted from your wallet.
+                </li>
+                <li class="mb-2">
+                    <i class="fas fa-eye-slash text-warning me-2"></i>
+                    If your balance goes negative, your profile becomes hidden from
+                    customers and you cannot submit new offers.
+                </li>
+                <li>
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Top up to bring your balance back to zero or above to restore full access.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+@* Transaction history *@
+<div class="k-card">
+    <h6 class="fw-700 mb-3">
+        <i class="fas fa-history text-primary me-2"></i>Transaction History
+    </h6>
+
+    @if (transactions == null || !transactions.Any())
+    {
+        <p class="text-muted small text-center py-3">No transactions yet.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Balance After</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in transactions)
+                    {
+                        <tr>
+                            <td class="small text-muted">
+                                @t.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+                            </td>
+                            <td>
+                                @if (t.Type == TransactionType.TopUp)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-arrow-up me-1"></i>Top Up
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-arrow-down me-1"></i>Commission
+                                    </span>
+                                }
+                            </td>
+                            <td class="small">@t.Description</td>
+                            <td class="fw-600 @(t.Type == TransactionType.TopUp ? "text-success" : "text-danger")">
+                                @(t.Type == TransactionType.TopUp ? "+" : "-")@t.Amount JD
+                            </td>
+                            <td class="fw-600 @(t.BalanceAfter < 0 ? "text-danger" : "text-success")">
+                                @t.BalanceAfter.ToString("0.00") JD
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Quick amount buttons fill the input
+        document.querySelectorAll('.quick-amount').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelector('input[name="amount"]').value = btn.dataset.amount;
+            });
+        });
+    </script>
+}

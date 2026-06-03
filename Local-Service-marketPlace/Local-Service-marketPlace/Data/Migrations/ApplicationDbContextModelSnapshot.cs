@@ -61,6 +61,9 @@ namespace Local_Service_marketPlace.Data.Migrations
                     b.Property<int>("ProviderProfileId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("SelectedPaymentMethod")
+                        .HasColumnType("int");
+
                     b.Property<int>("ServiceOfferId")
                         .HasColumnType("int");
 
@@ -290,9 +293,15 @@ namespace Local_Service_marketPlace.Data.Migrations
                     b.Property<string>("NationalIdImage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<decimal>("WalletBalance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
@@ -465,6 +474,44 @@ namespace Local_Service_marketPlace.Data.Migrations
                     b.HasIndex("ServiceRequestId");
 
                     b.ToTable("ServiceRequestImages");
+                });
+
+            modelBuilder.Entity("Local_Service_marketPlace.Models.WalletTransaction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("BalanceAfter")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("BookingId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProviderProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookingId");
+
+                    b.HasIndex("ProviderProfileId");
+
+                    b.ToTable("WalletTransactions");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -902,6 +949,24 @@ namespace Local_Service_marketPlace.Data.Migrations
                     b.Navigation("ServiceRequest");
                 });
 
+            modelBuilder.Entity("Local_Service_marketPlace.Models.WalletTransaction", b =>
+                {
+                    b.HasOne("Local_Service_marketPlace.Models.Booking", "Booking")
+                        .WithMany()
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Local_Service_marketPlace.Models.ProviderProfile", "ProviderProfile")
+                        .WithMany("WalletTransactions")
+                        .HasForeignKey("ProviderProfileId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("ProviderProfile");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -978,6 +1043,8 @@ namespace Local_Service_marketPlace.Data.Migrations
                     b.Navigation("ProviderCategories");
 
                     b.Navigation("ReviewsReceived");
+
+                    b.Navigation("WalletTransactions");
                 });
 
             modelBuilder.Entity("Local_Service_marketPlace.Models.ServiceOffer", b =>

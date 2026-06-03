@@ -1,0 +1,203 @@
+﻿@model Local_Service_marketPlace.Models.ViewModels.ProviderProfileSetupViewModel
+@{
+    ViewData["Title"] = "Complete Your Profile";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setup Profile — Khidmati</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background: #f0fdfa;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        .setup-card {
+            border-radius: 16px;
+            border: none;
+            box-shadow: 0 4px 24px rgba(0,0,0,.08);
+        }
+
+        .brand {
+            font-weight: 800;
+            color: #0f766e;
+            font-size: 1.5rem;
+        }
+
+            .brand span {
+                color: #1e293b;
+            }
+
+        .step-badge {
+            background: #0f766e;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        .category-check {
+            cursor: pointer;
+        }
+
+            .category-check input:checked + label {
+                background: #f0fdfa;
+                border-color: #0f766e !important;
+                color: #0f766e;
+            }
+
+            .category-check label {
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 0.5rem 0.75rem;
+                cursor: pointer;
+                transition: all .15s;
+                font-size: 0.9rem;
+            }
+
+        .btn-primary {
+            background: #0f766e;
+            border-color: #0f766e;
+            border-radius: 8px;
+        }
+
+            .btn-primary:hover {
+                background: #0d5c55;
+                border-color: #0d5c55;
+            }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: #0f766e;
+                box-shadow: 0 0 0 3px rgba(15,118,110,.1);
+            }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <div class="brand">Khid<span>mati</span></div>
+            <h4 class="mt-2 fw-700">Complete Your Provider Profile</h4>
+            <p class="text-muted">Fill in your details to start receiving service requests.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card setup-card">
+                    <div class="card-body p-4">
+
+                        <div class="alert alert-info border-0 rounded-3 mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            After completing your profile, an admin will verify your account.
+                            You can browse requests immediately but <strong>cannot submit offers until verified</strong>.
+                        </div>
+
+                        <form asp-action="Setup" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+                            @* Bio *@
+                            <div class="mb-4">
+                                <label asp-for="Bio" class="form-label fw-600">
+                                    <span class="step-badge">1</span>About You
+                                </label>
+                                <textarea asp-for="Bio" class="form-control" rows="3"
+                                          placeholder="Describe your skills, experience, and what makes you a great provider..."></textarea>
+                                <span asp-validation-for="Bio" class="text-danger small"></span>
+                            </div>
+
+                            @* Years of experience *@
+                            <div class="mb-4">
+                                <label asp-for="YearsOfExperience" class="form-label fw-600">
+                                    <span class="step-badge">2</span>Years of Experience
+                                </label>
+                                <input asp-for="YearsOfExperience" type="number" min="0" max="60"
+                                       class="form-control" style="max-width:150px;" />
+                                <span asp-validation-for="YearsOfExperience" class="text-danger small"></span>
+                            </div>
+
+                            @* Availability *@
+                            <div class="mb-4">
+                                <label class="form-label fw-600">
+                                    <span class="step-badge">3</span>Availability Hours
+                                </label>
+                                <div class="row g-3">
+                                    <div class="col-6">
+                                        <label asp-for="AvailableFrom" class="form-label small text-muted">From</label>
+                                        <input asp-for="AvailableFrom" type="time" class="form-control" />
+                                        <span asp-validation-for="AvailableFrom" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-6">
+                                        <label asp-for="AvailableTo" class="form-label small text-muted">To</label>
+                                        <input asp-for="AvailableTo" type="time" class="form-control" />
+                                        <span asp-validation-for="AvailableTo" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            @* Categories *@
+                            <div class="mb-4">
+                                <label class="form-label fw-600">
+                                    <span class="step-badge">4</span>Service Categories
+                                </label>
+                                <p class="text-muted small mb-2">Select all categories you can work in.</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    @foreach (var cat in Model.Categories)
+                                    {
+                                        <div class="category-check">
+                                            <input type="checkbox" name="SelectedCategoryIds"
+                                                   value="@cat.Value" id="cat_@cat.Value"
+                                                   class="form-check-input d-none" />
+                                            <label for="cat_@cat.Value">
+                                                <i class="fas fa-tag me-1"></i>@cat.Text
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                                <span asp-validation-for="SelectedCategoryIds" class="text-danger small d-block mt-1"></span>
+                            </div>
+
+                            @* National ID *@
+                            <div class="mb-4">
+                                <label asp-for="NationalIdImage" class="form-label fw-600">
+                                    <span class="step-badge">5</span>National ID Image
+                                </label>
+                                <input asp-for="NationalIdImage" type="file" class="form-control"
+                                       accept="image/*" />
+                                <div class="form-text">
+                                    <i class="fas fa-lock me-1"></i>
+                                    Your ID is only used for identity verification and is never shown publicly.
+                                </div>
+                                <span asp-validation-for="NationalIdImage" class="text-danger small"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100 py-2">
+                                <i class="fas fa-check-circle me-2"></i>Complete Profile & Continue
+                            </button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

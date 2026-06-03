@@ -1,0 +1,139 @@
+﻿@model Local_Service_marketPlace.Models.ViewModels.ProviderEditProfileViewModel
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+
+        <div class="page-header">
+            <h2><i class="fas fa-user-edit text-primary me-2"></i>Edit Profile</h2>
+            <p>Update your personal info, availability, and service categories.</p>
+        </div>
+
+        <div class="k-card">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+                @* Name *@
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label asp-for="FirstName" class="form-label fw-600"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger small"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="LastName" class="form-label fw-600"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                @* Profile picture *@
+                <div class="mb-3">
+                    <label asp-for="ProfileImageFile" class="form-label fw-600"></label>
+                    @if (!string.IsNullOrEmpty(Model.ExistingProfileImage))
+                    {
+                        <div class="mb-2">
+                            <img src="@Model.ExistingProfileImage"
+                                 class="rounded-circle"
+                                 style="width:60px;height:60px;object-fit:cover;" />
+                            <span class="text-muted small ms-2">Current picture</span>
+                        </div>
+                    }
+                    <input asp-for="ProfileImageFile" type="file" class="form-control"
+                           accept="image/*" />
+                    <div class="form-text">Leave empty to keep current picture.</div>
+                </div>
+
+                @* Bio *@
+                <div class="mb-3">
+                    <label asp-for="Bio" class="form-label fw-600"></label>
+                    <textarea asp-for="Bio" class="form-control" rows="3"
+                              placeholder="Describe your skills and experience..."></textarea>
+                    <span asp-validation-for="Bio" class="text-danger small"></span>
+                </div>
+
+                @* Years of experience *@
+                <div class="mb-3">
+                    <label asp-for="YearsOfExperience" class="form-label fw-600"></label>
+                    <input asp-for="YearsOfExperience" type="number" min="0" max="60"
+                           class="form-control" style="max-width:150px;" />
+                    <span asp-validation-for="YearsOfExperience" class="text-danger small"></span>
+                </div>
+
+                @* Availability *@
+                <div class="mb-3">
+                    <label class="form-label fw-600">Availability Hours</label>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <label asp-for="AvailableFrom" class="form-label small text-muted">From</label>
+                            <input asp-for="AvailableFrom" type="time" class="form-control" />
+                            <span asp-validation-for="AvailableFrom" class="text-danger small"></span>
+                        </div>
+                        <div class="col-6">
+                            <label asp-for="AvailableTo" class="form-label small text-muted">To</label>
+                            <input asp-for="AvailableTo" type="time" class="form-control" />
+                            <span asp-validation-for="AvailableTo" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+
+                @* Categories *@
+                <div class="mb-4">
+                    <label class="form-label fw-600">Service Categories</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            var isSelected = Model.SelectedCategoryIds.Contains(int.Parse(cat.Value));
+                            <div>
+                                <input type="checkbox" name="SelectedCategoryIds"
+                                       value="@cat.Value" id="cat_@cat.Value"
+                                       class="form-check-input d-none"
+                                       @(isSelected ? "checked" : "") />
+                                <label for="cat_@cat.Value"
+                                       class="category-label border rounded px-3 py-2 small"
+                                       style="cursor:pointer;transition:all .15s;
+                                                  @(isSelected ? "background:#f0fdfa;border-color:#0f766e!important;color:#0f766e;" : "")">
+                                    <i class="fas fa-tag me-1"></i>@cat.Text
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="fas fa-save me-1"></i> Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Toggle category checkbox style on click
+        document.querySelectorAll('.category-label').forEach(label => {
+            label.addEventListener('click', () => {
+                const cb = document.getElementById(label.getAttribute('for'));
+                setTimeout(() => {
+                    if (cb.checked) {
+                        label.style.background = '#f0fdfa';
+                        label.style.borderColor = '#0f766e';
+                        label.style.color = '#0f766e';
+                    } else {
+                        label.style.background = '';
+                        label.style.borderColor = '';
+                        label.style.color = '';
+                    }
+                }, 0);
+            });
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

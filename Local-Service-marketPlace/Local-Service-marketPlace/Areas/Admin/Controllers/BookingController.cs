@@ -19,8 +19,8 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
                 .Include(b => b.Customer)
                 .Include(b => b.ProviderProfile)
                     .ThenInclude(p => p.User)
-                .Include(b => b.ServiceRequest)  // ← add this
-                    .ThenInclude(s => s.Category) // ← add this
+                .Include(b => b.ServiceRequest)
+                    .ThenInclude(s => s.Category)
                 .OrderByDescending(b => b.CreatedAt)
                 .ToListAsync();
             return View(bookings);

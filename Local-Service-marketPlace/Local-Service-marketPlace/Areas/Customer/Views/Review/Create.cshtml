@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Leave a Review";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+
+    var booking = ViewBag.Booking as Local_Service_marketPlace.Models.Booking;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-5">
+
+        <div class="page-header text-center">
+            <h2><i class="fas fa-star text-warning me-2"></i>Rate Your Experience</h2>
+            <p>Your review helps other customers find great providers.</p>
+        </div>
+
+        <div class="k-card">
+
+            <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded">
+                <div class="rounded-circle bg-primary d-flex align-items-center justify-content-center text-white fw-700"
+                     style="width:50px;height:50px;font-size:1.2rem;">
+                    @booking?.ProviderProfile?.User?.FirstName?.Substring(0, 1)
+                </div>
+                <div>
+                    <div class="fw-700">
+                        @booking?.ProviderProfile?.User?.FirstName
+                        @booking?.ProviderProfile?.User?.LastName
+                    </div>
+                    <div class="small text-muted">@booking?.ServiceRequest?.Title</div>
+                </div>
+            </div>
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="bookingId" value="@booking?.Id" />
+
+                <div class="mb-4 text-center">
+                    <label class="form-label fw-600 d-block mb-2">Rating</label>
+                    <div class="star-rating d-flex justify-content-center gap-2" id="starContainer">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="fas fa-star fa-2x text-muted star-btn"
+                               data-value="@i" style="cursor:pointer; transition: color .15s;"></i>
+                        }
+                    </div>
+                    <input type="hidden" name="rating" id="ratingInput" value="0" />
+                    <div id="ratingLabel" class="small text-muted mt-2">Click a star to rate</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-600">Comment <span class="text-muted fw-400">(optional)</span></label>
+                    <textarea name="comment" class="form-control" rows="4"
+                              placeholder="Describe your experience — was the provider on time, professional, did the job well?"></textarea>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-warning px-4" id="submitBtn" disabled>
+                        <i class="fas fa-paper-plane me-1"></i> Submit Review
+                    </button>
+                    <a asp-area="Customer" asp-controller="Booking" asp-action="Details"
+                       asp-route-id="@booking?.Id" class="btn btn-outline-secondary">
+                        Skip for now
+                    </a>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const stars     = document.querySelectorAll('.star-btn');
+        const input     = document.getElementById('ratingInput');
+        const label     = document.getElementById('ratingLabel');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const labels = ['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', () => highlight(+star.dataset.value));
+            star.addEventListener('mouseout',  () => highlight(+input.value));
+            star.addEventListener('click',     () => {
+                input.value = star.dataset.value;
+                highlight(+input.value);
+                label.textContent = labels[+input.value];
+                label.className = 'small text-warning mt-2 fw-600';
+                submitBtn.disabled = false;
+            });
+        });
+
+        function highlight(val) {
+            stars.forEach(s => {
+                s.classList.toggle('text-warning', +s.dataset.value <= val);
+                s.classList.toggle('text-muted',   +s.dataset.value >  val);
+            });
+        }
+    </script>
+}

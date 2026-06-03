@@ -20,17 +20,15 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             _env = env;
         }
 
-        // GET: Admin/Category
+
         public async Task<IActionResult> Index()
         {
             var categories = await _db.Categories.ToListAsync();
             return View(categories);
         }
 
-        // GET: Admin/Category/Create
         public IActionResult Create() => View();
 
-        // POST: Admin/Category/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CategoryViewModel model)
@@ -44,7 +42,6 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
                 CreatedAt = DateTime.Now
             };
 
-            // Handle image upload
             if (model.ImageFile != null)
                 category.ImageUrl = await SaveImageAsync(model.ImageFile);
 
@@ -55,7 +52,6 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Admin/Category/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var category = await _db.Categories.FindAsync(id);
@@ -72,7 +68,6 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             return View(model);
         }
 
-        // POST: Admin/Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(CategoryViewModel model)
@@ -85,10 +80,8 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             category.Name = model.Name;
             category.Description = model.Description;
 
-            // Handle new image upload
             if (model.ImageFile != null)
             {
-                // Delete old image
                 DeleteImage(category.ImageUrl);
                 category.ImageUrl = await SaveImageAsync(model.ImageFile);
             }
@@ -99,7 +92,6 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Admin/Category/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -115,7 +107,6 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // ─── Helpers ───────────────────────────────────────
         private async Task<string> SaveImageAsync(IFormFile file)
         {
             var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads", "categories");

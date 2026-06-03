@@ -1,57 +1,191 @@
-﻿@model IEnumerable<Local_Service_marketPlace.Models.Complaint>
+﻿@model List<Local_Service_marketPlace.Models.Complaint>
 @using Local_Service_marketPlace.Models.Enums
-
 @{
     ViewData["Title"] = "Complaints";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    string? currentFilter = ViewBag.Filter as string;
 }
 
 <div class="container-fluid pt-4 px-4">
-    <div class="bg-secondary text-center rounded p-4">
-        <h4 class="mb-4">Customer Complaints & Disputes</h4>
-        <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0">
-                <thead>
-                    <tr class="text-white">
-                        <th>#</th>
-                        <th>Reported By</th>
-                        <th>Reason</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.Id</td>
-                            <td>@item.ReportedByUser.FirstName @item.ReportedByUser.LastName</td>
-                            <td>@item.Reason</td>
-                            <td>
-                                @{
-                                    var badge = item.Status switch
-                                    {
-                                        ComplaintStatus.Open => "bg-warning text-dark",
-                                        ComplaintStatus.UnderReview => "bg-info",
-                                        ComplaintStatus.Resolved => "bg-success",
-                                        ComplaintStatus.Dismissed => "bg-secondary",
-                                        _ => "bg-dark"
-                                    };
-                                }
-                                <span class="badge @badge">@item.Status</span>
-                            </td>
-                            <td>@item.CreatedAt.ToShortDateString()</td>
-                            <td>
-                                <a asp-action="Details" asp-route-id="@item.Id"
-                                   class="btn btn-sm btn-primary">
-                                    <i class="fas fa-eye me-1"></i> Review
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+
+    <!-- Page Header -->
+    <div class="d-flex align-items-center mb-4">
+        <i class="fa fa-exclamation-circle fa-2x text-primary me-3"></i>
+        <h4 class="mb-0">Complaints</h4>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4">
+
+        <!-- Total -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-clipboard-list fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Total Complaints</p>
+                    <h6 class="mb-0">@ViewBag.TotalComplaints</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Open -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-exclamation-triangle fa-3x text-danger"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Open</p>
+                    <h6 class="mb-0">@ViewBag.OpenCount</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Under Review -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-search fa-3x text-warning"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Under Review</p>
+                    <h6 class="mb-0">@ViewBag.UnderReviewCount</h6>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resolved + Dismissed -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-check-circle fa-3x text-success"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Resolved / Dismissed</p>
+                    <h6 class="mb-0">@((int)ViewBag.ResolvedCount + (int)ViewBag.DismissedCount)</h6>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Complaints Table -->
+    <div class="row g-4 mt-1">
+        <div class="col-12">
+            <div class="bg-secondary rounded p-4">
+
+                <!-- Header + Filters -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="mb-0">All Complaints</h5>
+                    <div class="d-flex gap-2 flex-wrap">
+
+                        <a asp-area="Admin" asp-controller="Complaint" asp-action="Index"
+                           class="btn btn-sm @(currentFilter == null ? "btn-primary" : "btn-outline-secondary")">
+                            All
+                        </a>
+
+                        <a asp-area="Admin" asp-controller="Complaint" asp-action="Index"
+                           asp-route-filter="open"
+                           class="btn btn-sm @(currentFilter == "open" ? "btn-danger" : "btn-outline-danger")">
+                            Open
+                        </a>
+
+                        <a asp-area="Admin" asp-controller="Complaint" asp-action="Index"
+                           asp-route-filter="underreview"
+                           class="btn btn-sm @(currentFilter == "underreview" ? "btn-warning" : "btn-outline-warning")">
+                            Under Review
+                        </a>
+
+                        <a asp-area="Admin" asp-controller="Complaint" asp-action="Index"
+                           asp-route-filter="resolved"
+                           class="btn btn-sm @(currentFilter == "resolved" ? "btn-success" : "btn-outline-success")">
+                            Resolved
+                        </a>
+
+                        <a asp-area="Admin" asp-controller="Complaint" asp-action="Index"
+                           asp-route-filter="dismissed"
+                           class="btn btn-sm @(currentFilter == "dismissed" ? "btn-secondary" : "btn-outline-secondary")">
+                            Dismissed
+                        </a>
+
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
+                        @TempData["Success"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                }
+
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                            <tr class="text-white">
+                                <th>#</th>
+                                <th>Reason</th>
+                                <th>Reported By</th>
+                                <th>Booking</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Reason</td>
+                                    <td>@item.ReportedByUser.FirstName @item.ReportedByUser.LastName</td>
+                                    <td>
+                                        @if (item.Booking?.ServiceRequest != null)
+                                        {
+                                            <span>@item.Booking.ServiceRequest.Title</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">Booking #@item.BookingId</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @switch (item.Status)
+                                        {
+                                            case ComplaintStatus.Open:
+                                                <span class="badge bg-danger">Open</span>
+                                                break;
+                                            case ComplaintStatus.UnderReview:
+                                                <span class="badge bg-warning">Under Review</span>
+                                                break;
+                                            case ComplaintStatus.Resolved:
+                                                <span class="badge bg-success">Resolved</span>
+                                                break;
+                                            case ComplaintStatus.Dismissed:
+                                                <span class="badge bg-secondary">Dismissed</span>
+                                                break;
+                                        }
+                                    </td>
+                                    <td>@item.CreatedAt.ToShortDateString()</td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="Complaint"
+                                           asp-action="Details" asp-route-id="@item.Id"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fa fa-eye me-1"></i>Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted py-4">
+                                        No complaints found.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
         </div>
     </div>
+
 </div>

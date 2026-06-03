@@ -1,49 +1,142 @@
-﻿@model IEnumerable<Local_Service_marketPlace.Models.ApplicationUser>
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<Local_Service_marketPlace.Models.ApplicationUser>
+@inject UserManager<Local_Service_marketPlace.Models.ApplicationUser> UserManager
+@inject Local_Service_marketPlace.Data.ApplicationDbContext Db
+@{
+    ViewData["Title"] = "Users";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
 <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
+
         <h4 class="mb-4">System Users</h4>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show text-start">
+                <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show text-start">
+                <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
         <div class="table-responsive">
             <table class="table text-start align-middle table-bordered table-hover mb-0">
                 <thead>
                     <tr class="text-white">
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Role</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Action</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Verification</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var user in Model)
                     {
-                        <tr>
-                            <td>@user.FirstName @user.LastName</td>
-                            <td>@user.Email</td>
-                            <td>@string.Join(", ", await UserManager.GetRolesAsync(user))</td>
-                            <td>
-                                @if (user.IsActive)
-                                {
-                                    <span class="text-success">Active</span>
-                                }
-                                else
-                                {
+                        var roles = await UserManager.GetRolesAsync(user);
+                        var isProvider = roles.Contains("Provider");
 
-                                    <span class="text-danger">Deactivated</span>
+                        Local_Service_marketPlace.Models.ProviderProfile? profile = null;
+                        if (isProvider)
+                            profile = Db.ProviderProfiles.FirstOrDefault(p => p.UserId == user.Id);
+
+                        <tr>
+                            <td class="fw-600">@user.FirstName @user.LastName</td>
+                            <td>@user.Email</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>
+                                @foreach (var role in roles)
+                                {
+                                    var roleBadge = role switch
+                                    {
+                                        "Admin" => "bg-danger",
+                                        "Provider" => "bg-primary",
+                                        "Customer" => "bg-success",
+                                        _ => "bg-secondary"
+                                    };
+                                    <span class="badge @roleBadge">@role</span>
                                 }
                             </td>
                             <td>
-                                <form asp-action="ToggleStatus" asp-route-id="@user.Id" method="post">
-                                    <button type="submit" class="btn btn-sm btn-outline-warning">
-                                        @(user.IsActive ? "Deactivate" : "Activate")
-                                    </button>
-                                </form>
+                                @if (user.IsActive)
+                                {
+                                    <span class="badge bg-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Deactivated</span>
+                                }
+                            </td>
+                            <td>
+                                @if (!isProvider)
+                                {
+                                    <span class="text-muted small">N/A</span>
+                                }
+                                else if (profile == null)
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-clock me-1"></i>No Profile Yet
+                                    </span>
+                                }
+                                else if (profile.IsVerified)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-shield-alt me-1"></i>Verified
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-hourglass-half me-1"></i>Pending
+                                    </span>
+                                }
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1 flex-wrap">
+
+                                    @* Activate / Deactivate *@
+                                    <form asp-action="ToggleStatus" asp-route-id="@user.Id"
+                                          method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit"
+                                                class="btn btn-sm @(user.IsActive ? "btn-outline-danger" : "btn-outline-success")"
+                                                onclick="return confirm('@(user.IsActive ? "Deactivate" : "Activate") this user?')">
+                                            @(user.IsActive ? "Deactivate" : "Activate")
+                                        </button>
+                                    </form>
+
+                                    @* Verify / Revoke — only for providers with a profile *@
+                                    @if (isProvider && profile != null)
+                                    {
+                                        <form asp-action="ToggleVerification" asp-route-id="@user.Id"
+                                              method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit"
+                                                    class="btn btn-sm @(profile.IsVerified ? "btn-outline-warning" : "btn-outline-primary")"
+                                                    onclick="return confirm('@(profile.IsVerified ? "Revoke verification for" : "Verify") this provider?')">
+                                                <i class="fas fa-@(profile.IsVerified ? "times" : "shield-alt") me-1"></i>
+                                                @(profile.IsVerified ? "Revoke" : "Verify")
+                                            </button>
+                                        </form>
+                                    }
+
+                                </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
         </div>
+
     </div>
 </div>
-
-@inject UserManager<ApplicationUser> UserManager

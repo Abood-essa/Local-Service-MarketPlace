@@ -1,0 +1,95 @@
+﻿@using Local_Service_marketPlace.Models.Enums
+@model IEnumerable<Local_Service_marketPlace.Models.Booking>
+@{
+    ViewData["Title"] = "My Bookings";
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="page-header">
+    <h2><i class="fas fa-calendar-check text-primary me-2"></i>My Bookings</h2>
+    <p>Manage all your confirmed and ongoing jobs.</p>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@* Status filter *@
+<div class="k-card mb-4 py-2">
+    <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+        <span class="text-muted small fw-600 me-1">Filter:</span>
+        <a asp-action="Index"
+           class="btn btn-sm @(string.IsNullOrEmpty(ViewBag.Status as string) ? "btn-primary" : "btn-outline-secondary")">
+            All
+        </a>
+        @foreach (var s in Enum.GetValues<BookingStatus>())
+        {
+            <a asp-action="Index" asp-route-status="@s"
+               class="btn btn-sm @(ViewBag.Status == s.ToString() ? "btn-primary" : "btn-outline-secondary")">
+                @s
+            </a>
+        }
+    </form>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="fas fa-calendar-times"></i>
+        <h5>No bookings yet</h5>
+        <p>Once a customer accepts your offer, the booking will appear here.</p>
+        <a asp-area="Provider" asp-controller="ServiceRequest" asp-action="Index"
+           class="btn btn-primary">
+            Browse Requests
+        </a>
+    </div>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var booking in Model)
+        {
+            var (bBadge, bIcon) = booking.BookingStatus switch
+            {
+                BookingStatus.Active => ("bg-primary", "fa-play-circle"),
+                BookingStatus.InProgress => ("bg-warning text-dark", "fa-spinner"),
+                BookingStatus.PendingCompletion => ("bg-info text-dark", "fa-hourglass-end"),
+                BookingStatus.Completed => ("bg-success", "fa-check-double"),
+                BookingStatus.Cancelled => ("bg-danger", "fa-times-circle"),
+                BookingStatus.Disputed => ("bg-dark", "fa-exclamation-triangle"),
+                _ => ("bg-secondary", "fa-question")
+            };
+            <div class="col-md-6">
+                <div class="k-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <span class="badge @bBadge badge-status">
+                            <i class="fas @bIcon me-1"></i>@booking.BookingStatus
+                        </span>
+                        <small class="text-muted">@booking.CreatedAt.ToString("MMM dd, yyyy")</small>
+                    </div>
+
+                    <h6 class="fw-700 mb-1">@booking.ServiceRequest?.Title</h6>
+                    <p class="text-muted small mb-1">
+                        <i class="fas fa-tag me-1"></i>@booking.ServiceRequest?.Category?.Name
+                    </p>
+                    <p class="text-muted small mb-3">
+                        <i class="fas fa-user me-1"></i>
+                        @booking.Customer?.FirstName @booking.Customer?.LastName
+                    </p>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-700 text-primary">@booking.ProviderEarnings JD</span>
+                        <a asp-action="Details" asp-route-id="@booking.Id"
+                           class="btn btn-sm btn-outline-primary">
+                            Manage <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
