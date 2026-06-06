@@ -1,104 +1,198 @@
-﻿@using Local_Service_marketPlace.Models.Enums
+@using Local_Service_marketPlace.Models.Enums
 @model IEnumerable<Local_Service_marketPlace.Models.Booking>
 @{
     ViewData["Title"] = "My Bookings";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+
+    var bookings = Model.ToList();
+    var activeBookings = bookings.Count(b => b.BookingStatus == BookingStatus.Active || b.BookingStatus == BookingStatus.InProgress);
+    var awaitingConfirmation = bookings.Count(b => b.BookingStatus == BookingStatus.PendingCompletion);
+    var completedBookings = bookings.Count(b => b.BookingStatus == BookingStatus.Completed);
+    var totalSpend = bookings.Where(b => b.BookingStatus != BookingStatus.Cancelled).Sum(b => b.FinalConfirmedPrice);
+    var currentStatus = ViewBag.Status as string;
 }
 
-<div class="page-header">
-    <h2><i class="fas fa-calendar-check text-primary me-2"></i>My Bookings</h2>
-    <p>Track the status of all your confirmed jobs.</p>
-</div>
-
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-
-<div class="k-card mb-4 py-2">
-    <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
-        <span class="text-muted small fw-600 me-1">Filter:</span>
-        <a asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(ViewBag.Status as string) ? "btn-primary" : "btn-outline-secondary")">
-            All
-        </a>
-        @foreach (var s in Enum.GetValues<BookingStatus>())
-        {
-            <a asp-action="Index" asp-route-status="@s"
-               class="btn btn-sm @(ViewBag.Status == s.ToString() ? "btn-primary" : "btn-outline-secondary")">
-                @s
-            </a>
-        }
-    </form>
-</div>
-
-@if (!Model.Any())
-{
-    <div class="empty-state">
-        <i class="fas fa-calendar-times"></i>
-        <h5>No bookings yet</h5>
-        <p>Once you accept a provider's final price, your booking will appear here.</p>
-        <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index"
-           class="btn btn-primary">
-            View My Requests
-        </a>
-    </div>
-}
-else
-{
-    <div class="row g-3">
-        @foreach (var booking in Model)
-        {
-            
-                var (bBadge, bIcon) = booking.BookingStatus switch
-                {
-                    BookingStatus.Active            => ("bg-primary", "fa-play-circle"),
-                    BookingStatus.InProgress        => ("bg-warning text-dark", "fa-spinner"),
-                    BookingStatus.PendingCompletion => ("bg-info text-dark", "fa-hourglass-end"),
-                    BookingStatus.Completed         => ("bg-success", "fa-check-double"),
-                    BookingStatus.Cancelled         => ("bg-danger", "fa-times-circle"),
-                    BookingStatus.Disputed          => ("bg-dark", "fa-exclamation-triangle"),
-                    _                               => ("bg-secondary", "fa-question")
-                };
-            
-
-            <div class="col-md-6">
-                <div class="k-card h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge @bBadge badge-status">
-                            <i class="fas @bIcon me-1"></i>@booking.BookingStatus
-                        </span>
-                        <small class="text-muted">@booking.CreatedAt.ToString("MMM dd, yyyy")</small>
-                    </div>
-
-                    <h6 class="fw-700 mb-1">@booking.ServiceRequest?.Title</h6>
-                    <p class="text-muted small mb-1">
-                        <i class="fas fa-tag me-1"></i>@booking.ServiceRequest?.Category?.Name
-                    </p>
-                    <p class="text-muted small mb-3">
-                        <i class="fas fa-wrench me-1"></i>
-                        @booking.ProviderProfile?.User?.FirstName
-                        @booking.ProviderProfile?.User?.LastName
-                    </p>
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="fw-700 text-primary">@booking.FinalConfirmedPrice JD</span>
-                        <a asp-action="Details" asp-route-id="@booking.Id"
-                           class="btn btn-sm btn-outline-primary">
-                            Details <i class="fas fa-arrow-right ms-1"></i>
-                        </a>
-                    </div>
+<div class="marketplace-page">
+    <section class="kh-page-hero">
+        <div class="kh-hero-grid">
+            <div>
+                <div class="kh-hero-kicker">
+                    <i class="fas fa-calendar-check"></i>
+                    My bookings
                 </div>
+                <h1 class="kh-page-title">Track every confirmed service with confidence.</h1>
+                <p class="kh-page-copy">
+                    See who is coming, what the job costs, and which bookings are waiting for your next action.
+                </p>
             </div>
-        }
-    </div>
-}
+            <div class="kh-hero-panel">
+                <div class="kh-inline-between">
+                    <div>
+                        <div class="kh-stat-label">Visible total</div>
+                        <div class="fs-2 fw-800">@totalSpend.ToString("0.##") JD</div>
+                    </div>
+                    <span class="icon-chip bg-white"><i class="fas fa-receipt"></i></span>
+                </div>
+                <p class="small mb-0 mt-2 text-white-50">Based on bookings currently shown by the selected filter.</p>
+            </div>
+        </div>
+    </section>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <section class="kh-metric-grid">
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-calendar-days"></i></span>
+            <div class="kh-metric-number">@bookings.Count</div>
+            <div class="kh-metric-label">Total bookings</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-person-digging"></i></span>
+            <div class="kh-metric-number">@activeBookings</div>
+            <div class="kh-metric-label">Active work</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-hourglass-end"></i></span>
+            <div class="kh-metric-number">@awaitingConfirmation</div>
+            <div class="kh-metric-label">Need confirmation</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-check-double"></i></span>
+            <div class="kh-metric-number">@completedBookings</div>
+            <div class="kh-metric-label">Completed</div>
+        </article>
+    </section>
+
+    <section class="kh-filter-panel">
+        <div class="kh-filter-title">
+            <i class="fas fa-filter"></i>
+            Booking status
+        </div>
+        <form method="get" class="kh-chip-row">
+            <a asp-action="Index" class="kh-filter-chip @(string.IsNullOrEmpty(currentStatus) ? "active" : "")">
+                <i class="fas fa-border-all"></i> All
+            </a>
+            @foreach (var s in Enum.GetValues<BookingStatus>())
+            {
+                var icon = s switch
+                {
+                    BookingStatus.Active => "fa-play",
+                    BookingStatus.InProgress => "fa-spinner",
+                    BookingStatus.PendingCompletion => "fa-hourglass-end",
+                    BookingStatus.Completed => "fa-check-double",
+                    BookingStatus.Cancelled => "fa-ban",
+                    BookingStatus.Disputed => "fa-triangle-exclamation",
+                    _ => "fa-circle"
+                };
+                <a asp-action="Index" asp-route-status="@s"
+                   class="kh-filter-chip @(currentStatus == s.ToString() ? "active" : "")">
+                    <i class="fas @icon"></i> @s
+                </a>
+            }
+        </form>
+    </section>
+
+    @if (!bookings.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-calendar-times"></i>
+            <h5>No bookings yet</h5>
+            <p>Once you accept a provider's final price, your booking will appear here.</p>
+            <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index" class="btn btn-primary">
+                View My Requests
+            </a>
+        </div>
+    }
+    else
+    {
+        <section class="kh-card-grid two-col">
+            @foreach (var booking in bookings)
+            {
+                var (statusClass, statusIcon) = booking.BookingStatus switch
+                {
+                    BookingStatus.Active => ("kh-status-soft-primary", "fa-play-circle"),
+                    BookingStatus.InProgress => ("kh-status-soft-warning", "fa-spinner"),
+                    BookingStatus.PendingCompletion => ("kh-status-soft-blue", "fa-hourglass-end"),
+                    BookingStatus.Completed => ("kh-status-soft-success", "fa-check-double"),
+                    BookingStatus.Cancelled => ("kh-status-soft-danger", "fa-times-circle"),
+                    BookingStatus.Disputed => ("kh-status-soft-muted", "fa-triangle-exclamation"),
+                    _ => ("kh-status-soft-muted", "fa-question")
+                };
+
+                <article class="kh-booking-card">
+                    <div class="kh-card-topline">
+                        <span class="kh-status-badge @statusClass">
+                            <i class="fas @statusIcon"></i>@booking.BookingStatus
+                        </span>
+                        <small class="text-muted">Booked @booking.CreatedAt.ToString("MMM dd, yyyy")</small>
+                    </div>
+
+                    <div>
+                        <h3 class="kh-card-title">@booking.ServiceRequest?.Title</h3>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="kh-status-badge kh-status-soft-muted">
+                                <i class="fas fa-tag"></i>@booking.ServiceRequest?.Category?.Name
+                            </span>
+                            <span class="kh-status-badge kh-status-soft-muted">
+                                <i class="fas fa-location-dot"></i>@booking.ServiceRequest?.City
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="kh-offer-provider">
+                        @if (!string.IsNullOrEmpty(booking.ProviderProfile?.ProfileImage))
+                        {
+                            <img src="@booking.ProviderProfile.ProfileImage" class="kh-avatar"
+                                 alt="@booking.ProviderProfile?.User?.FirstName @booking.ProviderProfile?.User?.LastName" />
+                        }
+                        else
+                        {
+                            <span class="kh-avatar-fallback">
+                                @(booking.ProviderProfile?.User?.FirstName?.Substring(0, 1) ?? "P")
+                            </span>
+                        }
+                        <div>
+                            <div class="small text-muted">Provider</div>
+                            <div class="fw-800">
+                                @booking.ProviderProfile?.User?.FirstName @booking.ProviderProfile?.User?.LastName
+                            </div>
+                            <div class="small text-muted">
+                                <i class="fas fa-star text-warning me-1"></i>
+                                @booking.ProviderProfile?.AverageRating.ToString("0.0")
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kh-inline-between mt-auto">
+                        <div>
+                            <div class="small text-muted">Final price</div>
+                            <div class="kh-price fs-5">@booking.FinalConfirmedPrice.ToString("0.##") JD</div>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a asp-area="" asp-controller="ProviderPublic" asp-action="Profile"
+                               asp-route-id="@booking.ProviderProfileId" class="btn btn-outline-secondary">
+                                <i class="fas fa-user me-1"></i> Provider
+                            </a>
+                            <a asp-action="Details" asp-route-id="@booking.Id" class="btn btn-outline-primary">
+                                Details <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </section>
+    }
+</div>

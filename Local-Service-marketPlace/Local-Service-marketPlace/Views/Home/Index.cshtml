@@ -1,8 +1,502 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Local_Service_marketPlace.Models.Category>
+@{
+    ViewData["Title"] = "Home";
+    var categories = Model.ToList();
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="landing-hero">
+    <div class="container landing-hero-grid">
+        <div>
+            <div class="eyebrow">
+                <i class="fa-solid fa-shield-heart"></i>
+                Verified local services, organized in one place
+            </div>
+            <h1 class="landing-title">
+                Your local experts, <span>ready when the job matters.</span>
+            </h1>
+            <p class="landing-copy">
+                Khidmati connects customers with trusted providers for repairs, maintenance, cleaning,
+                and home services. Post a request, compare offers, and keep every booking easy to track.
+            </p>
+            <div class="hero-actions">
+                <a asp-area="" asp-controller="Account" asp-action="Register"
+                   class="btn btn-outline-primary btn-lg px-4">
+                    Request a Service
+                </a>
+                <a asp-area="" asp-controller="Account" asp-action="Register"
+                   class="btn btn-outline-primary btn-lg px-4">
+                    Become a Provider
+                </a>
+            </div>
+            <div class="hero-proof">
+                <span><i class="fa-solid fa-circle-check text-primary"></i> Verified providers</span>
+                <span><i class="fa-solid fa-wallet text-primary"></i> Wallet tracking</span>
+                <span><i class="fa-solid fa-star text-primary"></i> Reviews after completion</span>
+            </div>
+        </div>
+
+        <div class="service-visual" aria-hidden="true">
+            <div class="service-shot"></div>
+            <div class="floating-ticket">
+                <div class="d-flex align-items-center gap-3">
+                    <span class="icon-chip"><i class="fa-solid fa-screwdriver-wrench"></i></span>
+                    <div>
+                        <div class="fw-800">Kitchen repair</div>
+                        <div class="text-muted small">3 offers received</div>
+                    </div>
+                </div>
+                <div class="progress mt-3" style="height: 8px;">
+                    <div class="progress-bar bg-primary" style="width: 72%;"></div>
+                </div>
+            </div>
+            <div class="floating-rating">
+                <div class="fw-800 text-primary">4.9 / 5</div>
+                <div class="text-muted small">Average provider rating</div>
+            </div>
+            <div class="floating-provider">
+                <div class="d-flex align-items-center justify-content-between gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="icon-chip"><i class="fa-solid fa-user-check"></i></span>
+                        <div>
+                            <div class="fw-800">Provider verified</div>
+                            <div class="text-muted small">Ready for confirmed bookings</div>
+                        </div>
+                    </div>
+                    <span class="badge bg-success">Active</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ── Categories ── *@
+<section class="section-band " id="categories">
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div class="section-heading mb-0">
+                <h2 class="mb-1 text-primary">Our Services</h2>
+                <p class="mb-0 text-primary">Browse all available service categories.</p>
+            </div>
+            @if (categories.Count > 4)
+            {
+                <div class="d-flex gap-2">
+                    <button id="catPrev"
+                            class="cat-nav-btn"
+                            aria-label="Previous">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button id="catNext"
+                            class="cat-nav-btn cat-nav-btn--active"
+                            aria-label="Next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            }
+        </div>
+
+        @if (!categories.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-tags"></i>
+                <h5>No categories yet</h5>
+                <p class="text-muted">Check back soon.</p>
+            </div>
+        }
+        else
+        {
+            <div class="cat-slider-outer">
+                <div class="cat-track" id="catTrack">
+                    @foreach (var cat in categories)
+                    {
+                        <div class="cat-slide">
+                            <div class="cat-card">
+                                <div class="cat-card-img">
+                                    @if (!string.IsNullOrEmpty(cat.ImageUrl))
+                                    {
+                                        <img src="@cat.ImageUrl" alt="@cat.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="cat-card-img-placeholder">
+                                            <i class="fas fa-tools"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="cat-card-body">
+                                    <h5 class="cat-card-title">@cat.Name</h5>
+                                    @if (!string.IsNullOrEmpty(cat.Description))
+                                    {
+                                        <p class="cat-card-desc">
+                                            @(cat.Description.Length > 65
+                                                                            ? cat.Description.Substring(0, 65) + "…"
+                                                                            : cat.Description)
+                            </p>
+                                                        }
+                                    <a asp-area="" asp-controller="Account"
+                                       asp-action="Register" class="cat-card-link">
+                                        Book now <i class="fas fa-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (categories.Count > 4)
+            {
+                <div class="cat-dots" id="catDots">
+                    @{
+                        int pages = (int)Math.Ceiling(categories.Count / 4.0);
+                        for (int d = 0; d < pages; d++)
+                        {
+                            <button class="cat-dot @(d == 0 ? "cat-dot--active" : "")"
+                                    data-page="@d"
+                                    aria-label="Page @(d + 1)"></button>
+                        }
+                    }
+                </div>
+            }
+        }
+
+    </div>
+</section>
+
+<section class="section-band section-band-soft" id="how-it-works">
+    <div class="container">
+        <div class="section-heading text-center mx-auto">
+            <h2>How it works</h2>
+            <p class="mx-auto">A simple flow for customers and providers without losing the details that matter.</p>
+        </div>
+        <div class="step-grid">
+            <div class="step-card">
+                <span class="step-number">1</span>
+                <h3>Create a request</h3>
+                <p class="text-muted mb-0">Share the category, location, preferred date, description, and optional photos.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-number">2</span>
+                <h3>Compare offers</h3>
+                <p class="text-muted mb-0">Review provider details, ratings, estimated ranges, and final submitted prices.</p>
+            </div>
+            <div class="step-card">
+                <span class="step-number">3</span>
+                <h3>Track the booking</h3>
+                <p class="text-muted mb-0">Follow the status from confirmation through completion, payment, review, and support.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-band">
+    <div class="container">
+        <div class="role-grid">
+            <div class="role-card">
+                <span class="icon-chip mb-3"><i class="fa-solid fa-house-user"></i></span>
+                <h3>For customers</h3>
+                <p class="text-muted">Post jobs, receive offers, confirm final prices, manage bookings, and review completed work.</p>
+                <a asp-area="" asp-controller="Account" asp-action="Register"
+                   class="btn btn-outline-primary">Start as customer</a>
+            </div>
+            <div class="role-card">
+                <span class="icon-chip mb-3"><i class="fa-solid fa-toolbox"></i></span>
+                <h3>For providers</h3>
+                <p class="text-muted">Set up your profile, choose categories, browse matching requests, submit offers, and track wallet balance.</p>
+                <a asp-area="" asp-controller="Account" asp-action="Register"
+                   class="btn btn-outline-primary">Join as provider</a>
+            </div>
+           @*  <div class="role-card">
+                <span class="icon-chip mb-3"><i class="fa-solid fa-user-shield"></i></span>
+                <h3>For admins</h3>
+                <p class="text-muted">Review users, verify providers, manage categories, monitor bookings, wallet activity, and complaints.</p>
+                <a asp-area="" asp-controller="Account" asp-action="Login"
+                   class="btn btn-outline-secondary">Admin login</a>
+            </div> *@
+        </div>
+    </div>
+</section>
+
+@* ── Category styles — fully aligned with your design system ── *@
+<style>
+    /* Slider shell */
+
+    #categories {
+        padding-top: 2rem;
+    }
+
+    /* Replace the cat-track and cat-slide styles */
+    .cat-slider-outer {
+        overflow: hidden;
+    }
+
+    .cat-track {
+        display: flex;
+        gap: 1.1rem;
+        transition: transform .38s cubic-bezier(.4, 0, .2, 1);
+        will-change: transform;
+    }
+
+    .cat-slide {
+        /* Each slide is exactly 1/4 of the container minus gap compensation */
+        flex: 0 0 calc(25% - 0.825rem);
+        min-width: 0;
+    }
+
+    /* Card — uses your existing card tokens */
+    .cat-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: var(--kh-surface-container);
+        border: 1px solid rgba(188, 201, 198, 0.8);
+        border-radius: var(--kh-radius-lg);
+        box-shadow: var(--kh-shadow);
+        overflow: hidden;
+        transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+        .cat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--kh-shadow-strong);
+        }
+
+    /* Image area */
+    .cat-card-img {
+        width: 100%;
+        height: 168px;
+        overflow: hidden;
+        background: var(--kh-surface-low);
+        flex-shrink: 0;
+    }
+
+        .cat-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .32s ease;
+        }
+
+    .cat-card:hover .cat-card-img img {
+        transform: scale(1.06);
+    }
+
+    .cat-card-img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .cat-card-img-placeholder i {
+            font-size: 2rem;
+            color: var(--kh-primary);
+            opacity: .35;
+        }
+
+    /* Body */
+    .cat-card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1.1rem 1.2rem 1.2rem;
+    }
+
+    .cat-card-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--kh-text);
+        margin-bottom: .35rem;
+    }
+
+    .cat-card-desc {
+        font-size: .84rem;
+        color: var(--kh-muted);
+        flex: 1;
+        margin-bottom: .75rem;
+        line-height: 1.55;
+    }
+
+    .cat-card-link {
+        font-size: .875rem;
+        font-weight: 700;
+        color: var(--kh-primary);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+    }
+
+        .cat-card-link:hover {
+            color: var(--kh-primary-strong);
+            text-decoration: underline;
+        }
+
+    /* Nav buttons */
+    .cat-nav-btn {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 104, 95, .3);
+        background: #ffffff;
+        color: var(--kh-muted);
+        font-size: .85rem;
+        cursor: pointer;
+        transition: background .18s, color .18s, border-color .18s, transform .18s;
+    }
+
+        .cat-nav-btn:hover,
+        .cat-nav-btn--active {
+            background: var(--kh-primary);
+            border-color: var(--kh-primary);
+            color: #ffffff;
+        }
+
+        .cat-nav-btn:hover {
+            transform: translateY(-1px);
+        }
+
+    /* Dots */
+    .cat-dots {
+        display: flex;
+        justify-content: center;
+        gap: .55rem;
+        margin-top: 1.6rem;
+    }
+
+    .cat-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        border: none;
+        padding: 0;
+        background: var(--kh-surface-variant);
+        cursor: pointer;
+        transition: background .2s, transform .2s, width .2s;
+    }
+
+    .cat-dot--active {
+        background: var(--kh-primary);
+        width: 22px;
+    }
+
+    /* Responsive */
+    @@media (max-width: 991.98px) {
+        .cat-track
+
+    {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    }
+
+    @@media (max-width: 767.98px) {
+        .cat-track
+
+    {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cat-card-img {
+        height: 130px;
+    }
+
+    }
+
+    @@media (max-width: 479.98px) {
+        .cat-track
+
+    {
+        grid-template-columns: minmax(0, 1fr);
+    }
+        @@media (max-width: 991.98px) {
+            .cat-slide
+
+    {
+        flex: 0 0 calc(33.333% - 0.733rem);
+    }
+
+    }
+    @@media (max-width: 767.98px) {
+        .cat-slide
+
+    {
+        flex: 0 0 calc(50% - 0.55rem);
+    }
+
+    .cat-card-img {
+        height: 130px;
+    }
+
+    }
+    @@media (max-width: 479.98px) {
+        .cat-slide
+
+    {
+        flex: 0 0 100%;
+    }
+
+    }
+
+    }
+    </style>
+
+<script>
+    (function () {
+        const track  = document.getElementById('catTrack');
+        const dots   = document.querySelectorAll('.cat-dot');
+        const prev   = document.getElementById('catPrev');
+        const next   = document.getElementById('catNext');
+
+        if (!track) return;
+
+        // How many columns are currently visible (matches CSS grid)
+        function perPage() {
+            const w = window.innerWidth;
+            if (w <= 479)  return 1;
+            if (w <= 767)  return 2;
+            if (w <= 991)  return 3;
+            return 4;
+        }
+
+        const totalSlides = track.children.length;
+        let current = 0;
+
+        function totalPages() {
+            return Math.ceil(totalSlides / perPage());
+        }
+
+            function goTo(page) {
+        const pp    = perPage();
+        const pages = totalPages();
+        current     = Math.max(0, Math.min(page, pages - 1));
+
+        // Calculate offset: each "page" moves by pp slides worth of width
+        const containerWidth = track.parentElement.offsetWidth;
+        const gap = 1.1 * 16; // 1.1rem in px
+        const slideWidth = (containerWidth - (pp - 1) * gap) / pp;
+        const offset = current * pp * (slideWidth + gap);
+
+        track.style.transform = `translateX(-${offset}px)`;
+
+        dots.forEach((d, i) => {
+            d.classList.toggle('cat-dot--active', i === current);
+        });
+    }
+
+        if (prev) prev.addEventListener('click', () => goTo(current - 1));
+        if (next) next.addEventListener('click', () => goTo(current + 1));
+        dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.page)));
+
+        // Reset on resize so we don't get stuck mid-slide
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => goTo(0), 120);
+        });
+    })();
+</script>

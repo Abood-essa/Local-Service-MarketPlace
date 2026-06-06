@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati - Create Service Request</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dee4e1",
+                        "on-secondary-container": "#00217a",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1c",
+                        "surface-container": "#eaefed",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "background": "#f5faf8",
+                        "tertiary-container": "#6c748b",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary-container": "#fefcff",
+                        "on-surface": "#171d1c",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#2c3130",
+                        "primary": "#00685f",
+                        "tertiary": "#545c72",
+                        "surface-container-high": "#e4e9e7",
+                        "surface-container-highest": "#dee4e1",
+                        "surface": "#f5faf8",
+                        "secondary-fixed-dim": "#b8c4ff",
+                        "inverse-primary": "#6bd8cb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#173bab",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201d",
+                        "surface-tint": "#006a61",
+                        "on-secondary-fixed": "#001453",
+                        "inverse-on-surface": "#edf2f0",
+                        "primary-container": "#008378",
+                        "on-surface-variant": "#3d4947",
+                        "outline-variant": "#bcc9c6",
+                        "secondary": "#3755c3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005049",
+                        "secondary-container": "#708cfd",
+                        "on-primary-container": "#f4fffc",
+                        "surface-bright": "#f5faf8",
+                        "secondary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #bcc9c6; border-radius: 10px; }
+        .form-shadow { box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05); }
+        .glass-accent { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- Sidebar Navigation (Desktop Only) -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant p-md overflow-y-auto z-40">
+<div class="mb-xl">
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</h1>
+<div class="mt-md flex items-center gap-3 p-3 bg-surface-container-high rounded-xl">
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-primary" data-alt="A professional headshot of a smiling middle-aged man in business casual attire against a clean, blurred office background. The lighting is warm and natural, emphasizing a high-trust, dependable persona. The overall image has a polished corporate aesthetic consistent with a service marketplace administrator profile." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC55nLNrQj2UetXIhK2ZmXk5xsqUR8_mmmQSpREuKmUTwGMdNpjJ6Xi3sE9eexE8SI7D2492m8EzeZ9K3p9-stPGhw7kqzUFRaw400fWfQmmahHLXEMMyppRGUt6K0wgWgbvUv9TK2NArJg5-AeMzQa8odxPiSeWILMGUkRgXh9zoZ6pqSLd_P7tpejtkO6zNhJ5mnreMh9Q7-NgmEXZ5JFtn2PR2J25M2qCFgdgUEnUitOiZWMGohdVVy7_s24H2rfTuS0n87y7Q"/>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Alex Rivera</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">System Administrator</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Navigation Items mapped from JSON -->
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 bg-secondary-container text-on-secondary-container rounded-lg font-bold scale-[0.98]" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-3 p-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-xl pt-md border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded-xl text-label-md font-label-md flex items-center justify-center gap-2 hover:opacity-90 transition-opacity active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                New Category
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-[280px] min-h-screen pb-xl">
+<!-- Header -->
+<header class="sticky top-0 z-30 bg-surface/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop py-4 border-b border-outline-variant flex justify-between items-center">
+<h2 class="text-headline-md font-headline-md text-on-background">New Service Request</h2>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors">notifications</button>
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold">AR</div>
+</div>
+</header>
+<!-- Progress Steps -->
+<div class="max-w-[800px] mx-auto mt-lg px-margin-mobile">
+<div class="flex items-center justify-between relative mb-xl">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-outline-variant -z-10 -translate-y-1/2"></div>
+<div class="flex flex-col items-center gap-2 bg-background px-4">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold shadow-md">1</div>
+<span class="text-label-sm font-label-sm text-primary">Details</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-background px-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">2</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Location</span>
+</div>
+<div class="flex flex-col items-center gap-2 bg-background px-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold">3</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Review</span>
+</div>
+</div>
+<!-- Form Container -->
+<div class="bg-surface-container-lowest rounded-xl p-md md:p-xl form-shadow border border-outline-variant/30">
+<form class="space-y-lg" id="serviceRequestForm">
+<!-- Section: Basic Info -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="col-span-full md:col-span-1">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2" for="category">Category</label>
+<div class="relative">
+<select class="w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none" id="category">
+<option>Home Maintenance</option>
+<option>Electrical Works</option>
+<option>Plumbing</option>
+<option>Gardening &amp; Landscaping</option>
+<option>Cleaning Services</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
+</div>
+</div>
+<div class="col-span-full md:col-span-1">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2" for="preferred_time">Preferred Date/Time</label>
+<div class="relative">
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="preferred_time" type="datetime-local"/>
+</div>
+</div>
+<div class="col-span-full">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2" for="title">Request Title</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="title" placeholder="e.g. Broken kitchen faucet needs repair" type="text"/>
+</div>
+<div class="col-span-full">
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2" for="description">Description</label>
+<textarea class="w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="description" placeholder="Describe the issue in detail..." rows="4"></textarea>
+</div>
+</div>
+<!-- Section: Media Upload -->
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-3">Photos of the Issue (Optional)</p>
+<div class="border-2 border-dashed border-outline-variant rounded-xl p-xl flex flex-col items-center justify-center bg-surface-container-low hover:bg-surface-container-high transition-colors cursor-pointer group" id="drop-zone">
+<div class="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">cloud_upload</span>
+</div>
+<p class="text-body-md font-medium text-on-surface">Drag &amp; Drop photos here</p>
+<p class="text-body-sm text-on-surface-variant">or <span class="text-primary font-bold">browse files</span> on your computer</p>
+<input class="hidden" id="file-input" multiple="" type="file"/>
+</div>
+</div>
+<!-- Section: Location -->
+<div class="pt-md border-t border-outline-variant">
+<h3 class="text-headline-sm font-headline-sm text-on-surface mb-md">Location Details</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2" for="city">City</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="city" placeholder="Select your city" type="text"/>
+</div>
+<div>
+<label class="block text-label-md font-label-md text-on-surface-variant mb-2" for="address">Address</label>
+<input class="w-full rounded-lg border-outline-variant bg-surface-container-lowest py-3 px-4 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" id="address" placeholder="Street, Building, Apartment" type="text"/>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col md:flex-row items-center justify-end gap-md pt-lg">
+<button class="w-full md:w-auto px-8 py-3 rounded-lg border border-primary text-primary font-label-md hover:bg-primary/5 transition-colors" type="button">Save as Draft</button>
+<button class="w-full md:w-auto px-12 py-4 rounded-lg bg-primary text-on-primary font-label-md shadow-lg shadow-primary/20 hover:opacity-90 active:scale-95 transition-all" type="submit">Post Request</button>
+</div>
+</form>
+</div>
+<!-- Hint Card -->
+<div class="mt-lg p-md bg-secondary-fixed rounded-xl flex gap-4 items-start border border-secondary-fixed-dim">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant mt-1">info</span>
+<div>
+<p class="text-label-md font-label-md text-on-secondary-fixed-variant">Trust Tip</p>
+<p class="text-body-sm text-on-secondary-fixed-variant opacity-80">Detailed descriptions and clear photos help service providers give more accurate estimates and reduces wait time by up to 40%.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Nav for Mobile (As requested by "Shell Visibility & Relevance") -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface flex justify-around items-center px-4 py-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl border-t border-outline-variant/30">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 font-bold" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-sm font-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interactions
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('bg-primary/5', 'border-primary');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('bg-primary/5', 'border-primary');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-primary/5', 'border-primary');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                alert(`${files.length} files dropped! (UI Mockup)`);
+            }
+        });
+
+        // Form Submission Effect
+        const form = document.getElementById('serviceRequestForm');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Posting...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Success!';
+                btn.classList.replace('bg-primary', 'bg-green-600');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-green-600', 'bg-primary');
+                    btn.disabled = false;
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+</body></html>

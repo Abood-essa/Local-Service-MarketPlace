@@ -1,260 +1,396 @@
-﻿@using Local_Service_marketPlace.Models.Enums
+@using Local_Service_marketPlace.Models.Enums
 @model Local_Service_marketPlace.Models.Booking
 @{
     ViewData["Title"] = "Booking Details";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
-}
 
-@{
-    var (bBadge, bIcon) = Model.BookingStatus switch
+    var (statusClass, statusIcon) = Model.BookingStatus switch
     {
-        BookingStatus.Active => ("bg-primary", "fa-play-circle"),
-        BookingStatus.InProgress => ("bg-warning text-dark", "fa-spinner"),
-        BookingStatus.PendingCompletion => ("bg-info text-dark", "fa-hourglass-end"),
-        BookingStatus.Completed => ("bg-success", "fa-check-double"),
-        BookingStatus.Cancelled => ("bg-danger", "fa-times-circle"),
-        BookingStatus.Disputed => ("bg-dark", "fa-exclamation-triangle"),
-        _ => ("bg-secondary", "fa-question")
+        BookingStatus.Active => ("kh-status-soft-primary", "fa-play-circle"),
+        BookingStatus.InProgress => ("kh-status-soft-warning", "fa-spinner"),
+        BookingStatus.PendingCompletion => ("kh-status-soft-blue", "fa-hourglass-end"),
+        BookingStatus.Completed => ("kh-status-soft-success", "fa-check-double"),
+        BookingStatus.Cancelled => ("kh-status-soft-danger", "fa-times-circle"),
+        BookingStatus.Disputed => ("kh-status-soft-muted", "fa-triangle-exclamation"),
+        _ => ("kh-status-soft-muted", "fa-question")
     };
+
+    var providerName = $"{Model.ProviderProfile?.User?.FirstName} {Model.ProviderProfile?.User?.LastName}".Trim();
+    var providerInitial = !string.IsNullOrEmpty(Model.ProviderProfile?.User?.FirstName)
+        ? Model.ProviderProfile.User.FirstName.Substring(0, 1)
+        : "P";
+    var markedDone = Model.BookingStatus == BookingStatus.PendingCompletion || Model.BookingStatus == BookingStatus.Completed;
 }
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
+<div class="marketplace-page">
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
-        <i class="fas fa-arrow-left me-1"></i> Back to My Bookings
-    </a>
-    <span class="badge @bBadge badge-status fs-6">
-        <i class="fas @bIcon me-1"></i>@Model.BookingStatus
-    </span>
-</div>
+    <section class="kh-page-hero">
+        <div class="kh-card-topline mb-3">
+            <a asp-action="Index" class="btn btn-outline-light btn-sm">
+                <i class="fas fa-arrow-left me-1"></i> Back to bookings
+            </a>
+            <span class="kh-status-badge @statusClass">
+                <i class="fas @statusIcon"></i>@Model.BookingStatus
+            </span>
+        </div>
 
-<div class="row g-4">
+        <div class="kh-hero-grid">
+            <div>
+                <div class="kh-hero-kicker">
+                    <i class="fas fa-calendar-check"></i>
+                    Booking details
+                </div>
+                <h1 class="kh-page-title">@Model.ServiceRequest?.Title</h1>
+                <p class="kh-page-copy">
+                    Review the provider, schedule, pricing, status, and next actions for this confirmed service.
+                </p>
+                <div class="kh-hero-actions">
+                    <span class="kh-status-badge kh-status-soft-muted">
+                        <i class="fas fa-tag"></i>@Model.ServiceRequest?.Category?.Name
+                    </span>
+                    <span class="kh-status-badge kh-status-soft-blue">
+                        <i class="fas fa-location-dot"></i>@Model.ServiceRequest?.City
+                    </span>
+                </div>
+            </div>
+            <div class="kh-hero-panel">
+                <div class="kh-inline-between">
+                    <div>
+                        <div class="kh-stat-label">Confirmed price</div>
+                        <div class="fs-2 fw-800">@Model.FinalConfirmedPrice.ToString("0.##") JD</div>
+                    </div>
+                    <span class="icon-chip bg-white"><i class="fas fa-receipt"></i></span>
+                </div>
+                <p class="small mb-0 mt-2 text-white-50">
+                    Booked @Model.CreatedAt.ToString("MMM dd, yyyy") with @providerName.
+                </p>
+            </div>
+        </div>
+    </section>
 
-    @* Left column *@
-    <div class="col-lg-5">
+    <section class="kh-metric-grid">
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-calendar-day"></i></span>
+            <div class="kh-metric-number">@Model.ServiceRequest?.PreferredDate.ToString("MMM dd")</div>
+            <div class="kh-metric-label">Preferred date</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-user-check"></i></span>
+            <div class="kh-metric-number">@Model.ProviderProfile?.AverageRating.ToString("0.0")</div>
+            <div class="kh-metric-label">Provider rating</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-briefcase"></i></span>
+            <div class="kh-metric-number">@Model.ProviderProfile?.CompletedJobsCount</div>
+            <div class="kh-metric-label">Completed jobs</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-wallet"></i></span>
+            <div class="kh-metric-number">@Model.ProviderEarnings.ToString("0.##")</div>
+            <div class="kh-metric-label">Provider payout (JD)</div>
+        </article>
+    </section>
 
-        @* Service Details *@
-        <div class="k-card mb-3">
-            <h6 class="fw-700 mb-3">
-                <i class="fas fa-clipboard-list text-primary me-2"></i>Service Details
-            </h6>
-            <p class="fw-600 mb-1">@Model.ServiceRequest?.Title</p>
-            <ul class="list-unstyled small text-muted">
-                <li class="mb-1">
-                    <i class="fas fa-tag me-2 text-primary"></i>@Model.ServiceRequest?.Category?.Name
-                </li>
-                <li class="mb-1">
-                    <i class="fas fa-map-marker-alt me-2 text-primary"></i>
-                    @Model.ServiceRequest?.Address, @Model.ServiceRequest?.City
-                </li>
-                <li>
-                    <i class="fas fa-calendar me-2 text-primary"></i>
-                    @Model.ServiceRequest?.PreferredDate.ToString("MMMM dd, yyyy")
-                </li>
-            </ul>
+    <div class="kh-detail-layout">
+        <div class="kh-detail-stack">
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-circle-info text-primary me-2"></i>Booking overview</h2>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-hashtag"></i></span>
+                    <div>
+                        <div class="small text-muted">Booking reference</div>
+                        <div class="fw-800">#@Model.Id</div>
+                    </div>
+                </div>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-calendar-plus"></i></span>
+                    <div>
+                        <div class="small text-muted">Booked on</div>
+                        <div class="fw-800">@Model.CreatedAt.ToString("MMMM dd, yyyy")</div>
+                    </div>
+                </div>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-signal"></i></span>
+                    <div>
+                        <div class="small text-muted">Current status</div>
+                        <span class="kh-status-badge @statusClass mt-1">
+                            <i class="fas @statusIcon"></i>@Model.BookingStatus
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>Service information</h2>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-clipboard-list"></i></span>
+                    <div>
+                        <div class="small text-muted">Service</div>
+                        <div class="fw-800">@Model.ServiceRequest?.Title</div>
+                    </div>
+                </div>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-tag"></i></span>
+                    <div>
+                        <div class="small text-muted">Category</div>
+                        <div class="fw-800">@Model.ServiceRequest?.Category?.Name</div>
+                    </div>
+                </div>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-map-location-dot"></i></span>
+                    <div>
+                        <div class="small text-muted">Location</div>
+                        <div class="fw-800">@Model.ServiceRequest?.Address, @Model.ServiceRequest?.City</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-align-left text-primary me-2"></i>Notes and description</h2>
+                <p class="text-muted mb-0">
+                    @(string.IsNullOrWhiteSpace(Model.ServiceRequest?.Description)
+                        ? "No description was added for this service request."
+                        : Model.ServiceRequest.Description)
+                </p>
+            </section>
 
             @if (Model.ServiceRequest?.Images != null && Model.ServiceRequest.Images.Any())
             {
-                <div class="row g-1 mt-2">
-                    @foreach (var img in Model.ServiceRequest.Images)
-                    {
-                        <div class="col-3">
-                            <a href="@img.ImageUrl" target="_blank">
-                                <img src="@img.ImageUrl" class="img-fluid rounded"
-                                     style="height:60px;width:100%;object-fit:cover;" />
-                            </a>
-                        </div>
-                    }
-                </div>
-            }
-        </div>
-
-        @* Provider *@
-        <div class="k-card mb-3">
-            <h6 class="fw-700 mb-3">
-                <i class="fas fa-user-hard-hat text-primary me-2"></i>Provider
-            </h6>
-            <p class="fw-600 mb-1">
-                <a asp-area="" asp-controller="ProviderPublic" asp-action="Profile"
-                   asp-route-id="@Model.ProviderProfile.Id"
-                   class="text-decoration-none text-dark">
-                    @Model.ProviderProfile?.User?.FirstName
-                    @Model.ProviderProfile?.User?.LastName
-                </a>
-                @if (Model.ProviderProfile?.IsVerified == true)
-                {
-                    <span class="badge bg-success ms-1">
-                        <i class="fas fa-shield-alt"></i> Verified
-                    </span>
-                }
-            </p>
-            <p class="small text-muted mb-1">
-                <i class="fas fa-star text-warning me-1"></i>
-                @Model.ProviderProfile?.AverageRating.ToString("0.0") rating
-                &nbsp;·&nbsp;
-                @Model.ProviderProfile?.CompletedJobsCount jobs
-            </p>
-            <p class="small text-muted mb-0">
-                <i class="fas fa-phone me-1"></i>@Model.ProviderProfile?.User?.PhoneNumber
-            </p>
-        </div>
-
-        @* Payment Summary *@
-        <div class="k-card">
-            <h6 class="fw-700 mb-3">
-                <i class="fas fa-receipt text-primary me-2"></i>Payment Summary
-            </h6>
-            <div class="d-flex justify-content-between small mb-1">
-                <span class="text-muted">Final Price</span>
-                <span class="fw-600">@Model.FinalConfirmedPrice JD</span>
-            </div>
-            <div class="d-flex justify-content-between small mb-1">
-                <span class="text-muted">Platform Fee (@Model.CommissionPercentage%)</span>
-                <span>@Model.CommissionAmount JD</span>
-            </div>
-            <hr class="my-2" />
-            <div class="d-flex justify-content-between">
-                <span class="fw-700">Provider Earns</span>
-                <span class="fw-700 text-success">@Model.ProviderEarnings JD</span>
-            </div>
-            @if (Model.Payment != null)
-            {
-                <div class="mt-2 text-success small">
-                    <i class="fas fa-check-circle me-1"></i>
-                    Payment recorded on @Model.Payment.TransactionDate.ToString("MMM dd, yyyy")
-                </div>
-            }
-        </div>
-
-    </div>
-
-    @* Right column *@
-    <div class="col-lg-7">
-
-        @* Job Timeline *@
-        <div class="k-card mb-3">
-            <h6 class="fw-700 mb-3">
-                <i class="fas fa-stream text-primary me-2"></i>Job Timeline
-            </h6>
-            <ul class="list-unstyled small">
-                <li class="mb-2 text-success">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <strong>Booked</strong> — @Model.CreatedAt.ToString("MMM dd, yyyy")
-                </li>
-                <li class="mb-2 @(Model.StartedAt.HasValue ? "text-success" : "text-muted")">
-                    <i class="fas fa-@(Model.StartedAt.HasValue ? "check-circle" : "circle") me-2"></i>
-                    <strong>Started</strong>
-                    @(Model.StartedAt.HasValue
-                                        ? "— " + Model.StartedAt.Value.ToString("MMM dd, yyyy")
-                                        : "— Waiting for provider")
-                </li>
-                <li class="mb-2 @(Model.BookingStatus == BookingStatus.PendingCompletion || Model.BookingStatus == BookingStatus.Completed ? "text-success" : "text-muted")">
-                    <i class="fas fa-@(Model.BookingStatus == BookingStatus.PendingCompletion || Model.BookingStatus == BookingStatus.Completed ? "check-circle" : "circle") me-2"></i>
-                    <strong>Provider Marked Done</strong>
-                    @(Model.BookingStatus == BookingStatus.PendingCompletion || Model.BookingStatus == BookingStatus.Completed
-                                        ? ""
-                                        : "— Pending")
-                </li>
-                <li class="@(Model.CompletedAt.HasValue ? "text-success" : "text-muted")">
-                    <i class="fas fa-@(Model.CompletedAt.HasValue ? "check-double" : "circle") me-2"></i>
-                    <strong>Completed</strong>
-                    @(Model.CompletedAt.HasValue
-                                        ? "— " + Model.CompletedAt.Value.ToString("MMM dd, yyyy")
-                                        : "— Awaiting your confirmation")
-                </li>
-            </ul>
-        </div>
-
-        @* Confirm completion *@
-        @if (Model.BookingStatus == BookingStatus.PendingCompletion)
-        {
-            <div class="k-card mb-3 border-start border-info border-3">
-                <h6 class="fw-700 text-info mb-2">
-                    <i class="fas fa-hourglass-end me-2"></i>Confirm Job Completion
-                </h6>
-                <p class="small text-muted mb-3">
-                    The provider has marked this job as done. Please confirm to finalize
-                    the booking and release payment.
-                </p>
-                <form asp-action="ConfirmCompletion" asp-route-id="@Model.Id" method="post"
-                      onsubmit="return confirm('Confirm this job is completed?')">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-check-double me-1"></i> Yes, Job is Done
-                    </button>
-                </form>
-            </div>
-        }
-
-        @* Review *@
-        @if (Model.BookingStatus == BookingStatus.Completed)
-        {
-            @if (Model.Review != null)
-            {
-                <div class="k-card border-start border-success border-3">
-                    <h6 class="fw-700 mb-2">
-                        <i class="fas fa-star text-warning me-2"></i>Your Review
-                    </h6>
-                    <div class="mb-1">
-                        @for (int i = 1; i <= 5; i++)
+                <section class="kh-info-card">
+                    <h2 class="h5 mb-3"><i class="fas fa-images text-primary me-2"></i>Service photos</h2>
+                    <div class="kh-gallery-grid">
+                        @foreach (var img in Model.ServiceRequest.Images)
                         {
-                            <i class="fas fa-star @(i <= Model.Review.Rating ? "text-warning" : "text-muted")"></i>
+                            <a href="@img.ImageUrl" target="_blank" aria-label="Open service request photo">
+                                <img src="@img.ImageUrl" alt="@Model.ServiceRequest.Title" />
+                            </a>
                         }
-                        <span class="ms-1 small text-muted">(@Model.Review.Rating/5)</span>
                     </div>
-                    @if (!string.IsNullOrEmpty(Model.Review.Comment))
+                </section>
+            }
+        </div>
+
+        <div class="kh-detail-stack">
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-user-hard-hat text-primary me-2"></i>Provider information</h2>
+                <div class="kh-offer-provider mb-3">
+                    @if (!string.IsNullOrEmpty(Model.ProviderProfile?.ProfileImage))
                     {
-                        <p class="small text-muted mb-0">@Model.Review.Comment</p>
+                        <img src="@Model.ProviderProfile.ProfileImage" class="kh-avatar"
+                             alt="@providerName" />
                     }
+                    else
+                    {
+                        <span class="kh-avatar-fallback">@providerInitial</span>
+                    }
+                    <div>
+                        <a asp-area="" asp-controller="ProviderPublic" asp-action="Profile"
+                           asp-route-id="@Model.ProviderProfileId"
+                           class="fw-800 text-decoration-none text-dark">
+                            @providerName
+                        </a>
+                        <div class="d-flex flex-wrap gap-2 mt-1">
+                            @if (Model.ProviderProfile?.IsVerified == true)
+                            {
+                                <span class="kh-status-badge kh-status-soft-success">
+                                    <i class="fas fa-shield-alt"></i>Verified
+                                </span>
+                            }
+                            <span class="small text-muted">
+                                <i class="fas fa-star text-warning me-1"></i>
+                                @Model.ProviderProfile?.AverageRating.ToString("0.0") rating
+                            </span>
+                            <span class="small text-muted">
+                                <i class="fas fa-briefcase text-primary me-1"></i>
+                                @Model.ProviderProfile?.CompletedJobsCount jobs
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            }
-            else
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-phone"></i></span>
+                    <div>
+                        <div class="small text-muted">Phone</div>
+                        <div class="fw-800">@Model.ProviderProfile?.User?.PhoneNumber</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-clock text-primary me-2"></i>Schedule information</h2>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-calendar-day"></i></span>
+                    <div>
+                        <div class="small text-muted">Preferred service date</div>
+                        <div class="fw-800">@Model.ServiceRequest?.PreferredDate.ToString("MMMM dd, yyyy")</div>
+                    </div>
+                </div>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-play"></i></span>
+                    <div>
+                        <div class="small text-muted">Started</div>
+                        <div class="fw-800">
+                            @(Model.StartedAt.HasValue ? Model.StartedAt.Value.ToString("MMMM dd, yyyy") : "Waiting for provider")
+                        </div>
+                    </div>
+                </div>
+                <div class="kh-info-row">
+                    <span class="kh-info-icon"><i class="fas fa-check-double"></i></span>
+                    <div>
+                        <div class="small text-muted">Completed</div>
+                        <div class="fw-800">
+                            @(Model.CompletedAt.HasValue ? Model.CompletedAt.Value.ToString("MMMM dd, yyyy") : "Not completed yet")
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-receipt text-primary me-2"></i>Pricing information</h2>
+                <div class="kh-price-grid mb-3">
+                    <div class="kh-price-cell">
+                        <div class="small text-muted">Final price</div>
+                        <div class="kh-price">@Model.FinalConfirmedPrice.ToString("0.##") JD</div>
+                    </div>
+                    <div class="kh-price-cell">
+                        <div class="small text-muted">Provider earns</div>
+                        <div class="kh-price text-success">@Model.ProviderEarnings.ToString("0.##") JD</div>
+                    </div>
+                </div>
+                <div class="kh-inline-between mb-2">
+                    <span class="text-muted">Platform fee (@Model.CommissionPercentage.ToString("0.##")%)</span>
+                    <strong>@Model.CommissionAmount.ToString("0.##") JD</strong>
+                </div>
+                @if (Model.Payment != null)
+                {
+                    <div class="kh-status-badge kh-status-soft-success mt-2">
+                        <i class="fas fa-check-circle"></i>
+                        Payment recorded @Model.Payment.TransactionDate.ToString("MMM dd, yyyy")
+                    </div>
+                }
+            </section>
+
+            <section class="kh-info-card">
+                <h2 class="h5 mb-3"><i class="fas fa-stream text-primary me-2"></i>Status information</h2>
+                <ul class="kh-timeline">
+                    <li class="kh-timeline-item is-done">
+                        <span class="kh-timeline-dot"><i class="fas fa-check"></i></span>
+                        <div>
+                            <strong>Booked</strong>
+                            <div class="text-muted small">@Model.CreatedAt.ToString("MMM dd, yyyy")</div>
+                        </div>
+                    </li>
+                    <li class="kh-timeline-item @(Model.StartedAt.HasValue ? "is-done" : "")">
+                        <span class="kh-timeline-dot">
+                            <i class="fas @(Model.StartedAt.HasValue ? "fa-check" : "fa-circle")"></i>
+                        </span>
+                        <div>
+                            <strong>Started</strong>
+                            <div class="text-muted small">
+                                @(Model.StartedAt.HasValue ? Model.StartedAt.Value.ToString("MMM dd, yyyy") : "Waiting for provider")
+                            </div>
+                        </div>
+                    </li>
+                    <li class="kh-timeline-item @(markedDone ? "is-done" : "")">
+                        <span class="kh-timeline-dot">
+                            <i class="fas @(markedDone ? "fa-check" : "fa-circle")"></i>
+                        </span>
+                        <div>
+                            <strong>Provider marked done</strong>
+                            <div class="text-muted small">@(markedDone ? "Ready for confirmation" : "Pending")</div>
+                        </div>
+                    </li>
+                    <li class="kh-timeline-item @(Model.CompletedAt.HasValue ? "is-done" : "")">
+                        <span class="kh-timeline-dot">
+                            <i class="fas @(Model.CompletedAt.HasValue ? "fa-check" : "fa-circle")"></i>
+                        </span>
+                        <div>
+                            <strong>Completed</strong>
+                            <div class="text-muted small">
+                                @(Model.CompletedAt.HasValue ? Model.CompletedAt.Value.ToString("MMM dd, yyyy") : "Awaiting confirmation")
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            @if (Model.BookingStatus == BookingStatus.PendingCompletion)
             {
-                <div class="k-card border-start border-warning border-3">
-                    <h6 class="fw-700 mb-2">
-                        <i class="fas fa-star me-2 text-warning"></i>Leave a Review
-                    </h6>
-                    <p class="small text-muted mb-2">Share your experience with this provider.</p>
-                    <a asp-area="Customer" asp-controller="Review" asp-action="Create"
-                       asp-route-bookingId="@Model.Id" class="btn btn-sm btn-warning">
-                        <i class="fas fa-pen me-1"></i> Write a Review
-                    </a>
-                </div>
+                <section class="kh-action-panel">
+                    <h2 class="h5 fw-800 mb-2"><i class="fas fa-hourglass-end text-primary me-2"></i>Confirm completion</h2>
+                    <p class="text-muted small mb-3">
+                        The provider marked this job as done. Confirm completion to finalize the booking and release payment.
+                    </p>
+                    <form asp-action="ConfirmCompletion" asp-route-id="@Model.Id" method="post"
+                          onsubmit="return confirm('Confirm this job is completed?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check-double me-1"></i> Yes, job is done
+                        </button>
+                    </form>
+                </section>
             }
-        }
 
-        @* ── File a Complaint ── *@
-        @if (Model.BookingStatus != BookingStatus.Cancelled)
-        {
-            <div class="k-card mt-3 border-start border-danger border-3">
-                <h6 class="fw-700 mb-2 text-danger">
-                    <i class="fas fa-flag me-2"></i>Report an Issue
-                </h6>
-                <p class="small text-muted mb-3">
-                    Experienced a problem with this booking? File a complaint and our
-                    team will investigate within 24–48 hours.
-                </p>
-                <a asp-area="Customer" asp-controller="Complaint" asp-action="Create"
-                   asp-route-bookingId="@Model.Id"
-                   class="btn btn-sm btn-outline-danger">
-                    <i class="fas fa-flag me-1"></i> File a Complaint
-                </a>
-            </div>
-        }
+            @if (Model.BookingStatus == BookingStatus.Completed)
+            {
+                @if (Model.Review != null)
+                {
+                    <section class="kh-info-card">
+                        <h2 class="h5 mb-3"><i class="fas fa-star text-warning me-2"></i>Your review</h2>
+                        <div class="mb-2">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="fas fa-star @(i <= Model.Review.Rating ? "text-warning" : "text-muted")"></i>
+                            }
+                            <span class="ms-1 small text-muted">(@Model.Review.Rating/5)</span>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.Review.Comment))
+                        {
+                            <p class="text-muted mb-0">@Model.Review.Comment</p>
+                        }
+                    </section>
+                }
+                else
+                {
+                    <section class="kh-action-panel warning">
+                        <h2 class="h5 fw-800 mb-2"><i class="fas fa-star text-warning me-2"></i>Leave a review</h2>
+                        <p class="text-muted small mb-3">Share your experience so other customers can choose with confidence.</p>
+                        <a asp-area="Customer" asp-controller="Review" asp-action="Create"
+                           asp-route-bookingId="@Model.Id" class="btn btn-warning">
+                            <i class="fas fa-pen me-1"></i> Write a review
+                        </a>
+                    </section>
+                }
+            }
 
+            @if (Model.BookingStatus != BookingStatus.Cancelled)
+            {
+                <section class="kh-action-panel danger">
+                    <h2 class="h5 fw-800 mb-2 text-danger"><i class="fas fa-flag me-2"></i>Report an issue</h2>
+                    <p class="text-muted small mb-3">
+                        Experienced a problem with this booking? File a complaint and the support team will review it.
+                    </p>
+                    <a asp-area="Customer" asp-controller="Complaint" asp-action="Create"
+                       asp-route-bookingId="@Model.Id"
+                       class="btn btn-outline-danger">
+                        <i class="fas fa-flag me-1"></i> File a complaint
+                    </a>
+                </section>
+            }
+        </div>
     </div>
 </div>

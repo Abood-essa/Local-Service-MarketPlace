@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Provider Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bcc9c6;
+            border-radius: 10px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#dee4e1",
+                      "on-secondary-container": "#00217a",
+                      "outline": "#6d7a77",
+                      "on-background": "#171d1c",
+                      "surface-container": "#eaefed",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#89f5e7",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "background": "#f5faf8",
+                      "tertiary-container": "#6c748b",
+                      "on-tertiary-fixed": "#131b2e",
+                      "surface-container-low": "#f0f5f2",
+                      "on-tertiary-container": "#fefcff",
+                      "on-surface": "#171d1c",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-dim": "#d6dbd9",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed-dim": "#6bd8cb",
+                      "inverse-surface": "#2c3130",
+                      "primary": "#00685f",
+                      "tertiary": "#545c72",
+                      "surface-container-high": "#e4e9e7",
+                      "surface-container-highest": "#dee4e1",
+                      "surface": "#f5faf8",
+                      "secondary-fixed-dim": "#b8c4ff",
+                      "inverse-primary": "#6bd8cb",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#173bab",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#00201d",
+                      "surface-tint": "#006a61",
+                      "on-secondary-fixed": "#001453",
+                      "inverse-on-surface": "#edf2f0",
+                      "primary-container": "#008378",
+                      "on-surface-variant": "#3d4947",
+                      "outline-variant": "#bcc9c6",
+                      "secondary": "#3755c3",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#005049",
+                      "secondary-container": "#708cfd",
+                      "on-primary-container": "#f4fffc",
+                      "surface-bright": "#f5faf8",
+                      "secondary-fixed": "#dde1ff",
+                      "tertiary-fixed": "#dae2fd",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "lg": "40px",
+                      "xl": "64px",
+                      "margin-desktop": "48px",
+                      "sm": "12px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "max-width": "1280px",
+                      "md": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display-lg": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- Desktop Sidebar -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-40">
+<div class="p-md">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</span>
+<p class="text-on-surface-variant text-label-sm mt-xs">System Administrator</p>
+</div>
+<nav class="flex-1 px-sm mt-md space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg transition-all scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+<span class="font-label-md text-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="hail">hail</span>
+<span class="font-label-md text-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="font-label-md text-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Wallet</span>
+</a>
+</nav>
+<div class="p-md mt-auto">
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                New Category
+            </button>
+</div>
+</aside>
+<!-- Mobile Top Bar -->
+<header class="md:hidden sticky top-0 z-50 flex justify-between items-center w-full h-16 px-margin-mobile bg-surface border-b border-outline-variant">
+<span class="text-headline-md font-headline-md font-bold text-primary">Khidmati</span>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-primary" data-icon="notifications">notifications</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged male service provider with a warm, confident smile. He is set against a clean, softly blurred modern office interior with warm ambient lighting. The overall color palette is professional and calm, using soft teal and slate tones to match the corporate identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3Lt9eVbzChVTrf0lec9kAirOjU4SVB-89QS2c1PJmYFGGBoDzlT7IDstgsB-hDeI-BwXLG_HYyu2AjqBh6pnFLrblKoc0t5G5HrL3yrz9llsgrkz_x9GFNy31ig7kmTfKhAKp5Va6-jlr0Cp296o6miMGXaNcdPD2RyGlM2VP7Cqj6gk5RTrbZgQrZ_E1oW77Au_DrJ0pxYQsSBhehV_i_gqpxPN-0Vo8MhY5PuKG-ihWgr6CvloC0nEdwZfK_COgi8LC_ecNrA8"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="md:ml-[280px] p-margin-mobile md:p-margin-desktop pb-32">
+<!-- Header Section with Toggle -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-md mb-lg">
+<div>
+<h1 class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">Welcome back, Sarah</h1>
+<p class="text-body-md text-on-surface-variant">Here is what's happening with your services today.</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-high p-4 rounded-xl shadow-sm">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-on-surface">Available for Jobs</span>
+<span class="text-label-sm text-on-surface-variant" id="status-text">Currently Online</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="availability-toggle" type="checkbox"/>
+<div class="w-14 h-7 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md mb-lg">
+<!-- Earnings Card -->
+<div class="bg-secondary p-6 rounded-xl text-on-secondary shadow-lg relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary-fixed opacity-80" data-icon="payments">payments</span>
+<span class="text-label-sm font-label-sm bg-on-secondary/10 px-2 py-1 rounded">+12.5%</span>
+</div>
+<p class="text-label-md font-label-md opacity-90">Monthly Earnings</p>
+<h2 class="text-headline-lg font-headline-lg mt-1">$4,250.00</h2>
+<button class="mt-md bg-white text-secondary py-2 px-6 rounded-lg font-label-md hover:scale-105 active:scale-95 transition-transform">Withdraw</button>
+</div>
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-on-secondary/5 rounded-full blur-2xl group-hover:scale-125 transition-transform duration-700"></div>
+</div>
+<!-- Jobs Completed -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="task_alt">task_alt</span>
+</div>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant">Jobs Completed</p>
+<h2 class="text-headline-lg font-headline-lg text-on-surface mt-1">128</h2>
+</div>
+<div class="mt-md h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[75%] rounded-full"></div>
+</div>
+<p class="text-label-sm text-on-surface-variant mt-2">15 more to reach next goal</p>
+</div>
+<!-- Rating -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<div class="w-10 h-10 rounded-lg bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant">Average Rating</p>
+<h2 class="text-headline-lg font-headline-lg text-on-surface mt-1">4.92 <span class="text-label-sm font-label-sm text-on-surface-variant">/ 5.0</span></h2>
+<div class="flex gap-1 mt-md">
+<span class="material-symbols-outlined text-yellow-500 text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-yellow-500 text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-yellow-500 text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-yellow-500 text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-yellow-500 text-[18px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<!-- Secondary Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- Upcoming Jobs (List/Calendar Hybrid) -->
+<div class="lg:col-span-2 space-y-md">
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-md">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Upcoming Jobs</h3>
+<div class="flex gap-2">
+<button class="p-2 rounded-lg bg-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="list">list</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="calendar_month">calendar_month</span>
+</button>
+</div>
+</div>
+<div class="space-y-sm">
+<!-- Job Item -->
+<div class="flex items-center gap-md p-4 rounded-xl border border-outline-variant hover:border-primary transition-colors cursor-pointer group">
+<div class="hidden sm:flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-surface-container">
+<span class="text-label-sm font-label-sm text-on-surface-variant">OCT</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">24</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-label-md font-label-md text-on-surface">Kitchen Faucet Replacement</h4>
+<span class="text-label-sm font-label-sm px-3 py-1 bg-primary/10 text-primary rounded-full">Confirmed</span>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-on-surface-variant text-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 09:00 AM</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span> Marina, Dubai</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Job Item -->
+<div class="flex items-center gap-md p-4 rounded-xl border border-outline-variant hover:border-primary transition-colors cursor-pointer group">
+<div class="hidden sm:flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-surface-container">
+<span class="text-label-sm font-label-sm text-on-surface-variant">OCT</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">24</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-label-md font-label-md text-on-surface">Full AC Maintenance</h4>
+<span class="text-label-sm font-label-sm px-3 py-1 bg-secondary-container text-on-secondary-container rounded-full">Pending</span>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-on-surface-variant text-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 02:30 PM</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span> JLT, Dubai</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Job Item -->
+<div class="flex items-center gap-md p-4 rounded-xl border border-outline-variant hover:border-primary transition-colors cursor-pointer group">
+<div class="hidden sm:flex flex-col items-center justify-center w-16 h-16 rounded-lg bg-surface-container">
+<span class="text-label-sm font-label-sm text-on-surface-variant">OCT</span>
+<span class="text-headline-sm font-headline-sm text-on-surface">25</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h4 class="text-label-md font-label-md text-on-surface">Garden Lighting Repair</h4>
+<span class="text-label-sm font-label-sm px-3 py-1 bg-primary/10 text-primary rounded-full">Confirmed</span>
+</div>
+<div class="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-on-surface-variant text-label-sm">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 10:00 AM</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px]" data-icon="location_on">location_on</span> Palm Jumeirah</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant group-hover:translate-x-1 transition-transform" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Notifications Feed -->
+<div class="bg-surface-container-lowest p-6 rounded-xl border border-outline-variant shadow-sm flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Recent Activity</h3>
+<button class="text-label-sm font-label-sm text-primary hover:underline">Mark all read</button>
+</div>
+<div class="space-y-md flex-1 overflow-y-auto max-h-[400px] pr-2">
+<!-- Notification Item -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface transition-colors">
+<div class="w-10 h-10 shrink-0 rounded-full bg-green-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-green-600 text-[20px]" data-icon="payments">payments</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Payment Received</p>
+<p class="text-body-sm text-on-surface-variant">Payment for #JOB-882 has been released to your wallet.</p>
+<span class="text-[11px] text-outline mt-1 block">2 mins ago</span>
+</div>
+</div>
+<!-- Notification Item -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface transition-colors">
+<div class="w-10 h-10 shrink-0 rounded-full bg-blue-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600 text-[20px]" data-icon="rate_review">rate_review</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">New Review</p>
+<p class="text-body-sm text-on-surface-variant">"Great service! Very professional." - Mike Johnson</p>
+<span class="text-[11px] text-outline mt-1 block">1 hour ago</span>
+</div>
+</div>
+<!-- Notification Item -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface transition-colors">
+<div class="w-10 h-10 shrink-0 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="assignment_late">assignment_late</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">New Job Request</p>
+<p class="text-body-sm text-on-surface-variant">A homeowner requested a quote for AC repair.</p>
+<span class="text-[11px] text-outline mt-1 block">3 hours ago</span>
+</div>
+</div>
+<!-- Notification Item -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-surface transition-colors opacity-60">
+<div class="w-10 h-10 shrink-0 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" data-icon="info">info</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">System Update</p>
+<p class="text-body-sm text-on-surface-variant">Wallet verification completed successfully.</p>
+<span class="text-[11px] text-outline mt-1 block">Yesterday</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Navigation Bar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-sm font-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-label-sm font-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        const toggle = document.getElementById('availability-toggle');
+        const statusText = document.getElementById('status-text');
+
+        toggle.addEventListener('change', function() {
+            if (this.checked) {
+                statusText.textContent = 'Currently Online';
+                statusText.classList.remove('text-error');
+                statusText.classList.add('text-on-surface-variant');
+            } else {
+                statusText.textContent = 'Offline (No new jobs)';
+                statusText.classList.add('text-error');
+                statusText.classList.remove('text-on-surface-variant');
+            }
+        });
+
+        // Add some subtle parallax or hover effects on cards
+        const cards = document.querySelectorAll('.bg-surface-container-lowest');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('shadow-md');
+            });
+        });
+    </script>
+</body></html>

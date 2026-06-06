@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Customer Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#dee4e1",
+                      "on-secondary-container": "#00217a",
+                      "outline": "#6d7a77",
+                      "on-background": "#171d1c",
+                      "surface-container": "#eaefed",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#89f5e7",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "background": "#f5faf8",
+                      "tertiary-container": "#6c748b",
+                      "on-tertiary-fixed": "#131b2e",
+                      "surface-container-low": "#f0f5f2",
+                      "on-tertiary-container": "#fefcff",
+                      "on-surface": "#171d1c",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-dim": "#d6dbd9",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed-dim": "#6bd8cb",
+                      "inverse-surface": "#2c3130",
+                      "primary": "#00685f",
+                      "tertiary": "#545c72",
+                      "surface-container-high": "#e4e9e7",
+                      "surface-container-highest": "#dee4e1",
+                      "surface": "#f5faf8",
+                      "secondary-fixed-dim": "#b8c4ff",
+                      "inverse-primary": "#6bd8cb",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#173bab",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#00201d",
+                      "surface-tint": "#006a61",
+                      "on-secondary-fixed": "#001453",
+                      "inverse-on-surface": "#edf2f0",
+                      "primary-container": "#008378",
+                      "on-surface-variant": "#3d4947",
+                      "outline-variant": "#bcc9c6",
+                      "secondary": "#3755c3",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#005049",
+                      "secondary-container": "#708cfd",
+                      "on-primary-container": "#f4fffc",
+                      "surface-bright": "#f5faf8",
+                      "secondary-fixed": "#dde1ff",
+                      "tertiary-fixed": "#dae2fd",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "lg": "40px",
+                      "xl": "64px",
+                      "margin-desktop": "48px",
+                      "sm": "12px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "max-width": "1280px",
+                      "md": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display-lg": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .sidebar-item-active {
+            @apply bg-secondary-container text-on-secondary-container;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5faf8;
+        }
+        .soft-shadow {
+            box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
+        }
+        .elevated-shadow {
+            box-shadow: 0px 10px 30px rgba(15, 23, 42, 0.1);
+        }
+    </style>
+</head>
+<body class="text-on-background">
+<!-- Desktop Sidebar -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-50">
+<div class="p-md flex flex-col h-full overflow-y-auto">
+<!-- Brand Logo -->
+<div class="mb-xl px-2">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</span>
+</div>
+<!-- Profile Snippet -->
+<div class="flex items-center gap-sm mb-lg px-2">
+<img alt="Customer Avatar" class="w-12 h-12 rounded-full object-cover border-2 border-surface-container-high" data-alt="A professional headshot of a friendly man in his 30s with a warm smile, set against a clean, soft-focus office background. The lighting is natural and bright, aligning with a premium light-mode UI aesthetic. The overall mood is approachable and trustworthy, consistent with a high-end service marketplace brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBVpo5hewpUxFdY3Mq4qKkgi_GXIOA73dpW8zDmleqMTztTA6lj7el_dDlMHz-if0dXnlzAR8yqm-SHTkC7_CTaER-0xcOVRanxp9Aob6Jk4LcxlPJep5lGxMNFURYm7kMT9pIKFQ3q6WSLUDhLw9hNzuJoxEc18KzGZaUOrR6ZlTyW03pwd5OjP9uGeNgiG2I6hBYG_exmqL6pjSEnWa5JpBVpdKkQoCdpCdSCoCXioODjRILkZZbZlTXsF29eyiGgG1gNIWqiTtU"/>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Omar Khalid</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Homeowner</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<nav class="flex-grow space-y-1">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-sm px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg font-label-md transition-all scale-[0.98]" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg font-label-md transition-colors" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+                    Requests
+                </a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg font-label-md transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+                    Bookings
+                </a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg font-label-md transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+                    Wallet
+                </a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg font-label-md transition-colors" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+                    Help &amp; Support
+                </a>
+</nav>
+<!-- Bottom Action -->
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg font-label-md transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+<a class="flex items-center gap-sm px-4 py-3 text-error hover:bg-error-container/20 rounded-lg font-label-md transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+                    Sign Out
+                </a>
+</div>
+</div>
+</aside>
+<!-- Mobile Bottom NavBar -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-sm font-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Main Content Canvas -->
+<main class="md:ml-[280px] min-h-screen pb-xl">
+<!-- Top App Bar -->
+<header class="sticky top-0 z-40 bg-surface flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-md border-b border-outline-variant shadow-sm">
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface">Dashboard</h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Welcome back, Omar!</p>
+</div>
+<div class="flex items-center gap-md">
+<button class="relative p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<!-- Quick Action CTA -->
+<button class="hidden md:flex items-center gap-xs bg-primary text-on-primary px-6 py-3 rounded-xl font-label-md hover:opacity-90 active:scale-95 transition-all elevated-shadow">
+<span class="material-symbols-outlined">add_circle</span>
+                    Create New Service Request
+                </button>
+</div>
+</header>
+<!-- Content Area -->
+<div class="px-margin-mobile md:px-margin-desktop mt-lg">
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mb-lg">
+<!-- Active Requests -->
+<div class="bg-surface-container-lowest p-md rounded-xl soft-shadow border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Active Requests</p>
+<h3 class="text-headline-md font-headline-md text-on-surface">04</h3>
+<p class="text-label-sm font-label-sm text-primary mt-2 flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                            2 pending offer
+                        </p>
+</div>
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">assignment_late</span>
+</div>
+</div>
+<!-- Upcoming Bookings -->
+<div class="bg-surface-container-lowest p-md rounded-xl soft-shadow border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Upcoming Bookings</p>
+<h3 class="text-headline-md font-headline-md text-on-surface">02</h3>
+<p class="text-label-sm font-label-sm text-secondary mt-2">Next: Tomorrow, 10 AM</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+</div>
+<!-- Wallet / Spending -->
+<div class="bg-primary text-on-primary p-md rounded-xl elevated-shadow flex items-center justify-between">
+<div>
+<p class="text-label-md font-label-md opacity-80 mb-1">Wallet Balance</p>
+<h3 class="text-headline-md font-headline-md">AED 1,240.50</h3>
+<button class="mt-3 text-label-sm font-label-sm bg-on-primary/20 px-3 py-1 rounded-full hover:bg-on-primary/30 transition-colors">
+                            Manage Wallet
+                        </button>
+</div>
+<div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Recent Activity List (Span 2) -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl soft-shadow border border-outline-variant overflow-hidden">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Recent Activity</h2>
+<a class="text-label-md font-label-md text-primary hover:underline" href="#">View All</a>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Activity Item 1 -->
+<div class="p-md hover:bg-surface-container-high transition-colors flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary">plumbing</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h4 class="font-label-md text-on-surface">Emergency Pipe Repair</h4>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary text-label-sm font-label-sm">In Progress</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Provider "EcoFix Solutions" is on the way.</p>
+<p class="text-label-sm font-label-sm text-outline mt-1">20 mins ago</p>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="p-md hover:bg-surface-container-high transition-colors flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-secondary">cleaning_services</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h4 class="font-label-md text-on-surface">Deep House Cleaning</h4>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/10 text-tertiary text-label-sm font-label-sm">Pending Offer</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">3 new quotes received for your request.</p>
+<p class="text-label-sm font-label-sm text-outline mt-1">2 hours ago</p>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="p-md hover:bg-surface-container-high transition-colors flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-success" style="color: #006a61;">verified</span>
+</div>
+<div class="flex-grow">
+<div class="flex justify-between items-start">
+<h4 class="font-label-md text-on-surface">AC Maintenance</h4>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed-dim/20 text-on-primary-fixed-variant text-label-sm font-label-sm">Completed</span>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Service completed. Please rate your experience.</p>
+<p class="text-label-sm font-label-sm text-outline mt-1">Yesterday</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Notifications / Alerts Sidebar -->
+<div class="space-y-gutter">
+<!-- Notification Card -->
+<div class="bg-surface-container-lowest p-md rounded-xl soft-shadow border border-outline-variant">
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-md">Quick Tips</h2>
+<div class="space-y-md">
+<div class="flex gap-sm">
+<span class="material-symbols-outlined text-secondary">info</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                                    Complete your home profile to get more accurate service quotes.
+                                </p>
+</div>
+<div class="flex gap-sm">
+<span class="material-symbols-outlined text-primary">security</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                                    Always pay through the app to ensure your service guarantee.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Recommended Services (Small Glassmorphism Style) -->
+<div class="bg-secondary-fixed/30 p-md rounded-xl border border-secondary/10 backdrop-blur-sm">
+<h3 class="text-label-md font-label-md text-on-secondary-fixed-variant mb-md">Recommended for You</h3>
+<div class="flex items-center gap-sm p-sm bg-white/60 rounded-lg mb-sm">
+<span class="material-symbols-outlined text-secondary">pest_control</span>
+<span class="text-label-md font-label-md text-on-secondary-fixed">Annual Pest Control</span>
+<span class="material-symbols-outlined ml-auto text-secondary">arrow_forward_ios</span>
+</div>
+<div class="flex items-center gap-sm p-sm bg-white/60 rounded-lg">
+<span class="material-symbols-outlined text-secondary">garden_cart</span>
+<span class="text-label-md font-label-md text-on-secondary-fixed">Garden Landscaping</span>
+<span class="material-symbols-outlined ml-auto text-secondary">arrow_forward_ios</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Mobile FAB for Quick Action -->
+<button class="md:hidden fixed bottom-20 right-6 w-14 h-14 bg-primary text-on-primary rounded-full elevated-shadow flex items-center justify-center z-50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+</main>
+<!-- Footer -->
+<footer class="md:ml-[280px] w-full py-xl px-margin-mobile md:px-margin-desktop bg-surface-container-highest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center gap-lg">
+<div class="text-center md:text-left">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-2 max-w-xs">Connecting homeowners with verified professionals for every task.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm font-body-sm" href="#">About Us</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm font-body-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm font-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm font-body-sm" href="#">Contact Support</a>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">© 2024 Khidmati Marketplace. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.97)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = '';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = '';
+            });
+        });
+
+        // Add scroll effect for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('shadow-md');
+                header.classList.remove('shadow-sm');
+            } else {
+                header.classList.add('shadow-sm');
+                header.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body></html>

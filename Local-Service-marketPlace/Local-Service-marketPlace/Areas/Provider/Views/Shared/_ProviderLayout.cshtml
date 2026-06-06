@@ -1,312 +1,133 @@
-﻿<!DOCTYPE html>
+@using Microsoft.AspNetCore.Identity
+@using Local_Service_marketPlace.Data
+@using Microsoft.EntityFrameworkCore
+@inject SignInManager<Local_Service_marketPlace.Models.ApplicationUser> SignInManager
+@inject UserManager<Local_Service_marketPlace.Models.ApplicationUser> UserManager
+@inject ApplicationDbContext DbContext
+
+@{
+    var currentUserId = UserManager.GetUserId(User);
+    var unreadCount = await DbContext.Notifications
+        .CountAsync(n => n.UserId == currentUserId && !n.IsRead);
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] — Khidmati Provider</title>
-
+    <title>@ViewData["Title"] - Khidmati Provider</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-    <style>
-        :root {
-            --primary: #0f766e;
-            --primary-dark: #0d5c55;
-            --primary-light: #f0fdfa;
-            --surface: #f8fafc;
-            --card-bg: #ffffff;
-            --text: #1e293b;
-            --muted: #64748b;
-            --border: #e2e8f0;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --warning: #d97706;
-        }
-
-        body {
-            background-color: var(--surface);
-            color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            min-height: 100vh;
-        }
-
-        .provider-navbar {
-            background: #ffffff;
-            border-bottom: 1px solid var(--border);
-            padding: 0.75rem 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,.06);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .navbar-brand-text {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: -0.5px;
-            text-decoration: none;
-        }
-
-            .navbar-brand-text span {
-                color: var(--text);
-            }
-
-        .provider-badge {
-            background: var(--primary-light);
-            color: var(--primary);
-            font-size: 0.7rem;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 20px;
-            border: 1px solid var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-link-custom {
-            color: var(--muted);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.4rem 0.75rem;
-            border-radius: 8px;
-            transition: all .2s;
-            font-size: 0.925rem;
-        }
-
-            .nav-link-custom:hover,
-            .nav-link-custom.active {
-                color: var(--primary);
-                background: var(--primary-light);
-            }
-
-            .nav-link-custom i {
-                margin-right: 5px;
-                font-size: 0.85rem;
-            }
-
-        .btn-logout {
-            color: var(--danger);
-            background: #fef2f2;
-            border: none;
-            padding: 0.4rem 0.9rem;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.925rem;
-            text-decoration: none;
-            transition: all .2s;
-        }
-
-            .btn-logout:hover {
-                background: #fee2e2;
-                color: var(--danger);
-            }
-
-        .page-wrapper {
-            padding: 2rem 0;
-            min-height: calc(100vh - 65px);
-        }
-
-        .k-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            box-shadow: 0 1px 4px rgba(0,0,0,.05);
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-            .k-card:hover {
-                box-shadow: 0 4px 12px rgba(0,0,0,.08);
-                transition: box-shadow .2s;
-            }
-
-        .page-header {
-            margin-bottom: 1.75rem;
-        }
-
-            .page-header h2 {
-                font-weight: 700;
-                font-size: 1.6rem;
-                color: var(--text);
-                margin-bottom: 0.25rem;
-            }
-
-            .page-header p {
-                color: var(--muted);
-                margin: 0;
-                font-size: 0.95rem;
-            }
-
-        .stat-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.25rem 1.5rem;
-            text-align: center;
-        }
-
-            .stat-card .stat-number {
-                font-size: 2rem;
-                font-weight: 800;
-                color: var(--primary);
-                line-height: 1;
-            }
-
-            .stat-card .stat-label {
-                font-size: 0.85rem;
-                color: var(--muted);
-                margin-top: 0.25rem;
-            }
-
-        .badge-status {
-            padding: 0.35em 0.75em;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .alert {
-            border-radius: 10px;
-            border: none;
-        }
-
-        .btn {
-            border-radius: 8px;
-            font-weight: 500;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            border-color: var(--primary);
-        }
-
-            .btn-primary:hover {
-                background: var(--primary-dark);
-                border-color: var(--primary-dark);
-            }
-
-        .form-control, .form-select {
-            border-radius: 8px;
-            border-color: var(--border);
-        }
-
-            .form-control:focus, .form-select:focus {
-                border-color: var(--primary);
-                box-shadow: 0 0 0 3px rgba(15,118,110,.1);
-            }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--muted);
-        }
-
-            .empty-state i {
-                font-size: 3rem;
-                margin-bottom: 1rem;
-                opacity: .4;
-            }
-
-            .empty-state h5 {
-                font-weight: 600;
-                color: var(--text);
-            }
-
-        .verified-banner {
-            background: #fef9c3;
-            border: 1px solid #fde047;
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            font-size: 0.9rem;
-            color: #854d0e;
-        }
-
-        .wallet-negative-banner {
-            background: #fef2f2;
-            border: 1px solid #fca5a5;
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            font-size: 0.9rem;
-            color: #991b1b;
-        }
-
-        .fw-600 {
-            font-weight: 600;
-        }
-
-        .fw-700 {
-            font-weight: 700;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/khidmati-theme.css" asp-append-version="true" />
 </head>
-<body>
+<body class="app-shell provider-shell">
+    <nav class="app-navbar">
+        <div class="container app-nav-container">
+            <div class="d-flex align-items-center gap-2">
+                <a asp-area="Provider" asp-controller="Dashboard" asp-action="Index" class="brand-mark">Khid<span>mati</span></a>
+                <span class="provider-badge">Provider</span>
+            </div>
 
-    <nav class="provider-navbar">
-        <div class="container">
-            <div class="d-flex align-items-center justify-content-between">
+            <div class="app-nav-links">
+                <a asp-area="Provider" asp-controller="Dashboard" asp-action="Index"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")"
+                   title="Dashboard">
+                    <i class="fas fa-tachometer-alt"></i> <span class="nav-label">Dashboard</span>
+                </a>
+                <a asp-area="Provider" asp-controller="ServiceRequest" asp-action="Index"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "ServiceRequest" ? "active" : "")"
+                   title="Browse Requests">
+                    <i class="fas fa-search"></i> <span class="nav-label">Browse</span>
+                </a>
+                <a asp-area="Provider" asp-controller="Offer" asp-action="Index"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Offer" ? "active" : "")"
+                   title="My Offers">
+                    <i class="fas fa-file-alt"></i> <span class="nav-label">Offers</span>
+                </a>
+                <a asp-area="Provider" asp-controller="Booking" asp-action="Index"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Booking" ? "active" : "")"
+                   title="My Bookings">
+                    <i class="fas fa-calendar-check"></i> <span class="nav-label">Bookings</span>
+                </a>
+                <a asp-area="Provider" asp-controller="Wallet" asp-action="Index"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wallet" ? "active" : "")"
+                   title="Wallet">
+                    <i class="fas fa-wallet"></i> <span class="nav-label">Wallet</span>
+                </a>
+                <a asp-area="Provider" asp-controller="Complaint" asp-action="MyComplaints"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")"
+                   title="My Complaints">
+                    <i class="fas fa-flag"></i> <span class="nav-label">Complaints</span>
+                </a>
+                <a asp-area="Provider" asp-controller="Profile" asp-action="Index"
+                   class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "active" : "")"
+                   title="My Profile">
+                    <i class="fas fa-user-cog"></i> <span class="nav-label">Profile</span>
+                </a>
+            </div>
 
-                <div class="d-flex align-items-center gap-2">
-                    <a asp-area="Provider" asp-controller="Dashboard" asp-action="Index"
-                       class="navbar-brand-text">
-                        Khid<span>mati</span>
-                    </a>
-                    <span class="provider-badge">Provider</span>
-                </div>
-
-                <div class="d-flex align-items-center gap-1">
-                    <a asp-area="Provider" asp-controller="Dashboard" asp-action="Index"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "active" : "")">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
-                    </a>
-                    <a asp-area="Provider" asp-controller="ServiceRequest" asp-action="Index"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "ServiceRequest" ? "active" : "")">
-                        <i class="fas fa-search"></i> Browse
-                    </a>
-                    <a asp-area="Provider" asp-controller="Offer" asp-action="Index"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Offer" ? "active" : "")">
-                        <i class="fas fa-file-alt"></i> My Offers
-                    </a>
-                    <a asp-area="Provider" asp-controller="Booking" asp-action="Index"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Booking" ? "active" : "")">
-                        <i class="fas fa-calendar-check"></i> Bookings
-                    </a>
-                    <a asp-area="Provider" asp-controller="Wallet" asp-action="Index"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Wallet" ? "active" : "")">
-                        <i class="fas fa-wallet"></i> Wallet
-                    </a>
-                    <a asp-area="Provider" asp-controller="Complaint" asp-action="MyComplaints"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Complaint" ? "active" : "")">
-                        <i class="fas fa-flag"></i> Complaints
-                    </a>
-                    <a asp-area="Provider" asp-controller="Profile" asp-action="Index"
-                       class="nav-link-custom @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" ? "active" : "")">
-                        <i class="fas fa-user-cog"></i> Profile
-                    </a>
-                </div>
-
-                <div class="d-flex align-items-center gap-3">
-                    <span class="text-muted small">
-                        <i class="fas fa-user-circle me-1"></i>@User.Identity?.Name
-                    </span>
-                    <a asp-area="" asp-controller="Account" asp-action="Logout"
-                       class="btn-logout">
-                        <i class="fas fa-sign-out-alt me-1"></i> Logout
-                    </a>
-                </div>
-
+            <div class="app-nav-actions">
+                <a asp-area="Provider" asp-controller="Notification" asp-action="Index" class="notif-bell" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                    @if (unreadCount > 0)
+                    {
+                        <span class="notif-badge" id="notif-badge">@(unreadCount > 9 ? "9+" : unreadCount.ToString())</span>
+                    }
+                </a>
+              
+                <a asp-area="" asp-controller="Account" asp-action="Logout" class="btn-logout">
+                    <i class="fas fa-sign-out-alt me-1"></i> Logout
+                </a>
             </div>
         </div>
     </nav>
 
     <div class="page-wrapper">
-        <div class="container">
-            @RenderBody()
-        </div>
+        <div class="container">@RenderBody()</div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+    @if (TempData["Success"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: '@TempData["Success"]',
+                confirmButtonColor: '#b86048'
+            });
+        </script>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '@TempData["Error"]',
+                confirmButtonColor: '#d33'
+            });
+        </script>
+    }
+
+    @if (TempData["Info"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'info',
+                title: 'Info',
+                text: '@TempData["Info"]',
+                confirmButtonColor: '#4a3729'
+            });
+        </script>
+    }
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

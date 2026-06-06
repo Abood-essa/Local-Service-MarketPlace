@@ -1,4 +1,4 @@
-﻿@model Local_Service_marketPlace.Models.ViewModels.LoginViewModel
+@model Local_Service_marketPlace.Models.ViewModels.LoginViewModel
 
 @{
     ViewData["Title"] = "Login";
@@ -6,43 +6,68 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Khidmati</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/khidmati-theme.css" asp-append-version="true" />
 </head>
-<body class="bg-light">
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="card shadow">
-                    <div class="card-body p-4">
-                        <h3 class="text-center mb-4">Login</h3>
-                        <form asp-action="Login" method="post">
-                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
-                            <div class="mb-3">
-                                <label asp-for="Email" class="form-label"></label>
-                                <input asp-for="Email" class="form-control" />
-                            </div>
-                            <div class="mb-3">
-                                <label asp-for="Password" class="form-label"></label>
-                                <input asp-for="Password" class="form-control" />
-                            </div>
-                            <div class="mb-3 form-check">
-                                <input asp-for="RememberMe" class="form-check-input" />
-                                <label asp-for="RememberMe" class="form-check-label"></label>
-                            </div>
-                            <div class="text-center mt-3">
-                                Don't have an account?
-                                <a asp-action="Register">Register here</a>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Login</button>
-                        </form>
-                    </div>
-                </div>
+<body class="auth-shell">
+    <div class="auth-frame">
+        <aside class="auth-panel">
+            <a asp-controller="Home" asp-action="Index" class="auth-brand">Khid<span>mati</span></a>
+            <div class="auth-panel-copy">
+                <h1>Welcome back to your service command center.</h1>
+                <p>
+                    Manage requests, bookings, provider offers, wallet activity, and support conversations from one calm workspace.
+                </p>
             </div>
-        </div>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-light text-dark">Verified providers</span>
+                <span class="badge bg-light text-dark">Tracked bookings</span>
+                <span class="badge bg-light text-dark">Secure workflow</span>
+            </div>
+        </aside>
+
+        <section class="auth-card">
+            <div class="mb-4">
+                <h2>Login</h2>
+                <p>Enter your account details to continue.</p>
+            </div>
+
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+                </div>
+
+                <div class="d-flex align-items-center justify-content-between gap-3 mb-4">
+                    <div class="form-check mb-0">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label"></label>
+                    </div>
+                    <a asp-action="Register" class="text-decoration-none fw-700">Create account</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100 py-3">
+                    <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>Login
+                </button>
+            </form>
+        </section>
     </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

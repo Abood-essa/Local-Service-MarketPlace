@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Admin - User Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bcc9c6;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6d7a77;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dee4e1",
+                        "on-secondary-container": "#00217a",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1c",
+                        "surface-container": "#eaefed",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "background": "#f5faf8",
+                        "tertiary-container": "#6c748b",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary-container": "#fefcff",
+                        "on-surface": "#171d1c",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#2c3130",
+                        "primary": "#00685f",
+                        "tertiary": "#545c72",
+                        "surface-container-high": "#e4e9e7",
+                        "surface-container-highest": "#dee4e1",
+                        "surface": "#f5faf8",
+                        "secondary-fixed-dim": "#b8c4ff",
+                        "inverse-primary": "#6bd8cb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#173bab",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201d",
+                        "surface-tint": "#006a61",
+                        "on-secondary-fixed": "#001453",
+                        "inverse-on-surface": "#edf2f0",
+                        "primary-container": "#008378",
+                        "on-surface-variant": "#3d4947",
+                        "outline-variant": "#bcc9c6",
+                        "secondary": "#3755c3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005049",
+                        "secondary-container": "#708cfd",
+                        "on-primary-container": "#f4fffc",
+                        "surface-bright": "#f5faf8",
+                        "secondary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant p-md overflow-y-auto z-40">
+<div class="flex items-center gap-3 mb-xl">
+<div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<div class="flex flex-col">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">System Administrator</span>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-outline">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-outline">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-outline">hail</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-outline">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-outline">report_problem</span>
+<span class="text-label-md font-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-outline">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined text-outline">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-xl pt-xl border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3 px-4 rounded-lg font-label-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+                New Category
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] min-h-screen">
+<!-- Top App Bar (Mobile Sensitive) -->
+<header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-margin-mobile md:px-margin-desktop py-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-headline-md font-headline-md text-on-surface">User Management</h1>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container px-4 py-2 rounded-full border border-outline-variant focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-64" placeholder="Search by name, email..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="relative p-2 text-on-surface-variant hover:bg-surface-variant rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<img alt="Admin Profile" class="w-10 h-10 rounded-full border-2 border-primary object-cover" data-alt="A professional headshot of a middle-aged woman with a friendly, confident smile. She is wearing a modern professional navy blazer over a clean white shirt. The background is a soft, out-of-focus modern office interior with warm ambient lighting. The overall aesthetic is trustworthy and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCG7gHozzsAZ-i5vJkN6sdTNCmR2zPfLIbqamkFIr2Aue7filb6LjA5pxcocCv3qbDK_a9icV11aDRZf9kv1bdr7U_fT3cYDTOS38rUgl7jwa_RwgkNLOdogVAQyQUmEPdUOphXVOVU2uetJOfQM9XkGbnCMLj84KJy_9St4Z2s8ZWPU6M9uX8HDK0oYBesqKLrjqagQaTmUMg6N9TQVy4bKtovL_sKtuIYtYm_cdXu8aSBWleJepCMoNwJvrEo8hlAGdgnP1RbXGM"/>
+</div>
+</div>
+</header>
+<div class="p-margin-mobile md:p-margin-desktop space-y-md">
+<!-- Filter Actions Bar -->
+<section class="flex flex-col md:flex-row gap-md justify-between items-start md:items-center">
+<div class="flex flex-wrap gap-sm">
+<div class="relative group">
+<select class="appearance-none bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-2.5 pr-10 text-label-md focus:ring-primary focus:border-primary cursor-pointer">
+<option>All Roles</option>
+<option>Homeowner</option>
+<option>Provider</option>
+<option>Moderator</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
+</div>
+<div class="relative group">
+<select class="appearance-none bg-surface-container-highest border border-outline-variant rounded-lg px-4 py-2.5 pr-10 text-label-md focus:ring-primary focus:border-primary cursor-pointer">
+<option>All Cities</option>
+<option>Dubai</option>
+<option>Abu Dhabi</option>
+<option>Sharjah</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">location_on</span>
+</div>
+</div>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary-container px-6 py-2.5 rounded-lg font-label-md hover:bg-primary hover:text-on-primary transition-all shadow-sm">
+<span class="material-symbols-outlined">person_add</span>
+                    Add New User
+                </button>
+</section>
+<!-- Table Container -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant overflow-hidden">
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full border-collapse text-left">
+<thead>
+<tr class="bg-surface-container border-b border-outline-variant">
+<th class="px-6 py-4 text-label-md text-on-surface-variant">User Information</th>
+<th class="px-6 py-4 text-label-md text-on-surface-variant">Role</th>
+<th class="px-6 py-4 text-label-md text-on-surface-variant">City</th>
+<th class="px-6 py-4 text-label-md text-on-surface-variant">Status</th>
+<th class="px-6 py-4 text-label-md text-on-surface-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Row 1 -->
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold overflow-hidden">
+<img alt="User 1" class="w-full h-full object-cover" data-alt="A portrait of a young professional man in his late 20s with a sharp haircut and stylish glasses. He is smiling warmly in a bright, minimalist setting with cool teal accents. The lighting is crisp and modern, matching a high-trust professional marketplace aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSkoUzcMotbhWLpDc70gM9TbRwpwMRbjcX-meFVjWla4HsY7X0HsaIaHaigvHVxtUErMsQET9nKU--8oZ8seqJqs1YruYZ9ZJzCp1fPiunG84BW5APMzxn1cbLVVNz0tw9kjeFTlS8cS2bvdixfiESpec7OIxCq0XHFkC3ZCsujyE-gfoTS_eVdA7adp1PtjE8LeBopJsdRDQ1HkPKvSXUfasJehs6gjODVt-U_FispJWPaUWI3aP2OtVdMUPnpkEdB8Dc40qQQvA"/>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Ahmed Al-Sayed</span>
+<span class="text-body-sm text-on-surface-variant">ahmed.sayed@email.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-label-sm">Provider</span>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Dubai</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-700 rounded-full text-label-sm font-bold">
+<span class="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="View Profile">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="p-2 text-outline hover:bg-surface-variant rounded-lg transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 text-error hover:bg-error/10 rounded-lg transition-colors" title="Suspend">
+<span class="material-symbols-outlined">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold overflow-hidden">
+<img alt="User 2" class="w-full h-full object-cover" data-alt="A smiling woman in professional attire, looking directly at the camera with warmth and reliability. She has long dark hair and is situated in a well-lit, airy home office with subtle plants in the background. The mood is calm, professional, and reflects high-quality customer service." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbREtxRD8eXL0VlJ_yycIu6uumP0ywVCfGSlZzRiwDjzLOsEhlA5Up6VOXmrvgGLoLdWNwHYSxNLm9cpHSC9CwXN9R8TmoG1Bn9aT6g7phXkVSkxLhAqyk52riiyN8Sb0NnL7o2WqG2W6JXpTG9kS4E1z9j3KeiGk6jfJl7LM8iZgZMkxvxFwFwCm9uncQqvhZCyzKeyrUgEKR74dM4zpEw1VNA8yFbqhQtD2Af4pfMbVZY8my5e4T-FJyxbGVX8tc1TYapItTllU"/>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Sarah Williams</span>
+<span class="text-body-sm text-on-surface-variant">sarah.w@email.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed rounded-full text-label-sm">Homeowner</span>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Abu Dhabi</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-700 rounded-full text-label-sm font-bold">
+<span class="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="View Profile">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="p-2 text-outline hover:bg-surface-variant rounded-lg transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 text-error hover:bg-error/10 rounded-lg transition-colors" title="Suspend">
+<span class="material-symbols-outlined">block</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold overflow-hidden">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">James Miller</span>
+<span class="text-body-sm text-on-surface-variant">james.m@email.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-secondary-fixed text-on-secondary-fixed rounded-full text-label-sm">Provider</span>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Dubai</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 px-3 py-1 bg-error-container text-on-error-container rounded-full text-label-sm font-bold">
+<span class="w-1.5 h-1.5 bg-error rounded-full"></span>
+                                        Inactive
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="View Profile">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="p-2 text-outline hover:bg-surface-variant rounded-lg transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors" title="Activate">
+<span class="material-symbols-outlined">check_circle</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-primary-container/5 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary font-bold overflow-hidden">
+<img alt="User 4" class="w-full h-full object-cover" data-alt="A close-up portrait of a mature man with a warm smile, wearing a professional polo shirt. He exudes experience and trustworthiness. The setting is bright and clean, with a soft blur showing a modern residential street in the background. The lighting is golden hour, adding a friendly, community-driven feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAptE-u4KIT0OJXkgCNhqzWii7GuSLL_Xl-ZiSdVq5m_H4VbXfx7tNK25lqeBXR91aDasVzGpqgdCTfwgIqCYlML2WSxRRdUrqWa79g73E0LOTbu3c1ave6jRs2hszZKz98MYWLXH2WL0kbWNqQKQnKjha7khiBlw9eoBq53PdLwYc5RHEho5hLaS9sToHz5jXZ4FD74N2jup-hYAGNX5SdUAMZ8AVjRXzOqAi904OLmgA-8-zdRxtw9bPB96JOJ_NJkFQnVK27jho"/>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-on-surface text-body-md">Khalid Omar</span>
+<span class="text-body-sm text-on-surface-variant">khalid.o@email.com</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 bg-on-primary-fixed-variant text-white rounded-full text-label-sm">Moderator</span>
+</td>
+<td class="px-6 py-4 text-body-sm text-on-surface-variant">Sharjah</td>
+<td class="px-6 py-4">
+<span class="flex items-center gap-1.5 px-3 py-1 bg-green-500/10 text-green-700 rounded-full text-label-sm font-bold">
+<span class="w-1.5 h-1.5 bg-green-600 rounded-full"></span>
+                                        Active
+                                    </span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-primary hover:bg-primary/10 rounded-lg transition-colors" title="View Profile">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<button class="p-2 text-outline hover:bg-surface-variant rounded-lg transition-colors" title="Edit">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-2 text-error hover:bg-error/10 rounded-lg transition-colors" title="Suspend">
+<span class="material-symbols-outlined">block</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="flex items-center justify-between px-6 py-4 bg-surface border-t border-outline-variant">
+<span class="text-body-sm text-on-surface-variant">Showing 4 of 1,248 users</span>
+<div class="flex items-center gap-2">
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-container transition-colors disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<div class="flex gap-1">
+<button class="w-10 h-10 bg-primary text-on-primary rounded-lg font-label-md">1</button>
+<button class="w-10 h-10 hover:bg-surface-container rounded-lg font-label-md text-on-surface-variant transition-colors">2</button>
+<button class="w-10 h-10 hover:bg-surface-container rounded-lg font-label-md text-on-surface-variant transition-colors">3</button>
+<span class="w-10 h-10 flex items-center justify-center">...</span>
+<button class="w-10 h-10 hover:bg-surface-container rounded-lg font-label-md text-on-surface-variant transition-colors">125</button>
+</div>
+<button class="p-2 border border-outline-variant rounded-lg hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Shell -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</span>
+<p class="text-body-sm font-body-sm text-on-surface-variant text-center md:text-left">© 2024 Khidmati Marketplace. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">About Us</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Contact Support</a>
+</div>
+</footer>
+</main>
+<!-- Mobile Nav Anchor -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface rounded-t-xl shadow-lg border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-sm font-label-sm">Users</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-sm font-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm font-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for table rows and buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', () => {
+                btn.style.transform = 'scale(0.95)';
+            });
+            btn.addEventListener('mouseup', () => {
+                btn.style.transform = 'scale(1)';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'scale(1)';
+            });
+        });
+
+        // Simple Mobile Sidebar Toggle (Logic Only)
+        const menuBtn = document.querySelector('header button');
+        menuBtn?.addEventListener('click', () => {
+            alert('Sidebar navigation menu would toggle here on mobile.');
+        });
+    </script>
+</body></html>

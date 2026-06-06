@@ -1,0 +1,32 @@
+# Khidmati UI Design Specification
+
+## Overview
+Khidmati is a local service marketplace for electricians, plumbers, AC technicians, etc. It features a unique two-phase pricing workflow and role-based access for Customers, Providers, and Admins.
+
+## Core Pages to Generate
+
+### Public
+1. **Landing Page**: Hero, CTA, Categories, How it Works, Trust sections.
+2. **Login/Register**: Dual-purpose authentication page.
+
+### Customer Area
+3. **Customer Dashboard**: Overview of active requests and bookings.
+4. **Create Service Request**: Form with category, date, city, address, image upload.
+5. **Service Request Details**: Info, images, timeline, and provider offers.
+6. **Customer Bookings**: Tracking list with status filters.
+
+### Provider Area
+7. **Provider Dashboard**: Stats, upcoming jobs, and notification summary.
+8. **Open Requests**: Marketplace for providers to find new jobs with filters.
+9. **Provider Profile Setup**: Form for bio, experience, and category selection.
+10. **Provider Wallet**: Earnings, commission breakdown, and payment history.
+
+### Admin Area
+11. **Admin Dashboard**: High-level stats (Users, Bookings, Commissions).
+12. **Admin Users Management**: Table with roles, status, and actions.
+13. **Admin Complaints**: Queue for handling disputes.
+14. **Admin Categories**: Management of service types.
+
+## Workflow Logic
+- **Pricing**: Estimated Range (Min-Max) -> Inspection -> Final Price -> Acceptance.
+- **Statuses**: Active, In Progress, Pending Completion, Completed, Cancelled, Disputed.

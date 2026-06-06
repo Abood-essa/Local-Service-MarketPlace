@@ -1,5 +1,6 @@
 ﻿using Local_Service_marketPlace.Models;
 using Local_Service_marketPlace.Models.ViewModels;
+using Local_Service_marketPlace.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,12 +10,16 @@ namespace Local_Service_marketPlace.Controllers
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager,
-                                 UserManager<ApplicationUser> userManager)
+        public AccountController(
+            SignInManager<ApplicationUser> signInManager,
+            UserManager<ApplicationUser> userManager,
+            IEmailService emailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         [HttpGet]
@@ -51,7 +56,6 @@ namespace Local_Service_marketPlace.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
         [HttpGet]
         public IActionResult Register() => View();
 
@@ -74,15 +78,19 @@ namespace Local_Service_marketPlace.Controllers
 
             if (result.Succeeded)
             {
-                // Assign role
-                if (model.Role == "Provider" || model.Role == "Customer")
-                    await _userManager.AddToRoleAsync(user, model.Role);
-                else
-                    await _userManager.AddToRoleAsync(user, "Customer");
+                var role = (model.Role == "Provider" || model.Role == "Customer")
+                    ? model.Role
+                    : "Customer";
 
+                await _userManager.AddToRoleAsync(user, role);
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
-                if (model.Role == "Provider")
+                // ── Welcome email ──────────────────────────────────────────
+                var fullName = $"{user.FirstName} {user.LastName}";
+                _ = _emailService.SendWelcomeEmailAsync(user.Email, fullName, role);
+                // ──────────────────────────────────────────────────────────
+
+                if (role == "Provider")
                     return RedirectToAction("Setup", "Profile", new { area = "Provider" });
                 else
                     return RedirectToAction("Index", "ServiceRequest", new { area = "Customer" });
@@ -93,7 +101,5 @@ namespace Local_Service_marketPlace.Controllers
 
             return View(model);
         }
-
-
     }
 }

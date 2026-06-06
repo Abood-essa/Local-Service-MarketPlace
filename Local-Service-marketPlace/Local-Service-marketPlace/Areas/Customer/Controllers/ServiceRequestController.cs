@@ -2,6 +2,7 @@
 using Local_Service_marketPlace.Models;
 using Local_Service_marketPlace.Models.Enums;
 using Local_Service_marketPlace.Models.ViewModels;
+using Local_Service_marketPlace.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -18,19 +19,21 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
+        private readonly IEmailService _emailService;
 
         public ServiceRequestController(
             ApplicationDbContext db,
             UserManager<ApplicationUser> userManager,
             IWebHostEnvironment env,
-            IConfiguration config)
+            IConfiguration config,
+            IEmailService emailService)
         {
             _db = db;
             _userManager = userManager;
             _env = env;
             _config = config;
+            _emailService = emailService;
         }
-
 
         public async Task<IActionResult> Index(string? status)
         {
@@ -122,7 +125,6 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         public async Task<IActionResult> Details(int id)
         {
             var userId = _userManager.GetUserId(User);
@@ -167,7 +169,6 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AcceptFinalPrice(int offerId)
@@ -176,7 +177,7 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
 
             var offer = await _db.ServiceOffers
                 .Include(o => o.ServiceRequest)
-                .Include(o => o.ProviderProfile)
+                .Include(o => o.ProviderProfile).ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(o => o.Id == offerId &&
                                           o.ServiceRequest.CustomerId == userId);
 
@@ -193,7 +194,6 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
                 TempData["Error"] = "This offer is not in a state that can be accepted.";
                 return RedirectToAction(nameof(Details), new { id = offer.ServiceRequestId });
             }
-
 
             var commissionPct = _config.GetValue<double>("MarketplaceSettings:CommissionPercentage");
             var finalPrice = offer.FinalPrice.Value;
@@ -240,6 +240,26 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
 
             await _db.SaveChangesAsync();
 
+            // ── Email: booking created → Customer ─────────────────────────
+            var customer = await _userManager.FindByIdAsync(userId);
+            var customerName = $"{customer.FirstName} {customer.LastName}";
+            _ = _emailService.SendBookingCreatedEmailAsync(
+                customer.Email!,
+                customerName,
+                offer.ServiceRequest.Title,
+                booking.Id,
+                finalPrice);
+
+            // ── Email: offer accepted → Provider ──────────────────────────
+            var providerName = $"{offer.ProviderProfile.User.FirstName} {offer.ProviderProfile.User.LastName}";
+            _ = _emailService.SendOfferAcceptedEmailAsync(
+                offer.ProviderProfile.User.Email!,
+                providerName,
+                offer.ServiceRequest.Title,
+                booking.Id,
+                finalPrice);
+            // ──────────────────────────────────────────────────────────────
+
             TempData["Success"] = "Offer accepted! Your booking is now active.";
             return RedirectToAction("Details", "Booking", new { area = "Customer", id = booking.Id });
         }
@@ -252,6 +272,7 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
 
             var offer = await _db.ServiceOffers
                 .Include(o => o.ServiceRequest)
+                .Include(o => o.ProviderProfile)
                 .FirstOrDefaultAsync(o => o.Id == offerId &&
                                           o.ServiceRequest.CustomerId == userId);
 
@@ -260,6 +281,15 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
             offer.Status = OfferStatus.RejectedByCustomer;
             offer.ServiceRequest.Status = ServiceRequestStatus.Pending;
             offer.ServiceRequest.UpdatedAt = DateTime.Now;
+
+            _db.Notifications.Add(new Notification
+            {
+                UserId = offer.ProviderProfile.UserId,
+                Title = "Offer Rejected",
+                Message = $"Your offer for '{offer.ServiceRequest.Title}' was rejected by the customer.",
+                IsRead = false,
+                CreatedAt = DateTime.Now
+            });
 
             await _db.SaveChangesAsync();
 

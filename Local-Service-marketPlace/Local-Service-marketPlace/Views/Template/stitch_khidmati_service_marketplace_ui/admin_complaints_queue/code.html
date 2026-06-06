@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Admin - Complaints Queue</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom Scrollbar for better UI */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #bcc9c6;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d7a77;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dee4e1",
+                        "on-secondary-container": "#00217a",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1c",
+                        "surface-container": "#eaefed",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "background": "#f5faf8",
+                        "tertiary-container": "#6c748b",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary-container": "#fefcff",
+                        "on-surface": "#171d1c",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#2c3130",
+                        "primary": "#00685f",
+                        "tertiary": "#545c72",
+                        "surface-container-high": "#e4e9e7",
+                        "surface-container-highest": "#dee4e1",
+                        "surface": "#f5faf8",
+                        "secondary-fixed-dim": "#b8c4ff",
+                        "inverse-primary": "#6bd8cb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#173bab",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201d",
+                        "surface-tint": "#006a61",
+                        "on-secondary-fixed": "#001453",
+                        "inverse-on-surface": "#edf2f0",
+                        "primary-container": "#008378",
+                        "on-surface-variant": "#3d4947",
+                        "outline-variant": "#bcc9c6",
+                        "secondary": "#3755c3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005049",
+                        "secondary-container": "#708cfd",
+                        "on-primary-container": "#f4fffc",
+                        "surface-bright": "#f5faf8",
+                        "secondary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant z-50">
+<div class="p-md flex items-center gap-sm">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">shield_person</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">System Administrator</p>
+</div>
+</div>
+<nav class="flex-1 px-sm py-md space-y-1">
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="text-label-md font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">hail</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg transition-all scale-[0.98]" href="#">
+<span class="material-symbols-outlined text-[20px]">report_problem</span>
+<span class="text-label-md font-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-sm px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<div class="p-md">
+<button class="w-full py-3 bg-primary text-white rounded-lg font-label-md hover:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Category
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] min-h-screen bg-background">
+<!-- Top Header Navigation -->
+<header class="sticky top-0 z-40 flex items-center justify-between w-full px-margin-mobile md:px-margin-desktop py-4 bg-surface border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-md">
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h2 class="text-headline-md font-headline-md font-bold text-primary">Complaints Queue</h2>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex items-center bg-surface-container px-4 py-2 rounded-full border border-outline-variant focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-64 ml-2" placeholder="Search disputes..." type="text"/>
+</div>
+<div class="relative">
+<button class="flex items-center text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+</div>
+<div class="flex items-center gap-2 border-l border-outline-variant pl-4">
+<img alt="Admin Profile" class="w-8 h-8 rounded-full object-cover" data-alt="Close-up professional portrait of a male system administrator in his 30s, wearing a modern blue shirt, clean-shaven, looking friendly and capable. The background is a blurred high-tech office environment with soft cool lighting and teal accents, following a modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2ZlbCiyA1TW76yrcoSu6Xfca6ZzMvp-ebY3b1kEVm5Ilzruy2Q4UET-S4VUBrG39HlGSOGOZJ93hp0mQ-Rse117gxt2tWi0_mMPbRXraPDvcY6j3Qazlpt_P0OjYP5zvL3DbmCwYfFJHuBQT-sXmww-OW4CUqrCHXPSs5BO_tuu3jJ_-X4uPM_Rd8swu9hT4fvnx3NE_JX04SAyG34nND0Uhk6hbzTL7nfzSCjIvJAaMbtYS-HO2s57firkiVbiSgyTm6SEscCgc"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-margin-mobile md:p-margin-desktop">
+<!-- Statistics Row -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-md mb-lg">
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-1">Total Active</p>
+<p class="text-headline-md font-headline-md text-on-surface">124</p>
+</div>
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">warning</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-1">Pending</p>
+<p class="text-headline-md font-headline-md text-on-surface">42</p>
+</div>
+<div class="w-12 h-12 bg-secondary-container/10 rounded-full flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">pending</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-1">Investigating</p>
+<p class="text-headline-md font-headline-md text-on-surface">68</p>
+</div>
+<div class="w-12 h-12 bg-tertiary-container/10 rounded-full flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">search_check</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant flex items-center justify-between">
+<div>
+<p class="text-label-sm font-label-sm text-on-surface-variant mb-1">Resolved Today</p>
+<p class="text-headline-md font-headline-md text-on-surface">14</p>
+</div>
+<div class="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Dashboard Bento Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+<!-- Complaints Table List -->
+<div class="lg:col-span-8 bg-surface-container-lowest rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant overflow-hidden">
+<div class="p-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="text-headline-sm font-headline-sm">Active Disputes</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 text-label-sm font-label-sm rounded-lg border border-outline-variant hover:bg-surface-container flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+                                Filter
+                            </button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-md py-4 text-label-sm font-label-sm text-on-surface-variant">Request ID</th>
+<th class="px-md py-4 text-label-sm font-label-sm text-on-surface-variant">Customer</th>
+<th class="px-md py-4 text-label-sm font-label-sm text-on-surface-variant">Provider</th>
+<th class="px-md py-4 text-label-sm font-label-sm text-on-surface-variant">Reason</th>
+<th class="px-md py-4 text-label-sm font-label-sm text-on-surface-variant">Status</th>
+<th class="px-md py-4 text-label-sm font-label-sm text-on-surface-variant">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-primary/5 transition-colors cursor-pointer group">
+<td class="px-md py-4 font-label-md text-primary">#REQ-8291</td>
+<td class="px-md py-4 text-body-sm">Ahmed Salim</td>
+<td class="px-md py-4 text-body-sm">QuickFix Plumbing</td>
+<td class="px-md py-4 text-body-sm">Unfinished work</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full text-label-sm bg-secondary-container/10 text-secondary border border-secondary/20">Investigating</span>
+</td>
+<td class="px-md py-4">
+<button class="text-primary hover:underline text-label-sm font-label-md">View</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors cursor-pointer active">
+<td class="px-md py-4 font-label-md text-primary">#REQ-7742</td>
+<td class="px-md py-4 text-body-sm">Sara Johnson</td>
+<td class="px-md py-4 text-body-sm">Elite Cleaning Co</td>
+<td class="px-md py-4 text-body-sm">Damage to property</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full text-label-sm bg-error-container/10 text-error border border-error/20">Pending</span>
+</td>
+<td class="px-md py-4">
+<button class="text-primary hover:underline text-label-sm font-label-md">View</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors cursor-pointer">
+<td class="px-md py-4 font-label-md text-primary">#REQ-9104</td>
+<td class="px-md py-4 text-body-sm">Michael Chen</td>
+<td class="px-md py-4 text-body-sm">Garden Pros</td>
+<td class="px-md py-4 text-body-sm">Service delay</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full text-label-sm bg-secondary-container/10 text-secondary border border-secondary/20">Investigating</span>
+</td>
+<td class="px-md py-4">
+<button class="text-primary hover:underline text-label-sm font-label-md">View</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors cursor-pointer">
+<td class="px-md py-4 font-label-md text-primary">#REQ-6532</td>
+<td class="px-md py-4 text-body-sm">Laila Hassan</td>
+<td class="px-md py-4 text-body-sm">TechHelp Experts</td>
+<td class="px-md py-4 text-body-sm">Incomplete installation</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full text-label-sm bg-green-100 text-green-700 border border-green-200">Resolved</span>
+</td>
+<td class="px-md py-4">
+<button class="text-primary hover:underline text-label-sm font-label-md">Details</button>
+</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors cursor-pointer">
+<td class="px-md py-4 font-label-md text-primary">#REQ-8812</td>
+<td class="px-md py-4 text-body-sm">David Miller</td>
+<td class="px-md py-4 text-body-sm">CoolAir HVAC</td>
+<td class="px-md py-4 text-body-sm">Overcharged</td>
+<td class="px-md py-4">
+<span class="px-3 py-1 rounded-full text-label-sm bg-error-container/10 text-error border border-error/20">Pending</span>
+</td>
+<td class="px-md py-4">
+<button class="text-primary hover:underline text-label-sm font-label-md">View</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Complaint Detail View -->
+<div class="lg:col-span-4 space-y-gutter">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0px_10px_30px_rgba(15,23,42,0.1)] border border-primary/20 overflow-hidden">
+<div class="bg-primary px-md py-4 flex justify-between items-center">
+<h3 class="text-label-md font-label-md text-white">Dispute Detail: #REQ-7742</h3>
+<span class="bg-white/20 text-white text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold">Priority High</span>
+</div>
+<div class="p-md space-y-md">
+<!-- Dispute Header -->
+<div class="pb-md border-b border-outline-variant">
+<div class="flex items-center gap-sm mb-2">
+<span class="material-symbols-outlined text-primary">event</span>
+<span class="text-body-sm text-on-surface-variant">Reported: Oct 24, 2023 - 14:30</span>
+</div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Damage to property during cleaning</h4>
+</div>
+<!-- Customer Side -->
+<div class="bg-surface-container-low p-md rounded-lg">
+<div class="flex items-center gap-sm mb-3">
+<img alt="Customer Profile" class="w-8 h-8 rounded-full border-2 border-white" data-alt="Close-up professional portrait of a woman in her late 20s, with a warm smile, wearing a professional gray blazer. The photo uses soft lighting and a clean, high-key background to evoke a sense of trust and professionalism in a modern service marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDZSMxV0-jx8ffMylhLSeYb77hMtsDKoQ9qM90fJsNxNaiPnNN-Qb_PqgpX2BWYpnOEEqtij6l9VlxxiJooKwu3Gj70omcdeI0cNvwsPvxN_YoKRr2k_vJ87IPwbaWkMFIP3V_b8uxmVnBf1L6x7pb6f40hYeEw-E3MqhzUiISwcHrO35kBjutV_u1lhU2pyuVnJ80TFShYpF46bK0wJL226p6v4i4aBqGY5Rrj_TrON1oKOYHvzT5MXV22nh1ckJeC6UKrSSJXxM"/>
+<div>
+<p class="text-label-md font-label-md">Sara Johnson</p>
+<p class="text-[11px] text-on-surface-variant">Customer Statement</p>
+</div>
+</div>
+<p class="text-body-sm text-on-surface italic leading-relaxed">
+                                    "The cleaning crew accidentally knocked over a vintage ceramic lamp in my living room. They didn't mention it to me at the time, but I found it broken after they left. I want a refund for the service plus compensation for the lamp."
+                                </p>
+</div>
+<!-- Provider Side -->
+<div class="bg-secondary-container/5 p-md rounded-lg border-l-4 border-secondary">
+<div class="flex items-center gap-sm mb-3">
+<div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-white text-[12px] font-bold">EC</div>
+<div>
+<p class="text-label-md font-label-md">Elite Cleaning Co</p>
+<p class="text-[11px] text-on-surface-variant">Provider Statement</p>
+</div>
+</div>
+<p class="text-body-sm text-on-surface italic leading-relaxed">
+                                    "We apologize for the oversight. The staff member responsible didn't report it immediately. We are happy to refund the service fee, but we require a valuation certificate for the lamp before processing compensation."
+                                </p>
+</div>
+<!-- Evidence Slots -->
+<div class="space-y-sm">
+<p class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Evidence Submitted</p>
+<div class="flex gap-2">
+<div class="w-20 h-20 bg-surface-container rounded-lg border border-outline-variant flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A photo showing a shattered vintage ceramic lamp on a hardwood floor, shards of white and blue pottery scattered around. The lighting is natural and clear, documenting the damage for a dispute resolution process in a high-quality, professional manner." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCUt_WLj5_awDCj-pmWTycEBCnATHBabjTwQiupSgJ-IsdH4i6VmF2HRoXqwxgDHWksKRniL8lO20Kx7x_bGbhQ0YRlFMQ8sd39PqqG5UwdFpxFcUnwjOwpQGtDaqwUCYIhJA_kERtePZQNiFCtZ6JxRFpT535oKrj7OIsL-y_mjCEc8QhgY8spLCE8BZRB73UpMuq33aJq_3JKoDTYEcjPamCUmfSuXt6Zjqu9z8T4FU-RdeteqhUWrQoTyK8fS8yXEpi_EQikcl8"/>
+</div>
+<div class="w-20 h-20 bg-surface-container rounded-lg border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">description</span>
+</div>
+<button class="w-20 h-20 bg-surface-container-high rounded-lg border border-dashed border-outline flex flex-col items-center justify-center gap-1 hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="text-[10px]">Add Note</span>
+</button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="grid grid-cols-2 gap-sm pt-md">
+<button class="py-3 bg-secondary text-white rounded-lg font-label-md hover:opacity-90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+                                    Adjudicate
+                                </button>
+<button class="py-3 bg-surface-container-highest text-on-surface rounded-lg font-label-md hover:bg-surface-variant transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">chat_bubble</span>
+                                    Mediate
+                                </button>
+</div>
+</div>
+</div>
+<!-- Task Quick Access Card -->
+<div class="bg-tertiary-container text-white p-md rounded-xl shadow-lg relative overflow-hidden group">
+<div class="relative z-10">
+<h4 class="text-label-md font-label-md mb-1 opacity-80 uppercase tracking-wider">Quick Note</h4>
+<p class="text-headline-sm font-headline-sm mb-4">Internal System Reminder</p>
+<p class="text-body-sm opacity-90 leading-relaxed mb-4">All property damage disputes over $500 require a senior admin signature before resolution can be finalized.</p>
+<a class="text-label-md font-bold underline hover:opacity-80 transition-opacity" href="#">Review Guidelines</a>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[120px]">sticky_note_2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-surface border-t border-outline-variant flex justify-around items-center px-4 py-2 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="text-label-sm font-label-sm">Complaints</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm font-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-1" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple interactivity for the table rows to update the detail view (UI simulation)
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', () => {
+                // Remove active styling from all rows
+                document.querySelectorAll('tbody tr').forEach(r => r.classList.remove('bg-primary/10', 'border-l-4', 'border-primary'));
+                // Add active styling to clicked row
+                row.classList.add('bg-primary/10', 'border-l-4', 'border-primary');
+                
+                // Here we would typically fetch data and update the detail panel
+                console.log('Switching to complaint: ' + row.cells[0].innerText);
+            });
+        });
+
+        // Hover effects for the stats cards
+        document.querySelectorAll('.bg-surface-container-lowest.p-md').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+                card.style.transition = 'transform 0.2s ease-out';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

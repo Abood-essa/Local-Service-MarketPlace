@@ -1,23 +1,57 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
+<ul class="public-auth-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="public-nav-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                    <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+            </li>
+        }
+        else if (User.IsInRole("Provider"))
+        {
+            <li class="nav-item">
+                <a class="public-nav-link" asp-area="Provider" asp-controller="Dashboard" asp-action="Index">
+                    <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+            </li>
+        }
+        else if (User.IsInRole("Customer"))
+        {
+            <li class="nav-item">
+                <a class="public-nav-link" asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index">
+                    <i class="fa-solid fa-list-check"></i> My Requests
+                </a>
+            </li>
+        }
+
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">
-                Logout @User.Identity?.Name
+            <span class="public-nav-link">
+                <i class="fa-solid fa-circle-user"></i>
+                @{
+                    var name = User.Identity?.Name ?? "";
+                    @(name.Contains("@") ? name.Split("@")[0] : name)
+                }
+            </span>
+        </li>
+        <li class="nav-item">
+            <a class="btn-logout" asp-area="" asp-controller="Account" asp-action="Logout">
+                <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Logout
             </a>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="public-nav-link btn-login-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="btn btn-primary btn-register-link" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
         </li>
     }
 </ul>

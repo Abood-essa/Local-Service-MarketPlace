@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Admin - Categories Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-item {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom scrollbar for sidebar */
+        .sidebar-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar-scroll::-webkit-scrollbar-thumb {
+            background: #bcc9c6;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#dee4e1",
+                      "on-secondary-container": "#00217a",
+                      "outline": "#6d7a77",
+                      "on-background": "#171d1c",
+                      "surface-container": "#eaefed",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#89f5e7",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "background": "#f5faf8",
+                      "tertiary-container": "#6c748b",
+                      "on-tertiary-fixed": "#131b2e",
+                      "surface-container-low": "#f0f5f2",
+                      "on-tertiary-container": "#fefcff",
+                      "on-surface": "#171d1c",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-dim": "#d6dbd9",
+                      "on-error-container": "#93000a",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed-dim": "#6bd8cb",
+                      "inverse-surface": "#2c3130",
+                      "primary": "#00685f",
+                      "tertiary": "#545c72",
+                      "surface-container-high": "#e4e9e7",
+                      "surface-container-highest": "#dee4e1",
+                      "surface": "#f5faf8",
+                      "secondary-fixed-dim": "#b8c4ff",
+                      "inverse-primary": "#6bd8cb",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed-variant": "#173bab",
+                      "error-container": "#ffdad6",
+                      "on-primary-fixed": "#00201d",
+                      "surface-tint": "#006a61",
+                      "on-secondary-fixed": "#001453",
+                      "inverse-on-surface": "#edf2f0",
+                      "primary-container": "#008378",
+                      "on-surface-variant": "#3d4947",
+                      "outline-variant": "#bcc9c6",
+                      "secondary": "#3755c3",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#005049",
+                      "secondary-container": "#708cfd",
+                      "on-primary-container": "#f4fffc",
+                      "surface-bright": "#f5faf8",
+                      "secondary-fixed": "#dde1ff",
+                      "tertiary-fixed": "#dae2fd",
+                      "on-primary": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "lg": "40px",
+                      "xl": "64px",
+                      "margin-desktop": "48px",
+                      "sm": "12px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "max-width": "1280px",
+                      "md": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-0 bg-surface-container-low border-r border-outline-variant p-md overflow-y-auto sidebar-scroll z-50">
+<div class="flex items-center gap-3 mb-xl">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" data-icon="category">category</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">System Administrator</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-label-md font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg transition-all scale-[0.98]" href="#">
+<span class="material-symbols-outlined active-nav-item" data-icon="category" data-weight="fill" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="hail">hail</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="event_available">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="report_problem">report_problem</span>
+<span class="text-label-md font-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<button class="mt-xl w-full bg-primary text-on-primary py-3 px-4 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="text-label-md font-label-md">New Category</span>
+</button>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 md:ml-[280px] pb-32 md:pb-0">
+<!-- Top Header (Contextual) -->
+<header class="sticky top-0 z-40 bg-surface/80 backdrop-blur-md px-margin-mobile md:px-margin-desktop py-4 flex justify-between items-center border-b border-outline-variant">
+<div class="md:hidden">
+<h2 class="text-headline-sm font-headline-sm text-primary font-bold">Khidmati</h2>
+</div>
+<div class="hidden md:block">
+<h2 class="text-headline-md font-headline-md text-on-surface font-bold">Category Management</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Manage service types and market visibility</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group hidden sm:block">
+<input class="bg-surface-container-high border-none rounded-full px-10 py-2 text-body-sm focus:ring-2 focus:ring-primary w-64 transition-all" placeholder="Search categories..." type="text"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<img alt="User Profile" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a Middle Eastern man in a tailored dark blue suit, standing against a softly blurred modern office interior with warm ambient lighting. His expression is confident and friendly, reflecting a high-trust administrative role in a corporate environment. The lighting is high-key and natural, emphasizing clarity and professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBekr0v-t3_7Q-QZ1-ZnCnU9sT_ex5Za752v0ZmjEUgYh56TqMczjOZJEMe9rOeO3U97adLDfqopGh_SSrWQB0H41wwfC5XxR0UqG8HEVoseHkruc2E8DaCYwk7zfyUx1rM-Vpuzw-AqDqG7xKceQoyv-fwEYGk0C_mEzSFm88NdGkXELeicjHCkYllnye1pG_bAaQefX9jX-cIJKhAmb0JLpaNn74bzasZJHSMazHIGlfjMZrgmSDlPCELFa2VuCiwW_89--5iU-c"/>
+</div>
+</header>
+<div class="p-margin-mobile md:p-margin-desktop space-y-lg">
+<!-- Stats Row (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-label-md font-label-md text-on-surface-variant">Total Categories</span>
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-display-lg font-display-lg text-on-surface">24</h3>
+<p class="text-label-sm font-label-sm text-primary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                                +2 new this month
+                            </p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<span class="text-label-md font-label-md text-on-surface-variant">Active Providers</span>
+<div class="p-2 bg-secondary/10 text-secondary rounded-lg">
+<span class="material-symbols-outlined" data-icon="engineering">engineering</span>
+</div>
+</div>
+<div class="mt-4">
+<h3 class="text-display-lg font-display-lg text-on-surface">1,482</h3>
+<p class="text-label-sm font-label-sm text-secondary flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="trending_up">trending_up</span>
+                                +12% from last quarter
+                            </p>
+</div>
+</div>
+<div class="bg-primary text-on-primary p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.1)] flex flex-col justify-between relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start">
+<span class="text-label-md font-label-md opacity-80">Platform Health</span>
+<span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div class="mt-4">
+<h3 class="text-display-lg font-display-lg">Optimal</h3>
+<p class="text-label-sm font-label-sm opacity-80 mt-1">All service systems operational</p>
+</div>
+</div>
+<!-- Abstract background element -->
+<div class="absolute -bottom-8 -right-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+</div>
+</div>
+<!-- Categories Grid -->
+<div class="space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Main Categories</h3>
+<div class="flex gap-2">
+<button class="p-2 bg-surface-container-high rounded-lg hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+<button class="p-2 bg-surface-container-high rounded-lg hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="sort_by_alpha">sort_by_alpha</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-gutter">
+<!-- Category Card: Electrician -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant hover:border-primary/50 hover:shadow-lg transition-all group relative">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" data-icon="bolt">bolt</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Active</span>
+<div class="flex gap-1">
+<button class="p-1.5 hover:bg-surface-variant rounded-md text-on-surface-variant transition-colors" title="Edit">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-error/10 hover:text-error rounded-md text-on-surface-variant transition-colors" title="Delete">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Electrician</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-2">Wiring, repairs, and installations for residential units.</p>
+<div class="mt-4 pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">342 Providers</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Featured</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Category Card: Plumber -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant hover:border-primary/50 hover:shadow-lg transition-all group relative">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" data-icon="water_drop">water_drop</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Active</span>
+<div class="flex gap-1">
+<button class="p-1.5 hover:bg-surface-variant rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-error/10 hover:text-error rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Plumber</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-2">Leak fixing, pipe installation, and drainage solutions.</p>
+<div class="mt-4 pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">218 Providers</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Featured</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Category Card: Cleaning -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant hover:border-primary/50 hover:shadow-lg transition-all group relative">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" data-icon="cleaning_services">cleaning_services</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-green-100 text-green-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Active</span>
+<div class="flex gap-1">
+<button class="p-1.5 hover:bg-surface-variant rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-error/10 hover:text-error rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Cleaning</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-2">Deep cleaning, sanitation, and organization services.</p>
+<div class="mt-4 pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">510 Providers</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Featured</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Category Card: Carpenter -->
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant hover:border-primary/50 hover:shadow-lg transition-all group relative">
+<div class="flex justify-between items-start mb-4">
+<div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[32px]" data-icon="carpenter">carpenter</span>
+</div>
+<div class="flex flex-col items-end gap-2">
+<span class="bg-outline-variant text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Draft</span>
+<div class="flex gap-1">
+<button class="p-1.5 hover:bg-surface-variant rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="edit">edit</span>
+</button>
+<button class="p-1.5 hover:bg-error/10 hover:text-error rounded-md text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+<h4 class="text-headline-sm font-headline-sm text-on-surface">Carpenter</h4>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-2">Furniture assembly, wood restoration, and cabinetry.</p>
+<div class="mt-4 pt-4 border-t border-outline-variant flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant">89 Providers</span>
+<div class="flex items-center gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Featured</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-9 h-5 bg-outline-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</div>
+<!-- Add New Placeholder -->
+<button class="bg-surface border-2 border-dashed border-outline-variant p-md rounded-xl flex flex-col items-center justify-center gap-4 hover:border-primary hover:bg-primary/5 transition-all group min-h-[220px]">
+<div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_circle">add_circle</span>
+</div>
+<div class="text-center">
+<span class="text-label-md font-label-md text-on-surface">Add Category</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Create a new service listing</p>
+</div>
+</button>
+</div>
+</div>
+<!-- Recent Activity Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-[0px_4px_20px_rgba(15,23,42,0.05)]">
+<div class="px-md py-4 border-b border-outline-variant flex justify-between items-center">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Audit Log</h3>
+<a class="text-label-md font-label-md text-primary hover:underline" href="#">View All Logs</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-md py-3 text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Administrator</th>
+<th class="px-md py-3 text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Action</th>
+<th class="px-md py-3 text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Category</th>
+<th class="px-md py-3 text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider">Timestamp</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-label-sm">JS</div>
+<span class="text-body-sm font-label-md text-on-surface">John Smith</span>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm">Created new category</td>
+<td class="px-md py-4">
+<span class="bg-secondary-container/20 text-secondary text-[11px] font-bold px-2 py-0.5 rounded-full uppercase">Pest Control</span>
+</td>
+<td class="px-md py-4 text-label-sm text-on-surface-variant">Oct 24, 2023 • 10:45 AM</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center text-label-sm">AM</div>
+<span class="text-body-sm font-label-md text-on-surface">Amina Mansoor</span>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm">Updated description</td>
+<td class="px-md py-4">
+<span class="bg-secondary-container/20 text-secondary text-[11px] font-bold px-2 py-0.5 rounded-full uppercase">Cleaning</span>
+</td>
+<td class="px-md py-4 text-label-sm text-on-surface-variant">Oct 23, 2023 • 04:12 PM</td>
+</tr>
+<tr class="hover:bg-primary/5 transition-colors group">
+<td class="px-md py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-label-sm">JS</div>
+<span class="text-body-sm font-label-md text-on-surface">John Smith</span>
+</div>
+</td>
+<td class="px-md py-4 text-body-sm">Toggled featured status</td>
+<td class="px-md py-4">
+<span class="bg-secondary-container/20 text-secondary text-[11px] font-bold px-2 py-0.5 rounded-full uppercase">Electrician</span>
+</td>
+<td class="px-md py-4 text-label-sm text-on-surface-variant">Oct 23, 2023 • 11:30 AM</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</div>
+<div class="flex gap-gutter">
+<a class="text-body-sm font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a>
+<a class="text-body-sm font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-body-sm font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-body-sm font-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a>
+</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">© 2024 Khidmati Marketplace. All rights reserved.</div>
+</div>
+</footer>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface shadow-[0_-4px_20px_rgba(0,0,0,0.05)] rounded-t-xl border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="category" data-weight="fill" style="font-variation-settings: 'FILL' 1;">category</span>
+<span class="text-label-sm font-label-sm">Categories</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-label-sm font-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant py-2" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<!-- FAB (Contextual) -->
+<button class="fixed bottom-24 right-6 md:bottom-10 md:right-10 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<script>
+        // Micro-interaction for Toggles
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const card = this.closest('.bg-surface-container-lowest');
+                if (this.checked) {
+                    console.log('Feature activated for category');
+                    card.classList.add('border-primary/30');
+                } else {
+                    card.classList.remove('border-primary/30');
+                }
+            });
+        });
+
+        // Search Bar focus effect
+        const searchInput = document.querySelector('input[placeholder="Search categories..."]');
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('scale-105');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('scale-105');
+            });
+        }
+    </script>
+</body></html>

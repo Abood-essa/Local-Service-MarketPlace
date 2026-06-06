@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Provider Profile Setup | Khidmati</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5faf8;
+        }
+        .tonal-elevation {
+            box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05);
+        }
+        .glass-header {
+            backdrop-filter: blur(8px);
+            background: rgba(245, 250, 248, 0.8);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dee4e1",
+                        "on-secondary-container": "#00217a",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1c",
+                        "surface-container": "#eaefed",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "background": "#f5faf8",
+                        "tertiary-container": "#6c748b",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary-container": "#fefcff",
+                        "on-surface": "#171d1c",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#2c3130",
+                        "primary": "#00685f",
+                        "tertiary": "#545c72",
+                        "surface-container-high": "#e4e9e7",
+                        "surface-container-highest": "#dee4e1",
+                        "surface": "#f5faf8",
+                        "secondary-fixed-dim": "#b8c4ff",
+                        "inverse-primary": "#6bd8cb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#173bab",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201d",
+                        "surface-tint": "#006a61",
+                        "on-secondary-fixed": "#001453",
+                        "inverse-on-surface": "#edf2f0",
+                        "primary-container": "#008378",
+                        "on-surface-variant": "#3d4947",
+                        "outline-variant": "#bcc9c6",
+                        "secondary": "#3755c3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005049",
+                        "secondary-container": "#708cfd",
+                        "on-primary-container": "#f4fffc",
+                        "surface-bright": "#f5faf8",
+                        "secondary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- Sidebar Navigation -->
+<aside class="hidden md:flex flex-col h-full p-md overflow-y-auto bg-surface-container-low dark:bg-surface-container-lowest h-screen w-[280px] fixed left-0 top-0 border-r border-outline-variant dark:border-outline z-30">
+<div class="flex items-center gap-3 mb-xl">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">verified_user</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant">System Administrator</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">hail</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="text-label-md font-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-highest rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-xl pt-xl border-t border-outline-variant">
+<button class="w-full bg-primary text-on-primary py-3 rounded-lg font-label-md flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span>
+                New Category
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-[280px] min-h-screen pb-24 md:pb-lg">
+<!-- Header -->
+<header class="sticky top-0 z-20 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 glass-header border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<h2 class="text-headline-md font-headline-md font-bold text-primary">Profile Setup</h2>
+<div class="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span class="text-label-sm font-label-sm">Verified Provider</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary/20">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a service provider smiling confidently, wearing a clean polo shirt. The background is a brightly lit, modern office environment with soft teal and white tones, reflecting a trustworthy and professional marketplace persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByp5pAiGOifynyDo4wtNTzp83n73a_P2yQLEXcKlS0CKYse8DtCB1m1poi81yUYBzIWv_zzPHNdlFcSiI1ZZX6_LtOI_aQw3eHhP4X_oKo0rCBVuoJDosz1hFz1-DMlIvO8DwEFt2rK-kWz8SFOmsjTXVpZ7A-_KJG2e9XBo3n1lzAFGZKGdBVCrQK_MYcgH6KN4eHTMtGoESyiqa94N4xDsW2MG6rn5x8V_A92qulKKjTVDQzPAuNz--11c4F9Ijg1msa9rLwjLQ"/>
+</div>
+</div>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop py-lg max-w-[1000px]">
+<!-- Hero Bento-style Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-lg">
+<!-- Profile Form Section -->
+<div class="lg:col-span-2 bg-surface-container-lowest tonal-elevation rounded-xl p-md border border-outline-variant/30">
+<div class="flex items-center justify-between mb-md">
+<h3 class="text-headline-sm font-headline-sm">Edit Provider Identity</h3>
+<span class="material-symbols-outlined text-primary">edit_note</span>
+</div>
+<form class="space-y-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="flex flex-col gap-xs">
+<label class="text-label-md font-label-md text-on-surface-variant">Primary Category</label>
+<select class="w-full h-[44px] rounded-lg border-outline-variant focus:ring-primary/20 focus:border-primary transition-all bg-surface">
+<option>Home Maintenance</option>
+<option>Electrical Services</option>
+<option>Plumbing</option>
+<option>Interior Design</option>
+<option>Landscaping</option>
+</select>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-md font-label-md text-on-surface-variant">Experience (Years)</label>
+<input class="w-full h-[44px] rounded-lg border-outline-variant focus:ring-primary/20 focus:border-primary transition-all bg-surface" type="number" value="8"/>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<label class="text-label-md font-label-md text-on-surface-variant">Professional Bio</label>
+<textarea class="w-full rounded-lg border-outline-variant focus:ring-primary/20 focus:border-primary transition-all bg-surface resize-none" rows="5">Dedicated professional with over 8 years of experience in high-end home maintenance and renovation. Specialized in electrical system upgrades and smart home integrations. Committed to delivering transparent pricing and exceptional craftsmanship to the Khidmati community.</textarea>
+</div>
+<div class="flex justify-end pt-md">
+<button class="bg-primary text-on-primary h-[56px] px-xl rounded-lg font-label-md hover:opacity-90 active:scale-95 transition-all" type="submit">Save Changes</button>
+</div>
+</form>
+</div>
+<!-- Summary Stats Card -->
+<div class="flex flex-col gap-gutter">
+<div class="bg-secondary tonal-elevation rounded-xl p-md text-on-secondary relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-label-md font-label-md opacity-80">Total Earnings</p>
+<h4 class="text-headline-lg font-headline-lg mt-1">$12,850.00</h4>
+<div class="mt-md">
+<button class="w-full bg-surface-container-lowest text-secondary h-[44px] rounded-lg font-label-md hover:bg-opacity-90 transition-all">Withdraw</button>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]">account_balance_wallet</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest tonal-elevation rounded-xl p-md border border-outline-variant/30 text-center">
+<div class="flex flex-col items-center gap-2">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-headline-lg font-headline-lg">4.9</span>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant">Based on 124 reviews</p>
+<div class="w-full h-1 bg-surface-container-high rounded-full mt-2">
+<div class="w-[98%] h-full bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Reviews Section -->
+<div class="space-y-md">
+<div class="flex items-center justify-between">
+<h3 class="text-headline-sm font-headline-sm">Recent Feedback</h3>
+<button class="text-primary text-label-md font-label-md flex items-center gap-1 hover:underline transition-all">
+                        View All <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Review Card 1 -->
+<div class="bg-surface-container-lowest tonal-elevation rounded-xl p-md border border-outline-variant/30 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up portrait of a satisfied female customer in a bright, modern living room. The lighting is natural and soft, emphasizing a warm and professional atmosphere consistent with a trustworthy community marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHsZEa4TxrRzCc5qZM9DnBGju4kTHwJRMcrL1cpqFt2xIxGQ06Y5TyqGAo5xhfcljhw3cu8-v5iuEn-GBiUDqq4ukZcBBmb0R7wFLvAWAHGadibkkd7qb-rjUiYZFa_SsN7rcyhwk-sZUuj69Zcohdc3pS_tSkyrb6QyiVBwTxeobZjb_xXTs9Kump-v6daGoZXg-F_tx0Au5f4JzEG3YugIY-JwvXMK2C9vDX5X4ftncL-kp0eChQX2TZOo9p3vRAteCOO4OsJR0"/>
+</div>
+<div>
+<p class="text-label-md font-label-md">Sarah Jenkins</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">2 days ago</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Extremely professional and punctual. The electrical work was clean and he explained everything clearly. Highly recommended for complex home projects!</p>
+<div class="mt-md inline-block bg-primary/5 text-primary px-3 py-1 rounded-full text-label-sm font-label-sm">
+                            Completed: Kitchen Rewiring
+                        </div>
+</div>
+<!-- Review Card 2 -->
+<div class="bg-surface-container-lowest tonal-elevation rounded-xl p-md border border-outline-variant/30 hover:border-primary/30 transition-colors">
+<div class="flex justify-between items-start mb-sm">
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A portrait of a male homeowner looking pleased in a high-key, modern minimalist interior setting. The lighting is crisp and clear, maintaining a calm and orderly corporate aesthetic suitable for a professional services app." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBk_iHJuJN2FpDQXOpcb2tKcmQ8OYxQGkcsK1KN0MINitjKyfQubPGjYgFOV_fV0Jzj_VKy2DzYKF2ocYd8NUSddfh64sUhySriRgpzE9581xiR-se6hSq9CcJk_CYrmCb3LAx5VVfqWwgc0178qvSAgNh-w-X4bxfnv6XQ9CBE7oMu45la4HaiJTq0c00HTHAt6ln5dUWdy97ATrX9XQ7qnR6Sukygz0bt0HVXgWoDTZ6zXCyPx3vEJBchQzy3nvJLGnDTjyg_P_w"/>
+</div>
+<div>
+<p class="text-label-md font-label-md">Mark Robertson</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">1 week ago</p>
+</div>
+</div>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star_half</span>
+</div>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Very knowledgeable about smart home setups. Solved an issue three other providers couldn't figure out. Will book again soon.</p>
+<div class="mt-md inline-block bg-primary/5 text-primary px-3 py-1 rounded-full text-label-sm font-label-sm">
+                            Completed: Smart Hub Setup
+                        </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface dark:bg-surface-container-lowest rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] shadow-lg">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-sm font-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm font-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="md:ml-[280px] w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-lg">
+<div>
+<h2 class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed-dim">Khidmati</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant dark:text-surface-variant mt-2 max-w-sm">Empowering skilled professionals and homeowners through a trusted, transparent marketplace.</p>
+</div>
+<div class="flex flex-wrap gap-md">
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim text-body-sm font-body-sm transition-colors" href="#">About Us</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim text-body-sm font-body-sm transition-colors" href="#">Terms of Service</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim text-body-sm font-body-sm transition-colors" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim text-body-sm font-body-sm transition-colors" href="#">Contact Support</a>
+</div>
+</div>
+<div class="mt-xl pt-md border-t border-outline-variant/30">
+<p class="text-body-sm font-body-sm text-on-surface-variant dark:text-surface-variant">© 2024 Khidmati Marketplace. All rights reserved.</p>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for the "Save Changes" button
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Saving...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Saved Successfully';
+                btn.classList.replace('bg-primary', 'bg-green-600');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-green-600', 'bg-primary');
+                    btn.disabled = false;
+                }, 2000);
+            }, 1000);
+        });
+    </script>
+</body></html>

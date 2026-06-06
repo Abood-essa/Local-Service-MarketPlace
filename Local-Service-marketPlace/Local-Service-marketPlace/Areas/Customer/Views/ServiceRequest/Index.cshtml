@@ -1,112 +1,181 @@
-﻿@using Local_Service_marketPlace.Models.Enums
+@using Local_Service_marketPlace.Models.Enums
 @model IEnumerable<Local_Service_marketPlace.Models.ServiceRequest>
 @{
     ViewData["Title"] = "My Requests";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+
+    var requests = Model.ToList();
+    var totalOffers = requests.Sum(r => r.Offers?.Count ?? 0);
+    var activeRequests = requests.Count(r => r.Status == ServiceRequestStatus.Confirmed || r.Status == ServiceRequestStatus.InProgress);
+    var waitingRequests = requests.Count(r => r.Status == ServiceRequestStatus.OfferReceived || r.Status == ServiceRequestStatus.WaitingForConfirmation);
+    var currentStatus = ViewBag.Status as string;
 }
 
-<div class="page-header d-flex justify-content-between align-items-start">
-    <div>
-        <h2><i class="fas fa-list-alt text-primary me-2"></i>My Service Requests</h2>
-        <p>Track all your posted service requests and their offers.</p>
-    </div>
-    <a asp-action="Create" class="btn btn-primary">
-        <i class="fas fa-plus me-1"></i> New Request
-    </a>
-</div>
+<div class="marketplace-page">
+    <section class="kh-page-hero">
+        <div class="kh-hero-grid">
+            <div>
+                <div class="kh-hero-kicker">
+                    <i class="fas fa-list-alt"></i>
+                    My service requests
+                </div>
+                <h1 class="kh-page-title">Review requests and compare provider bids.</h1>
+                <p class="kh-page-copy">
+                    Keep every posted job organized from first offer through booking confirmation.
+                </p>
+                <div class="kh-hero-actions">
+                    <a asp-action="Create" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i> New request
+                    </a>
+                </div>
+            </div>
+            <div class="kh-hero-panel">
+                <div class="kh-inline-between">
+                    <div>
+                        <div class="kh-stat-label">Offers received</div>
+                        <div class="fs-2 fw-800">@totalOffers</div>
+                    </div>
+                    <span class="icon-chip bg-white"><i class="fas fa-file-signature"></i></span>
+                </div>
+                <p class="small mb-0 mt-2 text-white-50">Open a request to compare provider bids and final prices.</p>
+            </div>
+        </div>
+    </section>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-<div class="k-card mb-4 py-2">
-    <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
-        <span class="text-muted small fw-600 me-1">Filter:</span>
-        <a asp-action="Index" class="btn btn-sm @(string.IsNullOrEmpty(ViewBag.Status as string) ? "btn-primary" : "btn-outline-secondary")">
-            All
-        </a>
-        @foreach (var s in Enum.GetValues<ServiceRequestStatus>())
-        {
-            <a asp-action="Index" asp-route-status="@s"
-               class="btn btn-sm @(ViewBag.Status == s.ToString() ? "btn-primary" : "btn-outline-secondary")">
-                @s
+    <section class="kh-metric-grid">
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-clipboard-list"></i></span>
+            <div class="kh-metric-number">@requests.Count</div>
+            <div class="kh-metric-label">Total requests</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-inbox"></i></span>
+            <div class="kh-metric-number">@totalOffers</div>
+            <div class="kh-metric-label">Offers received</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-hourglass-half"></i></span>
+            <div class="kh-metric-number">@waitingRequests</div>
+            <div class="kh-metric-label">Need review</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-calendar-check"></i></span>
+            <div class="kh-metric-number">@activeRequests</div>
+            <div class="kh-metric-label">Booked or active</div>
+        </article>
+    </section>
+
+    <section class="kh-filter-panel">
+        <div class="kh-filter-title">
+            <i class="fas fa-filter"></i>
+            Request status
+        </div>
+        <form method="get" class="kh-chip-row">
+            <a asp-action="Index" class="kh-filter-chip @(string.IsNullOrEmpty(currentStatus) ? "active" : "")">
+                <i class="fas fa-border-all"></i> All
             </a>
-        }
-    </form>
-</div>
-
-@if (!Model.Any())
-{
-    <div class="empty-state">
-        <i class="fas fa-clipboard-list"></i>
-        <h5>No requests yet</h5>
-        <p class="mb-3">Post your first service request and get offers from providers.</p>
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i> Post a Request
-        </a>
-    </div>
-}
-else
-{
-    <div class="row g-3">
-        @foreach (var req in Model)
-        {
-            
-                var (badgeCss, icon) = req.Status switch
+            @foreach (var s in Enum.GetValues<ServiceRequestStatus>())
+            {
+                var icon = s switch
                 {
-                    ServiceRequestStatus.Pending              => ("bg-warning text-dark", "fa-clock"),
-                    ServiceRequestStatus.OfferReceived        => ("bg-info text-dark", "fa-envelope-open"),
-                    ServiceRequestStatus.WaitingForConfirmation => ("bg-primary", "fa-hourglass-half"),
-                    ServiceRequestStatus.Confirmed            => ("bg-success", "fa-check-circle"),
-                    ServiceRequestStatus.InProgress           => ("bg-primary", "fa-spinner"),
-                    ServiceRequestStatus.Completed            => ("bg-success", "fa-check-double"),
-                    ServiceRequestStatus.Cancelled            => ("bg-danger", "fa-times-circle"),
-                    _                                         => ("bg-secondary", "fa-question")
+                    ServiceRequestStatus.Pending => "fa-clock",
+                    ServiceRequestStatus.OfferReceived => "fa-envelope-open",
+                    ServiceRequestStatus.WaitingForConfirmation => "fa-hourglass-half",
+                    ServiceRequestStatus.Confirmed => "fa-check-circle",
+                    ServiceRequestStatus.InProgress => "fa-spinner",
+                    ServiceRequestStatus.Completed => "fa-check-double",
+                    ServiceRequestStatus.Cancelled => "fa-ban",
+                    _ => "fa-circle"
+                };
+                <a asp-action="Index" asp-route-status="@s"
+                   class="kh-filter-chip @(currentStatus == s.ToString() ? "active" : "")">
+                    <i class="fas @icon"></i> @s
+                </a>
+            }
+        </form>
+    </section>
+
+    @if (!requests.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-clipboard-list"></i>
+            <h5>No requests yet</h5>
+            <p class="mb-3">Post your first service request and get offers from providers.</p>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Post a request
+            </a>
+        </div>
+    }
+    else
+    {
+        <section class="kh-card-grid">
+            @foreach (var req in requests)
+            {
+                var (statusClass, statusIcon) = req.Status switch
+                {
+                    ServiceRequestStatus.Pending => ("kh-status-soft-warning", "fa-clock"),
+                    ServiceRequestStatus.OfferReceived => ("kh-status-soft-blue", "fa-envelope-open"),
+                    ServiceRequestStatus.WaitingForConfirmation => ("kh-status-soft-primary", "fa-hourglass-half"),
+                    ServiceRequestStatus.Confirmed => ("kh-status-soft-success", "fa-check-circle"),
+                    ServiceRequestStatus.InProgress => ("kh-status-soft-primary", "fa-spinner"),
+                    ServiceRequestStatus.Completed => ("kh-status-soft-success", "fa-check-double"),
+                    ServiceRequestStatus.Cancelled => ("kh-status-soft-danger", "fa-times-circle"),
+                    _ => ("kh-status-soft-muted", "fa-question")
                 };
                 var offersCount = req.Offers?.Count ?? 0;
-            
-            <div class="col-md-6 col-lg-4">
-                <div class="k-card h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge @badgeCss badge-status">
-                            <i class="fas @icon me-1"></i>@req.Status
+
+                <article class="kh-request-card">
+                    <div class="kh-card-topline">
+                        <span class="kh-status-badge @statusClass">
+                            <i class="fas @statusIcon"></i>@req.Status
                         </span>
                         <small class="text-muted">@req.CreatedAt.ToString("MMM dd, yyyy")</small>
                     </div>
 
-                    <h6 class="fw-700 mb-1">@req.Title</h6>
-                    <p class="text-muted small mb-2">
-                        <i class="fas fa-tag me-1"></i>@req.Category?.Name
-                    </p>
-                    <p class="text-muted small mb-3">
-                        <i class="fas fa-map-marker-alt me-1"></i>@req.City
-                        &nbsp;·&nbsp;
-                        <i class="fas fa-calendar me-1"></i>@req.PreferredDate.ToString("MMM dd")
-                    </p>
+                    <div>
+                        <h3 class="kh-card-title">@req.Title</h3>
+                        <p class="text-muted small mb-0">
+                            <i class="fas fa-tag me-1 text-primary"></i>@req.Category?.Name
+                        </p>
+                    </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="small text-muted">
-                            <i class="fas fa-file-alt me-1"></i>
-                            <strong>@offersCount</strong> offer@(offersCount != 1 ? "s" : "")
+                    <ul class="kh-meta-list">
+                        <li>
+                            <i class="fas fa-location-dot"></i>
+                            <span>@req.City</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-calendar-day"></i>
+                            <span>@req.PreferredDate.ToString("MMM dd, yyyy")</span>
+                        </li>
+                    </ul>
+
+                    <div class="kh-inline-between mt-auto">
+                        <span class="kh-status-badge kh-status-soft-blue">
+                            <i class="fas fa-file-alt"></i>
+                            @offersCount offer@(offersCount == 1 ? "" : "s")
                         </span>
-                        <a asp-action="Details" asp-route-id="@req.Id"
-                           class="btn btn-sm btn-outline-primary">
-                            View Details <i class="fas fa-arrow-right ms-1"></i>
+                        <a asp-action="Details" asp-route-id="@req.Id" class="btn btn-outline-primary">
+                            View bids <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
-                </div>
-            </div>
-        }
-    </div>
-}
+                </article>
+            }
+        </section>
+    }
+</div>

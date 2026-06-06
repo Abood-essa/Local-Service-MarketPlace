@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Provider - Open Requests</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5faf8;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #bcc9c6;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dee4e1",
+                        "on-secondary-container": "#00217a",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1c",
+                        "surface-container": "#eaefed",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "background": "#f5faf8",
+                        "tertiary-container": "#6c748b",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary-container": "#fefcff",
+                        "on-surface": "#171d1c",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#2c3130",
+                        "primary": "#00685f",
+                        "tertiary": "#545c72",
+                        "surface-container-high": "#e4e9e7",
+                        "surface-container-highest": "#dee4e1",
+                        "surface": "#f5faf8",
+                        "secondary-fixed-dim": "#b8c4ff",
+                        "inverse-primary": "#6bd8cb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#173bab",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201d",
+                        "surface-tint": "#006a61",
+                        "on-secondary-fixed": "#001453",
+                        "inverse-on-surface": "#edf2f0",
+                        "primary-container": "#008378",
+                        "on-surface-variant": "#3d4947",
+                        "outline-variant": "#bcc9c6",
+                        "secondary": "#3755c3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005049",
+                        "secondary-container": "#708cfd",
+                        "on-primary-container": "#f4fffc",
+                        "surface-bright": "#f5faf8",
+                        "secondary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-full p-md overflow-y-auto bg-surface-container-low border-r border-outline-variant w-[280px] fixed left-0 top-0 z-40">
+<div class="flex items-center gap-3 mb-xl">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">handyman</span>
+</div>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</h1>
+<p class="text-label-sm text-on-surface-variant">System Administrator</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg transition-all scale-[0.98]" href="#">
+<span class="material-symbols-outlined">hail</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="text-label-md font-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<button class="mt-xl w-full flex items-center justify-center gap-2 bg-primary text-on-primary py-3 px-4 rounded-lg font-label-md transition-transform hover:scale-95">
+<span class="material-symbols-outlined">add</span>
+                New Category
+            </button>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-[280px] h-full overflow-y-auto custom-scrollbar pb-24 md:pb-8">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-30 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 bg-surface border-b border-outline-variant shadow-sm">
+<div class="flex items-center gap-4">
+<h2 class="text-headline-md font-headline-md font-bold text-primary">Open Requests</h2>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-surface-container rounded-full px-4 py-2 border border-outline-variant focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm w-64 outline-none" placeholder="Search requests..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container">
+<img alt="User Profile" data-alt="A close-up high-quality portrait of a professional male service provider in his late 30s. He wears a clean, branded polo shirt in a professional teal color, looking into the camera with a confident and friendly smile. The background is a soft-focus modern office environment with warm morning lighting, creating a high-trust and approachable atmosphere for a marketplace platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrN_NKq5Z5gFCNctENCzBwL6G0S9yxELluBO7yo0Coey2_o1pDJgowMVYweeNOk1K3JzZXXu0wPbgba-gTHHRMGq5bJi_cptE9YPQUbVKjdxwxk0LIb4mjHvpfNRXpGV0trM3slhzv1IIjBtbMBIKOWukzNzVKlgJSopiwRN6vApMf1Dx3erJpkaRNikb6jy1TyN-sQcrAhY55SSzQNToBN-NAqLep7QdFWnAia6MXfYfsisJ6RXpe7u2CxuplwBrYiNUIgTX3YOU"/>
+</div>
+</div>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Filters Section -->
+<div class="mb-lg flex flex-col md:flex-row gap-md items-center justify-between">
+<div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+<div class="relative group">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-highest rounded-lg text-label-md font-label-md border border-outline-variant hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">category</span>
+                                Category: All
+                                <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+<div class="relative">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-highest rounded-lg text-label-md font-label-md border border-outline-variant hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                                City: Dubai
+                                <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+<div class="relative">
+<button class="flex items-center gap-2 px-4 py-2 bg-surface-container-highest rounded-lg text-label-md font-label-md border border-outline-variant hover:border-primary transition-all">
+<span class="material-symbols-outlined text-sm">straighten</span>
+                                Distance: 10km
+                                <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+<div class="text-label-md text-on-surface-variant">
+                        Showing <span class="font-bold text-primary">24</span> requests
+                    </div>
+</div>
+<!-- Requests Grid (Asymmetric Layout) -->
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-gutter">
+<!-- Request Card 1 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant hover:shadow-lg transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">electrical_services</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Emergency AC Repair</h3>
+<p class="text-label-sm text-on-surface-variant">Posted 2 hours ago</p>
+</div>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">history</span>
+                                Pending
+                            </span>
+</div>
+<div class="flex flex-wrap gap-4 mb-6">
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">category</span>
+                                Maintenance
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                                Downtown Dubai
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">distance</span>
+                                4.2 km away
+                            </div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2 italic">
+                            "The AC unit in my apartment has stopped cooling suddenly. There's a slight humming sound but no air flow. Need someone to check immediately."
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container overflow-hidden">
+<img alt="Other offers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVowbUSSQULPY-UrlF2ZksZRhG6TadNACT_4gYXBV-Aj4ggGZG1tqbMz1OLSu1URVe-mJUsPVCFM3hCMOl_kCfyNzw-bL6Gh22V2AKhBqly0wTNySPmDtEIqfN5EmLAyaZX2qbhXs8q9vCvvkdXxnydg8OBEAjbQ4Z8o-u4MIyPxkvZmgyWEt86FY2qXkzb6f1YuWfcmuHejl1ia0eauSqSamSFvbyf6xzYSbg7hNiJglE1gKlHEfagtfkOymolAcDuDyI4sCHUJY"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-container overflow-hidden">
+<img alt="Other offers" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBg5PmUBoAwXWhUSacKJjkSkAluoTOfg--9Rye9nv8wWeIkVD4Clu7zt47whSLfV6-HbKi4pQLww9PC37Sn_SDMJeoXrVCX6K_qr5ZzLqQIcJMIr7QQh2VnGm9gy3f1vv5FCFksElBwSB9HbY1ziNStzR8SBS8jaApSpKMtfVj_yeOr5CMzyuXL1lh7Usbc8aVxC-Ksd9wU8ETSlU69da8qwp1kJPWOd7iYv5hjTcaDNWg8QbbOMZ4kr1YvlVwufnx_Cw2vY5UQkjk"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-surface bg-primary-container text-[10px] font-bold flex items-center justify-center text-on-primary-container">
+                                    +3
+                                </div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
+                                Send Estimate
+                            </button>
+</div>
+</div>
+<!-- Request Card 2 (Sent State) -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant relative overflow-hidden group opacity-90">
+<div class="absolute top-0 right-0 p-2">
+<span class="bg-success/10 bg-green-100 text-green-700 px-3 py-1 rounded-full text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                Offer Sent
+                            </span>
+</div>
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">plumbing</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Kitchen Pipe Leakage</h3>
+<p class="text-label-sm text-on-surface-variant">Posted 4 hours ago</p>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 mb-6">
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary">category</span>
+                                Plumbing
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary">location_on</span>
+                                Marina, Dubai
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-secondary">distance</span>
+                                8.5 km away
+                            </div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">
+                            "Small leak under the kitchen sink. Need a professional to replace the gasket or seal the joint. Preferably available after 6 PM."
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="text-label-md font-bold text-secondary">
+                                My Offer: $45.00
+                            </div>
+<button class="bg-outline text-on-surface-variant px-6 py-3 rounded-lg font-label-md opacity-50 cursor-not-allowed">
+                                Offer Sent
+                            </button>
+</div>
+</div>
+<!-- Request Card 3 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant hover:shadow-lg transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">brush</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Living Room Painting</h3>
+<p class="text-label-sm text-on-surface-variant">Posted 1 day ago</p>
+</div>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">local_fire_department</span>
+                                High Demand
+                            </span>
+</div>
+<div class="flex flex-wrap gap-4 mb-6">
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary">category</span>
+                                Renovation
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary">location_on</span>
+                                Jumeirah, Dubai
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-tertiary">distance</span>
+                                1.2 km away
+                            </div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">
+                            "Looking for a skilled painter for a 40sqm living room. Single color (Eggshell white). Furniture will be covered by us."
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-label-md font-bold">4.8</span>
+<span class="text-label-sm text-on-surface-variant">(Customer Rating)</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
+                                Send Estimate
+                            </button>
+</div>
+</div>
+<!-- Request Card 4 -->
+<div class="bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] border border-outline-variant hover:shadow-lg transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">cleaning_services</span>
+</div>
+<div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Deep Villa Cleaning</h3>
+<p class="text-label-sm text-on-surface-variant">Posted 5 hours ago</p>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-4 mb-6">
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">category</span>
+                                Cleaning
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">location_on</span>
+                                Al Barsha, Dubai
+                            </div>
+<div class="flex items-center gap-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary">distance</span>
+                                5.8 km away
+                            </div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 line-clamp-2">
+                            "Need a team of 3 for a full deep cleaning of a 5-bedroom villa. Move-in cleaning standard required including windows and balcony."
+                        </p>
+<div class="flex items-center justify-between pt-4 border-t border-outline-variant">
+<div class="text-label-md font-bold text-primary">
+                                Est. Budget: $250 - $400
+                            </div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-lg font-label-md hover:bg-primary-container transition-all active:scale-95 shadow-md">
+                                Send Estimate
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</div>
+<div class="flex flex-wrap justify-center gap-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">About Us</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Contact Support</a>
+</div>
+<div class="text-body-sm text-on-surface-variant">© 2024 Khidmati Marketplace. All rights reserved.</div>
+</div>
+</footer>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm">Profile</span>
+</a>
+</nav>
+</div>
+<!-- Floating Action Button (Only for specific primary tasks) -->
+<button class="fixed right-6 bottom-24 md:bottom-10 w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-40">
+<span class="material-symbols-outlined text-2xl">chat_bubble</span>
+</button>
+<script>
+        // Micro-interactions and Tab Logic
+        document.querySelectorAll('nav a, aside nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Just for demo visual feedback
+                if(!link.classList.contains('bg-secondary-container') && !link.classList.contains('bg-primary-container')){
+                    console.log('Navigating to:', link.textContent.trim());
+                }
+            });
+        });
+
+        // Search Bar Focus Effect
+        const searchInput = document.querySelector('input[type="text"]');
+        if(searchInput) {
+            searchInput.addEventListener('focus', () => {
+                searchInput.parentElement.classList.add('shadow-md');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchInput.parentElement.classList.remove('shadow-md');
+            });
+        }
+    </script>
+</body></html>

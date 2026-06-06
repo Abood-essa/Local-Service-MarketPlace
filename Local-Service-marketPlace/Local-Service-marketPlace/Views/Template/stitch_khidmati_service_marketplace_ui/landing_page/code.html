@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        [data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#dee4e1",
+                        "on-secondary-container": "#00217a",
+                        "outline": "#6d7a77",
+                        "on-background": "#171d1c",
+                        "surface-container": "#eaefed",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#89f5e7",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "background": "#f5faf8",
+                        "tertiary-container": "#6c748b",
+                        "on-tertiary-fixed": "#131b2e",
+                        "surface-container-low": "#f0f5f2",
+                        "on-tertiary-container": "#fefcff",
+                        "on-surface": "#171d1c",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d6dbd9",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed-dim": "#6bd8cb",
+                        "inverse-surface": "#2c3130",
+                        "primary": "#00685f",
+                        "tertiary": "#545c72",
+                        "surface-container-high": "#e4e9e7",
+                        "surface-container-highest": "#dee4e1",
+                        "surface": "#f5faf8",
+                        "secondary-fixed-dim": "#b8c4ff",
+                        "inverse-primary": "#6bd8cb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#173bab",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00201d",
+                        "surface-tint": "#006a61",
+                        "on-secondary-fixed": "#001453",
+                        "inverse-on-surface": "#edf2f0",
+                        "primary-container": "#008378",
+                        "on-surface-variant": "#3d4947",
+                        "outline-variant": "#bcc9c6",
+                        "secondary": "#3755c3",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed-variant": "#005049",
+                        "secondary-container": "#708cfd",
+                        "on-primary-container": "#f4fffc",
+                        "surface-bright": "#f5faf8",
+                        "secondary-fixed": "#dde1ff",
+                        "tertiary-fixed": "#dae2fd",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "margin-desktop": "48px",
+                        "sm": "12px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "md": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm h-16">
+<div class="flex items-center gap-8">
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed">Khidmati</span>
+<div class="hidden md:flex items-center gap-6">
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">How it Works</a>
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors" href="#">Categories</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:block text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors">Login</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded-lg text-label-md font-label-md hover:scale-95 transition-transform active:scale-90">Register</button>
+<button class="flex items-center justify-center p-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-[819px] flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="A professional electrician in a clean uniform inspecting a high-tech electrical panel in a modern, brightly lit home. The lighting is soft and cinematic, with a palette of deep teals and warm wood tones. The image conveys a sense of trust, precision, and high-quality local service, shot in a high-key corporate photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCClN631pnAC9MyhEAM9r2avpHqrsN6blcboEee9IEHIDydN-mLGqEx2-SeQX6JNVR8-LJgk4037-JozEl1K7SsyXcqYiIMTdspxtHWRQQdFgaMdD4clLkPtCEcdm26d0RgnvKYbliPumy1J6n0T5JrBN_XOiHJcQEzMLBnZilmMQ71mJp5G6_Zhrt4A_gY_WpfDLzLkeFSzJCAU4yQKK4dxwG77_-6KVzwolTgVnOByV_SjeVtFUEaI-4YGhGZrHu1fVFIgAbuSW0"/>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-transparent"></div>
+</div>
+<div class="relative z-10 w-full max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+<div class="max-w-2xl">
+<h1 class="font-display-lg text-display-lg mb-md text-on-background leading-tight">
+                        Your Local Experts, <br/><span class="text-primary">Just a Click Away.</span>
+</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant mb-xl max-w-lg">
+                        Connect with verified professionals for all your home maintenance and repair needs. Quality work guaranteed by Khidmati.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-lg font-label-md text-headline-sm hover:shadow-lg transition-all active:scale-95">
+                            Request a Service
+                        </button>
+<button class="border-2 border-primary text-primary px-8 py-4 rounded-lg font-label-md text-headline-sm hover:bg-primary/5 transition-all active:scale-95">
+                            Become a Provider
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Popular Categories Section -->
+<section class="py-xl px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto">
+<div class="mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Popular Categories</h2>
+<div class="h-1 w-20 bg-primary mt-xs rounded-full"></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-gutter">
+<!-- Category 1 -->
+<div class="group bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="electric_bolt">electric_bolt</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Electrician</h3>
+</div>
+<!-- Category 2 -->
+<div class="group bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="plumbing">plumbing</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Plumber</h3>
+</div>
+<!-- Category 3 -->
+<div class="group bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="ac_unit">ac_unit</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">AC Tech</h3>
+</div>
+<!-- Category 4 -->
+<div class="group bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="cleaning_services">cleaning_services</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Cleaner</h3>
+</div>
+<!-- Category 5 -->
+<div class="group bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="format_paint">format_paint</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Painter</h3>
+</div>
+<!-- Category 6 -->
+<div class="group bg-surface-container-lowest p-md rounded-xl shadow-[0px_4px_20px_rgba(15,23,42,0.05)] hover:shadow-lg transition-all cursor-pointer border border-transparent hover:border-primary/20">
+<div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="handyman">handyman</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Carpenter</h3>
+</div>
+</div>
+</section>
+<!-- How It Works Section -->
+<section class="py-xl bg-surface-container-low overflow-hidden">
+<div class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="text-center mb-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">How It Works</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Simple steps to get your task completed</p>
+</div>
+<div class="relative">
+<!-- Connector Line -->
+<div class="hidden lg:block absolute top-12 left-0 w-full h-0.5 bg-outline-variant/30"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-lg">
+<!-- Step 1 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-primary text-on-primary flex items-center justify-center mb-md z-10 shadow-lg">
+<span class="material-symbols-outlined text-4xl" data-icon="post_add">post_add</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">1. Post Request</h3>
+<p class="text-body-sm text-on-surface-variant px-4">Describe your service needs and set your preferred timing.</p>
+</div>
+<!-- Step 2 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-primary text-on-primary flex items-center justify-center mb-md z-10 shadow-lg">
+<span class="material-symbols-outlined text-4xl" data-icon="request_quote">request_quote</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">2. Get Estimates</h3>
+<p class="text-body-sm text-on-surface-variant px-4">Receive initial quotes from qualified professionals nearby.</p>
+</div>
+<!-- Step 3 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-primary text-on-primary flex items-center justify-center mb-md z-10 shadow-lg">
+<span class="material-symbols-outlined text-4xl" data-icon="search_check">search_check</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">3. Inspection &amp; Final Price</h3>
+<p class="text-body-sm text-on-surface-variant px-4">Provider visits for a real-world check and finalizes the quote.</p>
+</div>
+<!-- Step 4 -->
+<div class="relative flex flex-col items-center text-center">
+<div class="w-24 h-24 rounded-full bg-primary text-on-primary flex items-center justify-center mb-md z-10 shadow-lg">
+<span class="material-symbols-outlined text-4xl" data-icon="verified">verified</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">4. Completion &amp; Review</h3>
+<p class="text-body-sm text-on-surface-variant px-4">Work is done to your satisfaction. Rate your expert.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Section -->
+<section class="py-xl px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto">
+<div class="flex flex-col lg:flex-row items-center gap-xl">
+<div class="lg:w-1/2">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-md">Why Khidmati?</h2>
+<p class="text-body-lg text-on-surface-variant mb-lg">We prioritize your peace of mind and quality above all else. Our platform is built on trust and transparency.</p>
+<div class="grid sm:grid-cols-2 gap-md">
+<div class="flex items-start gap-4">
+<div class="text-primary">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Verified Providers</h4>
+<p class="text-body-sm text-on-surface-variant">Strict background and skill checks for every pro.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="text-primary">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Secure Workflow</h4>
+<p class="text-body-sm text-on-surface-variant">Payments and task tracking within a safe ecosystem.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="text-primary">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Admin Support</h4>
+<p class="text-body-sm text-on-surface-variant">Dedicated team to help resolve any issues quickly.</p>
+</div>
+</div>
+<div class="flex items-start gap-4">
+<div class="text-primary">
+<span class="material-symbols-outlined" data-icon="star">star</span>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Verified Reviews</h4>
+<p class="text-body-sm text-on-surface-variant">Real feedback from real customers for every job.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:w-1/2 relative">
+<div class="rounded-2xl overflow-hidden shadow-xl aspect-square">
+<img class="w-full h-full object-cover" data-alt="A diverse team of service professionals standing confidently in a clean, modern workspace. They are wearing professional uniforms including branded polos and high-visibility vests. The lighting is warm and welcoming, reflecting a collaborative and high-trust work environment. The color palette features soft teals and slate grays, maintaining a corporate yet accessible feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKGVPgswV_8xJELH0FABqBtuD8iVnZl8Yo5Fe5EhlTkXZRQmThFlkzes8qdHIB97jbdaScPrVzHJS2Dnmy8Xu5BMUgbTPyixyR5n4ih3jzebafcAePuE4WnyKl8ImXM6FXF9G3QyDOTQa2VpGBEyItvdUwbF9KbPM3XikKzAyEvi1noCcLZ_8GeQmBOC6CKtDq6RlzHqSnY-yStEevsh-xYnilNe2rXg0soI9-UmqZx2oHqXIwmjKDeYZGe51Vn3V1dmWaQaRAWAg"/>
+</div>
+<div class="absolute -bottom-6 -left-6 bg-secondary text-on-secondary p-6 rounded-xl shadow-lg hidden md:block">
+<div class="flex items-center gap-4 mb-2">
+<span class="material-symbols-outlined text-3xl" data-icon="military_tech">military_tech</span>
+<span class="text-headline-md font-bold">100%</span>
+</div>
+<p class="text-label-sm uppercase tracking-wider">Satisfaction Guaranteed</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline">
+<div class="max-w-max-width mx-auto flex flex-col md:flex-row justify-between items-start gap-xl">
+<div class="max-w-xs">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed-dim">Khidmati</span>
+<p class="text-body-sm text-on-surface-variant mt-md">Reliable local expertise for all your household tasks and professional services. Join our community of trusted providers today.</p>
+</div>
+<div class="grid grid-cols-2 gap-xl">
+<div>
+<h4 class="font-label-md text-on-surface mb-md">Quick Links</h4>
+<ul class="space-y-sm">
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact Support</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface mb-md">Social</h4>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="facebook">social_leaderboard</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center hover:bg-primary/10 transition-colors" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="share">share</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-max-width mx-auto mt-xl pt-lg border-t border-outline-variant">
+<p class="text-body-sm text-on-surface-variant text-center md:text-left">© 2024 Khidmati Marketplace. All rights reserved.</p>
+</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface dark:bg-surface-container-lowest rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home" data-weight="fill">home</span>
+<span class="text-label-sm font-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="pending_actions">pending_actions</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-sm font-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple intersection observer for reveal effects
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section > div').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

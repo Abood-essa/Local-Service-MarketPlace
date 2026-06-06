@@ -1,9 +1,19 @@
-﻿@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models.Enums
 @model Local_Service_marketPlace.Models.ProviderProfile
 @{
     ViewData["Title"] = "Provider Profile";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
     bool isHidden = ViewBag.IsHidden;
+
+    var categories = Model.ProviderCategories ?? new List<ProviderCategory>();
+    var completedBookings = Model.Bookings?
+        .Where(b => b.BookingStatus == BookingStatus.Completed)
+        .OrderByDescending(b => b.CompletedAt)
+        .ToList() ?? new List<Booking>();
+    var reviews = Model.ReviewsReceived?
+        .OrderByDescending(r => r.CreatedAt)
+        .ToList() ?? new List<Review>();
 }
 
 @if (isHidden)
@@ -12,171 +22,215 @@
         <i class="fas fa-user-slash"></i>
         <h5>Profile Unavailable</h5>
         <p>This provider's profile is currently unavailable.</p>
-        <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index"
-           class="btn btn-primary">Back to My Requests</a>
+        <a asp-area="Customer" asp-controller="ServiceRequest" asp-action="Index" class="btn btn-primary">
+            Back to My Requests
+        </a>
     </div>
 }
 else
 {
-    <div class="row g-4">
-
-        @* Left — profile card *@
-        <div class="col-lg-4">
-            <div class="k-card text-center">
-                @if (!string.IsNullOrEmpty(Model.ProfileImage))
-                {
-                    <img src="@Model.ProfileImage"
-                         class="rounded-circle mb-3"
-                         style="width:90px;height:90px;object-fit:cover;" />
-                }
-                else
-                {
-                    <div class="rounded-circle bg-primary d-inline-flex align-items-center
-                                        justify-content-center text-white fw-800 mb-3"
-                         style="width:90px;height:90px;font-size:2rem;">
-                        @Model.User?.FirstName?.Substring(0, 1)
-                    </div>
-                }
-
-                <h5 class="fw-700 mb-1">
-                    @Model.User?.FirstName @Model.User?.LastName
-                </h5>
-
-                <div class="mb-2">
-                    @if (Model.IsVerified)
+    <div class="marketplace-page">
+        <section class="kh-page-hero">
+            <div class="kh-profile-hero">
+                <div>
+                    @if (!string.IsNullOrEmpty(Model.ProfileImage))
                     {
-                        <span class="badge bg-success">
-                            <i class="fas fa-shield-alt me-1"></i>Verified
+                        <img src="@Model.ProfileImage" class="kh-profile-avatar"
+                             alt="@Model.User?.FirstName @Model.User?.LastName" />
+                    }
+                    else
+                    {
+                        <span class="kh-profile-avatar-fallback">
+                            @(Model.User?.FirstName?.Substring(0, 1) ?? "P")
                         </span>
                     }
                 </div>
-
-                @* Rating — hidden if wallet negative (already handled by isHidden above,
-                   but kept here for future partial-hide scenarios) *@
-                <div class="d-flex justify-content-center gap-1 mb-1">
-                    @for (int i = 1; i <= 5; i++)
-                    {
-                        <i class="fas fa-star @(i <= Math.Round(Model.AverageRating) ? "text-warning" : "text-muted")"
-                           style="font-size:.9rem;"></i>
-                    }
+                <div>
+                    <div class="kh-hero-kicker">
+                        <i class="fas fa-user-check"></i>
+                        Provider profile
+                    </div>
+                    <h1 class="kh-page-title">@Model.User?.FirstName @Model.User?.LastName</h1>
+                    <p class="kh-page-copy">
+                        @(string.IsNullOrWhiteSpace(Model.Bio) ? "A Khidmati provider ready to support local service requests." : Model.Bio)
+                    </p>
+                    <div class="kh-hero-actions">
+                        @if (Model.IsVerified)
+                        {
+                            <span class="kh-status-badge kh-status-soft-success">
+                                <i class="fas fa-shield-alt"></i>Verified provider
+                            </span>
+                        }
+                        <span class="kh-status-badge kh-status-soft-blue">
+                            <i class="fas fa-star"></i>@Model.AverageRating.ToString("0.0") rating
+                        </span>
+                    </div>
                 </div>
-                <p class="text-muted small mb-3">
-                    @Model.AverageRating.ToString("0.0") rating
-                    · @Model.CompletedJobsCount jobs completed
-                </p>
-
-                <ul class="list-unstyled small text-muted text-start">
-                    <li class="mb-1">
-                        <i class="fas fa-briefcase me-2 text-primary"></i>
-                        @Model.YearsOfExperience years experience
-                    </li>
-                    <li>
-                        <i class="fas fa-clock me-2 text-primary"></i>
-                        Available @Model.AvailableFrom.ToString(@"hh\:mm") —
-                        @Model.AvailableTo.ToString(@"hh\:mm")
-                    </li>
-                </ul>
-            </div>
-
-            @* Categories *@
-            <div class="k-card">
-                <h6 class="fw-700 mb-2">
-                    <i class="fas fa-tags text-primary me-2"></i>Categories
-                </h6>
-                <div class="d-flex flex-wrap gap-2">
-                    @foreach (var pc in Model.ProviderCategories ?? new List<ProviderCategory>())
-                    {
-                        <span class="badge bg-primary px-3 py-2">@pc.Category?.Name</span>
-                    }
+                <div class="kh-hero-panel">
+                    <div class="kh-stat-label">Availability</div>
+                    <div class="fs-5 fw-800">
+                        @Model.AvailableFrom.ToString(@"hh\:mm") - @Model.AvailableTo.ToString(@"hh\:mm")
+                    </div>
+                    <div class="small text-white-50 mt-2">@Model.YearsOfExperience years of experience</div>
                 </div>
             </div>
-        </div>
+        </section>
 
-        @* Right — bio + completed jobs + reviews *@
-        <div class="col-lg-8">
+        <section class="kh-metric-grid">
+            <article class="kh-metric">
+                <span class="kh-metric-icon"><i class="fas fa-star"></i></span>
+                <div class="kh-metric-number">@Model.AverageRating.ToString("0.0")</div>
+                <div class="kh-metric-label">Average rating</div>
+            </article>
+            <article class="kh-metric">
+                <span class="kh-metric-icon"><i class="fas fa-briefcase"></i></span>
+                <div class="kh-metric-number">@Model.CompletedJobsCount</div>
+                <div class="kh-metric-label">Completed jobs</div>
+            </article>
+            <article class="kh-metric">
+                <span class="kh-metric-icon"><i class="fas fa-tags"></i></span>
+                <div class="kh-metric-number">@categories.Count()</div>
+                <div class="kh-metric-label">Service categories</div>
+            </article>
+            <article class="kh-metric">
+                <span class="kh-metric-icon"><i class="fas fa-message"></i></span>
+                <div class="kh-metric-number">@reviews.Count</div>
+                <div class="kh-metric-label">Reviews</div>
+            </article>
+        </section>
 
-            @* Bio *@
-            @if (!string.IsNullOrEmpty(Model.Bio))
-            {
-                <div class="k-card mb-3">
-                    <h6 class="fw-700 mb-2">
-                        <i class="fas fa-info-circle text-primary me-2"></i>About
-                    </h6>
-                    <p class="text-muted mb-0">@Model.Bio</p>
-                </div>
-            }
-
-            @* Completed jobs *@
-            @{
-                var completedBookings = Model.Bookings?
-                .Where(b => b.BookingStatus == Local_Service_marketPlace.Models.Enums.BookingStatus.Completed)
-                .OrderByDescending(b => b.CompletedAt)
-                .Take(5)
-                .ToList();
-            }
-
-            @if (completedBookings != null && completedBookings.Any())
-            {
-                <div class="k-card mb-3">
-                    <h6 class="fw-700 mb-3">
-                        <i class="fas fa-briefcase text-primary me-2"></i>
-                        Completed Jobs (@Model.CompletedJobsCount)
-                    </h6>
-                    @foreach (var b in completedBookings)
+        <div class="kh-detail-layout">
+            <div class="kh-detail-stack">
+                <section class="kh-info-card">
+                    <h2 class="h5 mb-3"><i class="fas fa-screwdriver-wrench text-primary me-2"></i>Skills and services</h2>
+                    @if (categories.Any())
                     {
-                        <div class="d-flex justify-content-between align-items-center
-                                                border-bottom py-2">
-                            <div>
-                                <div class="fw-600 small">@b.ServiceRequest?.Title</div>
-                                <div class="text-muted small">
-                                    <i class="fas fa-tag me-1"></i>
-                                    @b.ServiceRequest?.Category?.Name
-                                </div>
-                            </div>
-                            <small class="text-muted">
-                                @b.CompletedAt?.ToString("MMM dd, yyyy")
-                            </small>
-                        </div>
-                    }
-                </div>
-            }
-
-            @* Reviews *@
-            @if (Model.ReviewsReceived != null && Model.ReviewsReceived.Any())
-            {
-                <div class="k-card">
-                    <h6 class="fw-700 mb-3">
-                        <i class="fas fa-star text-warning me-2"></i>
-                        Reviews (@Model.ReviewsReceived.Count)
-                    </h6>
-                    @foreach (var r in Model.ReviewsReceived
-                                .OrderByDescending(r => r.CreatedAt).Take(5))
-                    {
-                        <div class="border-bottom pb-3 mb-3">
-                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                <div>
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        <i class="fas fa-star @(i <= r.Rating ? "text-warning" : "text-muted")"
-                                           style="font-size:.85rem;"></i>
-                                    }
-                                    <span class="ms-2 small fw-600">
-                                        @r.Customer?.FirstName @r.Customer?.LastName
-                                    </span>
-                                </div>
-                                <small class="text-muted">
-                                    @r.CreatedAt.ToString("MMM dd, yyyy")
-                                </small>
-                            </div>
-                            @if (!string.IsNullOrEmpty(r.Comment))
+                        <div class="kh-skill-list">
+                            @foreach (var pc in categories)
                             {
-                                <p class="small text-muted mb-0">@r.Comment</p>
+                                <span class="kh-skill-pill">
+                                    <i class="fas fa-check"></i>@pc.Category?.Name
+                                </span>
                             }
                         </div>
                     }
-                </div>
-            }
+                    else
+                    {
+                        <p class="text-muted mb-0">No categories listed yet.</p>
+                    }
+                </section>
 
+                <section class="kh-info-card">
+                    <h2 class="h5 mb-3"><i class="fas fa-circle-info text-primary me-2"></i>Provider summary</h2>
+                    <div class="kh-info-row">
+                        <span class="kh-info-icon"><i class="fas fa-clock"></i></span>
+                        <div>
+                            <div class="small text-muted">Availability</div>
+                            <div class="fw-800">@Model.AvailableFrom.ToString(@"hh\:mm") - @Model.AvailableTo.ToString(@"hh\:mm")</div>
+                        </div>
+                    </div>
+                    <div class="kh-info-row">
+                        <span class="kh-info-icon"><i class="fas fa-award"></i></span>
+                        <div>
+                            <div class="small text-muted">Experience</div>
+                            <div class="fw-800">@Model.YearsOfExperience years</div>
+                        </div>
+                    </div>
+                    <div class="kh-info-row">
+                        <span class="kh-info-icon"><i class="fas fa-shield-alt"></i></span>
+                        <div>
+                            <div class="small text-muted">Verification</div>
+                            <div class="fw-800">@(Model.IsVerified ? "Verified" : "Not verified yet")</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="kh-detail-stack">
+                <section class="kh-info-card">
+                    <div class="kh-section-head">
+                        <div>
+                            <h2 class="kh-section-title">Completed jobs</h2>
+                            <p class="kh-section-copy">Recent finished work from this provider.</p>
+                        </div>
+                        <span class="kh-status-badge kh-status-soft-success">
+                            <i class="fas fa-check-double"></i>@Model.CompletedJobsCount total
+                        </span>
+                    </div>
+
+                    @if (completedBookings.Any())
+                    {
+                        <div class="kh-job-list">
+                            @foreach (var b in completedBookings.Take(6))
+                            {
+                                <div class="kh-job-row">
+                                    <div class="kh-inline-between">
+                                        <div>
+                                            <div class="fw-800">@b.ServiceRequest?.Title</div>
+                                            <div class="text-muted small">
+                                                <i class="fas fa-tag me-1 text-primary"></i>@b.ServiceRequest?.Category?.Name
+                                            </div>
+                                        </div>
+                                        <span class="text-muted small">@b.CompletedAt?.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-briefcase"></i>
+                            <h5>No completed jobs yet</h5>
+                            <p>Completed work will appear here after customer confirmation.</p>
+                        </div>
+                    }
+                </section>
+
+                <section class="kh-info-card">
+                    <div class="kh-section-head">
+                        <div>
+                            <h2 class="kh-section-title">Reviews</h2>
+                            <p class="kh-section-copy">Customer feedback from completed services.</p>
+                        </div>
+                    </div>
+
+                    @if (reviews.Any())
+                    {
+                        <div class="kh-review-list">
+                            @foreach (var r in reviews.Take(6))
+                            {
+                                <div class="kh-review-row">
+                                    <div class="kh-inline-between mb-2">
+                                        <div>
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i <= r.Rating ? "text-warning" : "text-muted")"></i>
+                                            }
+                                            <span class="ms-2 small fw-800">
+                                                @r.Customer?.FirstName @r.Customer?.LastName
+                                            </span>
+                                        </div>
+                                        <span class="text-muted small">@r.CreatedAt.ToString("MMM dd, yyyy")</span>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(r.Comment))
+                                    {
+                                        <p class="text-muted mb-0">@r.Comment</p>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="fas fa-star"></i>
+                            <h5>No reviews yet</h5>
+                            <p>Reviews will appear after completed bookings.</p>
+                        </div>
+                    }
+                </section>
+            </div>
         </div>
     </div>
 }

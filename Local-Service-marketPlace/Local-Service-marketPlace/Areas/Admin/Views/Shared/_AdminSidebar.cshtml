@@ -1,66 +1,64 @@
-﻿<div class="sidebar pb-3">
-    <nav class="navbar bg-secondary navbar-dark">
-        <a asp-area="Admin" asp-controller="Admin" asp-action="Index" class="navbar-brand mx-4 mb-3">
-            <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>Admin Panel</h3>
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<div class="sidebar pb-3">
+    <nav class="navbar navbar-dark">
+        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="navbar-brand mx-4 mb-3">
+            <h3><i class="fa fa-user-shield me-2"></i>Khidmati</h3>
         </a>
-        <div class="d-flex align-items-center ms-4 mb-4">
+
+        <div class="d-flex align-items-center mx-4 mb-4 p-3 rounded bg-white">
             <div class="position-relative">
-                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 40px; height: 40px;">
+                <img class="rounded-circle" src="/admin/img/user.jpg" alt="" style="width: 42px; height: 42px; object-fit: cover;">
                 <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
             </div>
-            <div class="ms-3">
-                <h6 class="mb-0">@User.Identity?.Name</h6>
-                <span>Admin</span>
+            <div class="ms-3 overflow-hidden">
+                <h6 class="mb-0 text-truncate">@User.Identity?.Name</h6>
+                <span class="role-pill mt-1">Admin</span>
             </div>
         </div>
-        <div class="navbar-nav w-100">
 
-            <!-- Dashboard -->
+        <div class="navbar-nav w-100">
             <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"
-               class="nav-item nav-link">
+               class="nav-item nav-link @(currentController == "Dashboard" ? "active" : "")">
                 <i class="fa fa-tachometer-alt me-2"></i>Dashboard
             </a>
 
-            <!-- Categories -->
             <a asp-area="Admin" asp-controller="Category" asp-action="Index"
-               class="nav-item nav-link">
+               class="nav-item nav-link @(currentController == "Category" ? "active" : "")">
                 <i class="fa fa-tags me-2"></i>Categories
             </a>
 
-            <!-- Users -->
             <a asp-area="Admin" asp-controller="User" asp-action="Index"
-               class="nav-item nav-link">
+               class="nav-item nav-link @(currentController == "User" ? "active" : "")">
                 <i class="fa fa-users me-2"></i>Users
             </a>
 
-            <!-- Service Requests -->
             <a asp-area="Admin" asp-controller="ServiceRequest" asp-action="Index"
-               class="nav-item nav-link">
+               class="nav-item nav-link @(currentController == "ServiceRequest" ? "active" : "")">
                 <i class="fa fa-list me-2"></i>Service Requests
             </a>
 
-            <!-- Bookings -->
             <a asp-area="Admin" asp-controller="Booking" asp-action="Index"
-               class="nav-item nav-link">
+               class="nav-item nav-link @(currentController == "Booking" ? "active" : "")">
                 <i class="fa fa-calendar-check me-2"></i>Bookings
             </a>
 
-            <a asp-area="Admin" asp-controller="Wallet" asp-action="Index" class="nav-item nav-link">
+            <a asp-area="Admin" asp-controller="Wallet" asp-action="Index"
+               class="nav-item nav-link @(currentController == "Wallet" ? "active" : "")">
                 <i class="fa fa-wallet me-2"></i>Wallet
             </a>
 
-            <!-- Complaints -->
             <a asp-area="Admin" asp-controller="Complaint" asp-action="Index"
-               class="nav-item nav-link">
+               class="nav-item nav-link @(currentController == "Complaint" ? "active" : "")">
                 <i class="fa fa-exclamation-circle me-2"></i>Complaints
             </a>
 
-            <!-- Logout -->
             <a asp-area="" asp-controller="Account" asp-action="Logout"
                class="nav-item nav-link text-danger mt-3">
                 <i class="fa fa-sign-out-alt me-2"></i>Logout
             </a>
-
         </div>
     </nav>
 </div>

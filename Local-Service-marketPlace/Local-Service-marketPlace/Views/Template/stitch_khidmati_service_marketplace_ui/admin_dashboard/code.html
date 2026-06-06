@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Khidmati Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#dee4e1",
+                    "on-secondary-container": "#00217a",
+                    "outline": "#6d7a77",
+                    "on-background": "#171d1c",
+                    "surface-container": "#eaefed",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#89f5e7",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "background": "#f5faf8",
+                    "tertiary-container": "#6c748b",
+                    "on-tertiary-fixed": "#131b2e",
+                    "surface-container-low": "#f0f5f2",
+                    "on-tertiary-container": "#fefcff",
+                    "on-surface": "#171d1c",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#d6dbd9",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#6bd8cb",
+                    "inverse-surface": "#2c3130",
+                    "primary": "#00685f",
+                    "tertiary": "#545c72",
+                    "surface-container-high": "#e4e9e7",
+                    "surface-container-highest": "#dee4e1",
+                    "surface": "#f5faf8",
+                    "secondary-fixed-dim": "#b8c4ff",
+                    "inverse-primary": "#6bd8cb",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#173bab",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00201d",
+                    "surface-tint": "#006a61",
+                    "on-secondary-fixed": "#001453",
+                    "inverse-on-surface": "#edf2f0",
+                    "primary-container": "#008378",
+                    "on-surface-variant": "#3d4947",
+                    "outline-variant": "#bcc9c6",
+                    "secondary": "#3755c3",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#005049",
+                    "secondary-container": "#708cfd",
+                    "on-primary-container": "#f4fffc",
+                    "surface-bright": "#f5faf8",
+                    "secondary-fixed": "#dde1ff",
+                    "tertiary-fixed": "#dae2fd",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "margin-desktop": "48px",
+                    "sm": "12px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "max-width": "1280px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f5faf8; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .stat-card-shadow { shadow-sm; box-shadow: 0px 4px 20px rgba(15, 23, 42, 0.05); }
+        .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background">
+<!-- SideNavBar (Admin) -->
+<aside class="hidden md:flex flex-col h-full p-md overflow-y-auto bg-surface-container-low dark:bg-surface-container-lowest h-screen w-[280px] fixed left-0 top-0 border-r border-outline-variant dark:border-outline z-50">
+<div class="flex items-center gap-sm mb-xl">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">handyman</span>
+</div>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati Admin</h1>
+</div>
+<div class="flex items-center gap-sm mb-xl p-sm bg-surface-container-high rounded-xl">
+<img alt="Admin Avatar" class="w-10 h-10 rounded-full bg-surface-variant" data-alt="A professional headshot of a Middle Eastern male executive in a modern office setting. He is wearing a sharp navy blue blazer over a crisp white shirt, looking directly at the camera with a confident and trustworthy expression. The background is a blurred, high-end corporate office with soft, natural morning light filtering through large glass windows, maintaining a clean and professional aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRpfwbUI5yeVVAwjp_CO2FuGx7l4HchfbhIXHsTBKEdyD6BJkZnFuv6JRSO0VzDTfvfX9PcXTYeNeaYcd-_G3kSAdp0dqAW0Vq-VDK71CZ-t2IWXeVyofE7BeoGL9bU5_uE1EgRp0Wh3vSixg_HVEAEatwlFvGUjCsYJDAhb6jqj7tWpEtTLWQiTXKU6FzgH6K_dz9B91PRIBoW1GC-DipTrR2T5e0SO_EPs5A2X6NuHLs9nUAYw3K_P9oE9AFgELE8AiCQBEp1Jg"/>
+<div>
+<p class="text-label-md font-label-md text-on-surface">System Administrator</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Admin Dashboard</p>
+</div>
+</div>
+<nav class="space-y-base flex-1">
+<a class="flex items-center gap-sm p-sm bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg scale-[0.98] transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-md font-label-md">Users</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">category</span>
+<span class="text-label-md font-label-md">Categories</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">hail</span>
+<span class="text-label-md font-label-md">Service Requests</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">event_available</span>
+<span class="text-label-md font-label-md">Bookings</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span class="text-label-md font-label-md">Complaints</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-label-md font-label-md">Wallet</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</nav>
+<button class="mt-xl w-full flex items-center justify-center gap-sm bg-primary text-on-primary py-sm rounded-lg font-label-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add_circle</span>
+            New Category
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-[280px] min-h-screen pb-24 md:pb-lg">
+<!-- TopAppBar (Search & Notifications) -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop bg-surface py-md border-b border-outline-variant dark:border-outline shadow-sm">
+<div class="md:hidden">
+<span class="text-headline-md font-bold text-primary">Khidmati</span>
+</div>
+<div class="hidden md:flex flex-1 max-w-md items-center bg-surface-container rounded-full px-md py-xs border border-outline-variant">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body-sm" placeholder="Search system logs or users..." type="text"/>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-xs text-on-surface-variant relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe8Vt5gyZtK4dDZf5IknZ_E2vCzuiMYOGOy-6dieOj2QJJ9hgZnA2HafvmwYDyt6W8DctvnVScQ8mNDds0fDGeh40vJoAneTvIPexPoZHdWVwaguVDr7vHEQfFCzieU2VaKSEiW1KVFVMwGUb58jpld5VsKGQxGn8hKUxfTVXotY__YGh03SghBUwpQTslyAWb8TWJjIpdLzCeiXTMzUMvpkV8WapkJaErtHZelfe1N_1rU9l6swinNu3C55_41coS13-J5GSU7yM"/>
+</div>
+</div>
+</header>
+<div class="px-margin-mobile md:px-margin-desktop pt-lg">
+<!-- Greeting & Date -->
+<div class="mb-lg">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">System Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Welcome back, Admin. Here's what's happening today.</p>
+</div>
+<!-- Statistic Cards Grid (Bento Style) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-lg">
+<div class="bg-surface-container-lowest p-md rounded-xl stat-card-shadow border border-outline-variant hover:scale-[1.02] transition-transform">
+<div class="flex justify-between items-start mb-sm">
+<div class="p-xs bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">group</span>
+</div>
+<span class="text-label-sm font-label-sm text-green-600 bg-green-50 px-xs py-[2px] rounded-full">+12%</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Total Users</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">14,282</h3>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl stat-card-shadow border border-outline-variant hover:scale-[1.02] transition-transform">
+<div class="flex justify-between items-start mb-sm">
+<div class="p-xs bg-secondary/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary">event_available</span>
+</div>
+<span class="text-label-sm font-label-sm text-secondary bg-secondary/5 px-xs py-[2px] rounded-full">Active</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Active Bookings</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">842</h3>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl stat-card-shadow border border-outline-variant hover:scale-[1.02] transition-transform">
+<div class="flex justify-between items-start mb-sm">
+<div class="p-xs bg-tertiary/10 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">payments</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant bg-surface-variant px-xs py-[2px] rounded-full">MTD</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Total Commission</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">$24,190</h3>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl stat-card-shadow border border-outline-variant hover:scale-[1.02] transition-transform">
+<div class="flex justify-between items-start mb-sm">
+<div class="p-xs bg-error/10 rounded-lg">
+<span class="material-symbols-outlined text-error">report_problem</span>
+</div>
+<span class="text-label-sm font-label-sm text-error bg-error/5 px-xs py-[2px] rounded-full">High Priority</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Open Complaints</p>
+<h3 class="font-headline-md text-headline-md text-on-surface">18</h3>
+</div>
+</div>
+<!-- Charts & Alerts Asymmetric Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Weekly Bookings Trend Chart -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-md rounded-xl stat-card-shadow border border-outline-variant">
+<div class="flex justify-between items-center mb-md">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Weekly Bookings Trend</h4>
+<select class="bg-surface-container border-none text-label-sm rounded-lg py-xs px-sm focus:ring-1 focus:ring-primary">
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+</select>
+</div>
+<!-- Simulated Chart Canvas -->
+<div class="relative h-[300px] w-full flex items-end justify-between px-sm pt-md">
+<!-- Chart Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pt-md pb-xs border-b border-outline-variant">
+<div class="border-t border-dashed border-outline-variant w-full h-0"></div>
+<div class="border-t border-dashed border-outline-variant w-full h-0"></div>
+<div class="border-t border-dashed border-outline-variant w-full h-0"></div>
+<div class="h-0"></div>
+</div>
+<!-- Chart Bars -->
+<div class="relative z-10 w-full flex items-end justify-around h-full">
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 60%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Mon</span>
+</div>
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 80%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Tue</span>
+</div>
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 55%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Wed</span>
+</div>
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 95%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Thu</span>
+</div>
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 70%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Fri</span>
+</div>
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 40%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Sat</span>
+</div>
+<div class="group relative flex flex-col items-center gap-xs">
+<div class="w-8 md:w-12 bg-primary/20 rounded-t-lg transition-all hover:bg-primary" style="height: 85%;"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Sun</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent System Logs / Alerts -->
+<div class="bg-surface-container-lowest p-md rounded-xl stat-card-shadow border border-outline-variant flex flex-col">
+<div class="flex justify-between items-center mb-md">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">System Logs</h4>
+<button class="text-primary text-label-sm font-label-sm hover:underline">View All</button>
+</div>
+<div class="space-y-md overflow-y-auto scrollbar-hide flex-1">
+<div class="flex gap-sm items-start border-b border-outline-variant pb-sm last:border-0">
+<div class="w-2 h-2 mt-2 rounded-full bg-error shrink-0"></div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Payment Failed</p>
+<p class="text-body-sm text-on-surface-variant">Booking #2910 payment failed from User ID: 9182.</p>
+<span class="text-label-sm text-outline">2 mins ago</span>
+</div>
+</div>
+<div class="flex gap-sm items-start border-b border-outline-variant pb-sm last:border-0">
+<div class="w-2 h-2 mt-2 rounded-full bg-primary shrink-0"></div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">New Provider Applied</p>
+<p class="text-body-sm text-on-surface-variant">John Doe (Plumbing) registered as a new service provider.</p>
+<span class="text-label-sm text-outline">15 mins ago</span>
+</div>
+</div>
+<div class="flex gap-sm items-start border-b border-outline-variant pb-sm last:border-0">
+<div class="w-2 h-2 mt-2 rounded-full bg-secondary shrink-0"></div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">New Booking Confirmed</p>
+<p class="text-body-sm text-on-surface-variant">Booking #2909 confirmed for AC Maintenance.</p>
+<span class="text-label-sm text-outline">45 mins ago</span>
+</div>
+</div>
+<div class="flex gap-sm items-start border-b border-outline-variant pb-sm last:border-0">
+<div class="w-2 h-2 mt-2 rounded-full bg-error shrink-0"></div>
+<div>
+<p class="font-label-md text-label-md text-on-surface">High Commission Alert</p>
+<p class="text-body-sm text-on-surface-variant">Transaction #8129 has a commission mismatch of $12.00.</p>
+<span class="text-label-sm text-outline">1 hour ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Bookings Table -->
+<div class="mt-lg bg-surface-container-lowest rounded-xl stat-card-shadow border border-outline-variant overflow-hidden">
+<div class="px-md py-md border-b border-outline-variant flex justify-between items-center">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Recent Booking Activity</h4>
+<button class="bg-surface-container text-on-surface-variant px-sm py-xs rounded-lg text-label-sm font-label-sm hover:bg-surface-variant transition-colors">Export CSV</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant">
+<th class="px-md py-sm font-label-md text-label-md text-outline">Booking ID</th>
+<th class="px-md py-sm font-label-md text-label-md text-outline">Service</th>
+<th class="px-md py-sm font-label-md text-label-md text-outline">Provider</th>
+<th class="px-md py-sm font-label-md text-label-md text-outline">Status</th>
+<th class="px-md py-sm font-label-md text-label-md text-outline text-right">Amount</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-[#F0FDFA] transition-colors">
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">#BK-9021</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">Deep Cleaning</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">Expert Cleaners Co.</td>
+<td class="px-md py-md">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-green-100 text-green-700 text-label-sm font-label-sm">Completed</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface text-right">$120.00</td>
+</tr>
+<tr class="hover:bg-[#F0FDFA] transition-colors">
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">#BK-9022</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">Home Painting</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">Artistic Walls Ltd.</td>
+<td class="px-md py-md">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-secondary/10 text-secondary text-label-sm font-label-sm">In Progress</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface text-right">$450.00</td>
+</tr>
+<tr class="hover:bg-[#F0FDFA] transition-colors">
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">#BK-9023</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">Plumbing Repair</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface">Pristine Pipes</td>
+<td class="px-md py-md">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-error/10 text-error text-label-sm font-label-sm">Disputed</span>
+</td>
+<td class="px-md py-md font-body-sm text-body-sm text-on-surface text-right">$85.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest dark:bg-inverse-surface border-t border-outline-variant dark:border-outline">
+<div class="flex flex-col md:flex-row justify-between items-center gap-md">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-primary-fixed-dim">Khidmati Marketplace</span>
+<div class="flex gap-md">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">About Us</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+</div>
+<p class="text-body-sm font-body-sm text-on-surface-variant">© 2024 Khidmati Marketplace. All rights reserved.</p>
+</div>
+</footer>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface dark:bg-surface-container-lowest rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-full px-4 py-1 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-sm font-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant px-2 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-label-sm font-label-sm">Users</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant px-2 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined">hail</span>
+<span class="text-label-sm font-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant px-2 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-label-sm font-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant px-2 py-1 transition-colors" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm font-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple Interaction: Smooth hover scaling for cards
+        document.querySelectorAll('.stat-card-shadow').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

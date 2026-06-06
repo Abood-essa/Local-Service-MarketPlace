@@ -1,0 +1,107 @@
+﻿@model List<Local_Service_marketPlace.Models.Notification>
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h2><i class="fas fa-bell text-primary me-2"></i>Notifications</h2>
+            <p>@Model.Count(n => !n.IsRead) unread notification(s)</p>
+        </div>
+        @if (Model.Any(n => !n.IsRead))
+        {
+            <form asp-area="Provider" asp-controller="Notification"
+                  asp-action="MarkAllRead" method="post">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                    <i class="fas fa-check-double me-1"></i> Mark All as Read
+                </button>
+            </form>
+        }
+    </div>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="empty-state">
+        <i class="fas fa-bell-slash"></i>
+        <h5>No Notifications</h5>
+        <p>You're all caught up!</p>
+    </div>
+}
+else
+{
+    <div class="k-card p-0" style="overflow:hidden;">
+        @foreach (var notification in Model)
+        {
+            <div class="d-flex align-items-start p-3 notification-item @(!notification.IsRead ? "unread" : "")"
+                 data-id="@notification.Id"
+                 style="border-bottom:1px solid var(--border);
+                                background: @(!notification.IsRead ? "#f0fdfa" : "transparent");
+                                cursor: pointer;"
+                 onclick="markRead(@notification.Id, this)">
+
+                <div class="me-3 mt-1">
+                    @if (!notification.IsRead)
+                    {
+                        <span class="text-primary"><i class="fas fa-circle" style="font-size:8px;"></i></span>
+                    }
+                    else
+                    {
+                        <span class="text-muted"><i class="far fa-circle" style="font-size:8px;"></i></span>
+                    }
+                </div>
+
+                <div class="flex-grow-1">
+                    <p class="fw-700 mb-1" style="font-size:0.95rem;">@notification.Title</p>
+                    <p class="text-muted mb-1" style="font-size:0.875rem;">@notification.Message</p>
+                    <p class="text-muted mb-0" style="font-size:0.8rem;">
+                        <i class="fas fa-clock me-1"></i>
+                        @notification.CreatedAt.ToString("MMM dd, yyyy — hh:mm tt")
+                    </p>
+                </div>
+
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function markRead(id, el) {
+            if (!el.classList.contains('unread')) return;
+
+            fetch(`/Provider/Notification/MarkRead/${id}`, {
+                method: 'POST',
+                headers: {
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value,
+                    'Content-Type': 'application/json'
+                }
+            }).then(() => {
+                el.style.background = 'transparent';
+                el.classList.remove('unread');
+                const dot = el.querySelector('.fas.fa-circle');
+                if (dot) {
+                    dot.classList.remove('fas', 'text-primary');
+                    dot.classList.add('far', 'text-muted');
+                }
+                const badge = document.getElementById('notif-badge');
+                if (badge) {
+                    const count = parseInt(badge.textContent) - 1;
+                    if (count <= 0) badge.style.display = 'none';
+                    else badge.textContent = count;
+                }
+            });
+        }
+    </script>
+}

@@ -1,124 +1,231 @@
-﻿@using Local_Service_marketPlace.Models.Enums
+@using Local_Service_marketPlace.Models.Enums
 @model IEnumerable<Local_Service_marketPlace.Models.ServiceOffer>
 @{
     ViewData["Title"] = "My Offers";
     Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
+
+    var offers = Model.ToList();
+    var totalOffers = offers.Count;
+    var pendingFinalPrices = offers.Count(o => o.Status == OfferStatus.Pending);
+    var awaitingCustomer = offers.Count(o => o.Status == OfferStatus.FinalPriceSubmitted);
+    var acceptedOffers = offers.Count(o => o.Status == OfferStatus.AcceptedByCustomer);
 }
 
-<div class="page-header">
-    <h2><i class="fas fa-file-alt text-primary me-2"></i>My Offers</h2>
-    <p>Track all offers you've submitted and send final prices to waiting customers.</p>
-</div>
+<div class="marketplace-page">
+    <section class="kh-page-hero">
+        <div class="kh-hero-grid">
+            <div>
+                <div class="kh-hero-kicker">
+                    <i class="fas fa-file-signature"></i>
+                    Provider offer workspace
+                </div>
+                <h1 class="kh-page-title">Track every estimate from pitch to booked job.</h1>
+                <p class="kh-page-copy">
+                    Manage submitted offers, send final prices after inspection, and keep accepted work moving into bookings.
+                </p>
+                <div class="kh-hero-actions">
+                    <span class="kh-status-badge kh-status-soft-primary">
+                        <i class="fas fa-layer-group"></i>@totalOffers offer@(totalOffers == 1 ? "" : "s")
+                    </span>
+                    <span class="kh-status-badge kh-status-soft-warning">
+                        <i class="fas fa-tag"></i>@pendingFinalPrices need final price
+                    </span>
+                </div>
+            </div>
+            <div class="kh-hero-panel">
+                <div class="kh-inline-between">
+                    <div>
+                        <div class="kh-stat-label">Accepted offers</div>
+                        <div class="fs-2 fw-800">@acceptedOffers</div>
+                    </div>
+                    <span class="icon-chip bg-white"><i class="fas fa-handshake"></i></span>
+                </div>
+                <p class="small mb-0 mt-2 text-white-50">Accepted offers become bookings you can manage from your provider workspace.</p>
+            </div>
+        </div>
+    </section>
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-@if (!Model.Any())
-{
-    <div class="empty-state">
-        <i class="fas fa-file-alt"></i>
-        <h5>No offers yet</h5>
-        <p>Browse open requests and submit your first offer.</p>
-        <a asp-area="Provider" asp-controller="ServiceRequest" asp-action="Index"
-           class="btn btn-primary">
-            Browse Requests
-        </a>
-    </div>
-}
-else
-{
-    <div class="row g-3">
-        @foreach (var offer in Model)
-        {
-            var (badgeCss, badgeLabel) = offer.Status switch
+    <section class="kh-metric-grid">
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-file-alt"></i></span>
+            <div class="kh-metric-number">@totalOffers</div>
+            <div class="kh-metric-label">Total offers</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-pen-nib"></i></span>
+            <div class="kh-metric-number">@pendingFinalPrices</div>
+            <div class="kh-metric-label">Need final price</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-hourglass-half"></i></span>
+            <div class="kh-metric-number">@awaitingCustomer</div>
+            <div class="kh-metric-label">Awaiting customer</div>
+        </article>
+        <article class="kh-metric">
+            <span class="kh-metric-icon"><i class="fas fa-circle-check"></i></span>
+            <div class="kh-metric-number">@acceptedOffers</div>
+            <div class="kh-metric-label">Accepted</div>
+        </article>
+    </section>
+
+    @if (!offers.Any())
+    {
+        <div class="empty-state">
+            <i class="fas fa-file-circle-plus"></i>
+            <h5>No offers yet</h5>
+            <p>Browse open requests, find a job that fits your craft, and submit your first estimate.</p>
+            <a asp-area="Provider" asp-controller="ServiceRequest" asp-action="Index"
+               class="btn btn-primary">
+                <i class="fas fa-search me-1"></i> Browse Requests
+            </a>
+        </div>
+    }
+    else
+    {
+        <section class="kh-filter-panel">
+            <div class="kh-section-head mb-3">
+                <div>
+                    <h2 class="kh-section-title">Offer pipeline</h2>
+                    <p class="kh-section-copy">Filter by status and act on offers that are ready for a final price.</p>
+                </div>
+                <span class="kh-status-badge kh-status-soft-primary">
+                    <i class="fas fa-chart-line"></i>@totalOffers visible
+                </span>
+            </div>
+
+            <div class="kh-filter-title">
+                <i class="fas fa-filter"></i>
+                Offer status
+            </div>
+            <div class="kh-chip-row" id="offerStatusChips">
+                <button type="button" class="kh-filter-chip active" data-offer-filter="all">
+                    <i class="fas fa-border-all"></i> All
+                </button>
+                @foreach (var status in Enum.GetValues<OfferStatus>())
+                {
+                    var chipIcon = status switch
+                    {
+                        OfferStatus.Pending => "fa-clock",
+                        OfferStatus.FinalPriceSubmitted => "fa-hourglass-half",
+                        OfferStatus.AcceptedByCustomer => "fa-check",
+                        OfferStatus.RejectedByCustomer => "fa-times",
+                        _ => "fa-circle"
+                    };
+                    <button type="button" class="kh-filter-chip" data-offer-filter="@status">
+                        <i class="fas @chipIcon"></i> @status
+                    </button>
+                }
+            </div>
+        </section>
+
+        <section class="kh-card-grid two-col" id="offerCards">
+            @foreach (var offer in offers)
             {
-                OfferStatus.Pending => ("bg-warning text-dark", "Pending"),
-                OfferStatus.FinalPriceSubmitted => ("bg-info text-dark", "Awaiting Customer"),
-                OfferStatus.AcceptedByCustomer => ("bg-success", "Accepted"),
-                OfferStatus.RejectedByCustomer => ("bg-danger", "Rejected"),
-                _ => ("bg-secondary", offer.Status.ToString())
-            };
+                var (statusClass, statusLabel, statusIcon) = offer.Status switch
+                {
+                    OfferStatus.Pending => ("kh-status-soft-warning", "Needs Final Price", "fa-clock"),
+                    OfferStatus.FinalPriceSubmitted => ("kh-status-soft-blue", "Waiting on Customer", "fa-hourglass-half"),
+                    OfferStatus.AcceptedByCustomer => ("kh-status-soft-success", "Accepted", "fa-check"),
+                    OfferStatus.RejectedByCustomer => ("kh-status-soft-danger", "Rejected", "fa-times"),
+                    _ => ("kh-status-soft-muted", offer.Status.ToString(), "fa-circle")
+                };
 
-            <div class="col-md-6">
-                <div class="k-card h-100 @(offer.Status == OfferStatus.Pending ? "border-start border-warning border-3" : offer.Status == OfferStatus.AcceptedByCustomer ? "border-start border-success border-3" : "")">
+                var customerInitial = !string.IsNullOrEmpty(offer.ServiceRequest?.Customer?.FirstName)
+                    ? offer.ServiceRequest.Customer.FirstName.Substring(0, 1)
+                    : "C";
 
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <div>
-                            <h6 class="fw-700 mb-0">@offer.ServiceRequest?.Title</h6>
-                            <small class="text-muted">
-                                <i class="fas fa-tag me-1"></i>@offer.ServiceRequest?.Category?.Name
-                                &nbsp;·&nbsp;
-                                <i class="fas fa-map-marker-alt me-1"></i>@offer.ServiceRequest?.City
-                            </small>
-                        </div>
-                        <span class="badge @badgeCss badge-status">@badgeLabel</span>
+                <article class="kh-offer-card @(offer.Status == OfferStatus.AcceptedByCustomer ? "border-success" : "")"
+                         data-offer-card data-status="@offer.Status">
+                    <div class="kh-card-topline">
+                        <span class="kh-status-badge @statusClass">
+                            <i class="fas @statusIcon"></i>@statusLabel
+                        </span>
+                        <small class="text-muted">Submitted @offer.CreatedAt.ToString("MMM dd, yyyy")</small>
                     </div>
 
-                    <div class="row g-2 mb-3">
-                        <div class="col-6">
-                            <div class="bg-light rounded p-2 text-center small">
-                                <div class="text-muted">Estimated Range</div>
-                                <div class="fw-700 text-primary">
-                                    @offer.EstimatedMinPrice JD — @offer.EstimatedMaxPrice JD
-                                </div>
+                    <div>
+                        <h3 class="kh-card-title">@offer.ServiceRequest?.Title</h3>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="kh-status-badge kh-status-soft-muted">
+                                <i class="fas fa-tag"></i>@offer.ServiceRequest?.Category?.Name
+                            </span>
+                            <span class="kh-status-badge kh-status-soft-muted">
+                                <i class="fas fa-location-dot"></i>@offer.ServiceRequest?.City
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="kh-offer-provider">
+                        <span class="kh-avatar-fallback">@customerInitial</span>
+                        <div>
+                            <div class="small text-muted">Customer</div>
+                            <div class="fw-800">
+                                @offer.ServiceRequest?.Customer?.FirstName @offer.ServiceRequest?.Customer?.LastName
+                            </div>
+                            <div class="small text-muted">
+                                <i class="fas fa-calendar-day me-1 text-primary"></i>
+                                Preferred @offer.ServiceRequest?.PreferredDate.ToString("MMM dd, yyyy")
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="bg-light rounded p-2 text-center small">
-                                <div class="text-muted">Final Price</div>
-                                <div class="fw-700 @(offer.FinalPrice.HasValue ? "text-success" : "text-muted")">
-                                    @(offer.FinalPrice.HasValue? offer.FinalPrice + " JD" : "Not set yet")
-                                </div>
+                    </div>
+
+                    <div class="kh-price-grid">
+                        <div class="kh-price-cell">
+                            <div class="small text-muted">Estimated range</div>
+                            <div class="kh-price">
+                                @offer.EstimatedMinPrice.ToString("0.##") - @offer.EstimatedMaxPrice.ToString("0.##") JD
+                            </div>
+                        </div>
+                        <div class="kh-price-cell">
+                            <div class="small text-muted">Final price</div>
+                            <div class="kh-price @(offer.FinalPrice.HasValue ? "" : "text-muted")">
+                                @(offer.FinalPrice.HasValue ? offer.FinalPrice.Value.ToString("0.##") + " JD" : "Not set yet")
                             </div>
                         </div>
                     </div>
 
                     @if (!string.IsNullOrEmpty(offer.Notes))
                     {
-                        <p class="small text-muted mb-2">
-                            <i class="fas fa-comment me-1"></i>@offer.Notes
+                        <p class="text-muted small mb-0 kh-clamp-2">
+                            <i class="fas fa-comment-dots me-1 text-primary"></i>@offer.Notes
                         </p>
                     }
 
-                    <div class="small text-muted mb-3">
-                        <i class="fas fa-user me-1"></i>
-                        Customer: @offer.ServiceRequest?.Customer?.FirstName
-                        @offer.ServiceRequest?.Customer?.LastName
-                        &nbsp;·&nbsp;
-                        Submitted @offer.CreatedAt.ToString("MMM dd, yyyy")
-                    </div>
-
-                    @* Submit final price — only when still Pending *@
                     @if (offer.Status == OfferStatus.Pending)
                     {
-                        <div class="border-top pt-3">
-                            <p class="small fw-600 mb-2">
-                                <i class="fas fa-tag text-warning me-1"></i>
-                                Submit your final price after inspecting the job:
+                        <div class="kh-action-panel warning mt-auto">
+                            <h4 class="h6 fw-800 mb-2">
+                                <i class="fas fa-tag text-warning me-2"></i>Submit final price
+                            </h4>
+                            <p class="small text-muted mb-3">
+                                After inspecting the job, send the exact price for the customer to accept.
                             </p>
                             <form asp-action="SubmitFinalPrice" method="post"
-                                  class="d-flex gap-2 align-items-center">
+                                  class="d-flex gap-2 align-items-center flex-wrap">
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="offerId" value="@offer.Id" />
-                                <div class="input-group" style="max-width:200px;">
+                                <div class="input-group flex-grow-1">
                                     <input type="number" name="finalPrice" step="0.5" min="1"
-                                           class="form-control form-control-sm"
+                                           class="form-control"
                                            placeholder="Final price" required />
                                     <span class="input-group-text">JD</span>
                                 </div>
-                                <button type="submit" class="btn btn-sm btn-warning"
+                                <button type="submit" class="btn btn-warning"
                                         onclick="return confirm('Submit this as your final price?')">
                                     <i class="fas fa-paper-plane me-1"></i> Submit
                                 </button>
@@ -128,29 +235,95 @@ else
 
                     @if (offer.Status == OfferStatus.FinalPriceSubmitted)
                     {
-                        <div class="border-top pt-2 mt-1">
-                            <p class="small text-info mb-0">
-                                <i class="fas fa-hourglass-half me-1"></i>
-                                Final price of <strong>@offer.FinalPrice JD</strong> sent.
-                                Waiting for customer to accept or reject.
+                        <div class="kh-action-panel mt-auto">
+                            <h4 class="h6 fw-800 mb-2">
+                                <i class="fas fa-hourglass-half text-primary me-2"></i>Final price sent
+                            </h4>
+                            <p class="small text-muted mb-0">
+                                The customer has received your final price of
+                                <strong>@offer.FinalPrice?.ToString("0.##") JD</strong> and can accept or reject it.
                             </p>
                         </div>
                     }
 
                     @if (offer.Status == OfferStatus.AcceptedByCustomer)
                     {
-                        <div class="border-top pt-2 mt-1">
-                            <p class="small text-success mb-0">
-                                <i class="fas fa-check-circle me-1"></i>
-                                Customer accepted your offer. Check
-                                <a asp-area="Provider" asp-controller="Booking" asp-action="Index">My Bookings</a>
-                                to manage the job.
+                        <div class="kh-action-panel success mt-auto">
+                            <h4 class="h6 fw-800 mb-2">
+                                <i class="fas fa-circle-check text-success me-2"></i>Offer accepted
+                            </h4>
+                            <p class="small text-muted mb-3">
+                                The customer accepted this offer. Manage the confirmed work from your bookings page.
+                            </p>
+                            <a asp-area="Provider" asp-controller="Booking" asp-action="Index"
+                               class="btn btn-success">
+                                <i class="fas fa-calendar-check me-1"></i> View bookings
+                            </a>
+                        </div>
+                    }
+
+                    @if (offer.Status == OfferStatus.RejectedByCustomer)
+                    {
+                        <div class="kh-action-panel danger mt-auto">
+                            <h4 class="h6 fw-800 mb-2 text-danger">
+                                <i class="fas fa-circle-xmark me-2"></i>Offer rejected
+                            </h4>
+                            <p class="small text-muted mb-0">
+                                This offer is closed. Browse more open requests to keep your pipeline active.
                             </p>
                         </div>
                     }
 
-                </div>
-            </div>
-        }
-    </div>
+                    <div class="kh-card-footer">
+                        <span class="text-muted small">
+                            <i class="fas fa-clock me-1 text-primary"></i>@offer.CreatedAt.ToString("MMM dd, yyyy")
+                        </span>
+                        <a asp-area="Provider" asp-controller="ServiceRequest" asp-action="Details"
+                           asp-route-id="@offer.ServiceRequestId" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-eye me-1"></i> View request
+                        </a>
+                    </div>
+                </article>
+            }
+        </section>
+
+        <div id="offerFilterEmpty" class="empty-state" style="display:none;">
+            <i class="fas fa-filter-circle-xmark"></i>
+            <h5>No offers in this status</h5>
+            <p>Choose another status to keep reviewing your offer pipeline.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const chips = Array.from(document.querySelectorAll('[data-offer-filter]'));
+            const cards = Array.from(document.querySelectorAll('[data-offer-card]'));
+            const empty = document.getElementById('offerFilterEmpty');
+
+            if (!chips.length || !cards.length) return;
+
+            chips.forEach(function (chip) {
+                chip.addEventListener('click', function () {
+                    const status = chip.dataset.offerFilter;
+                    let visible = 0;
+
+                    chips.forEach(function (item) {
+                        item.classList.toggle('active', item === chip);
+                    });
+
+                    cards.forEach(function (card) {
+                        const match = status === 'all' || card.dataset.status === status;
+                        card.style.display = match ? '' : 'none';
+                        if (match) visible += 1;
+                    });
+
+                    if (empty) {
+                        empty.style.display = visible === 0 ? '' : 'none';
+                    }
+                });
+            });
+        })();
+    </script>
 }

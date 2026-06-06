@@ -1,85 +1,178 @@
-﻿@model Local_Service_marketPlace.Models.ViewModels.ServiceRequestCreateViewModel
+@model Local_Service_marketPlace.Models.ViewModels.ServiceRequestCreateViewModel
 @{
     ViewData["Title"] = "New Request";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 }
 
-<div class="row justify-content-center">
-    <div class="col-lg-7">
-
-        <div class="page-header">
-            <h2><i class="fas fa-plus-circle text-primary me-2"></i>Post a Service Request</h2>
-            <p>Describe your job and providers in matching categories will send you offers.</p>
+<div class="marketplace-page">
+    <section class="kh-page-hero">
+        <div class="kh-hero-grid">
+            <div>
+                <div class="kh-hero-kicker">
+                    <i class="fas fa-plus-circle"></i>
+                    New service request
+                </div>
+                <h1 class="kh-page-title">Tell providers exactly what needs to be done.</h1>
+                <p class="kh-page-copy">
+                    A clear request helps matched providers understand the job, estimate responsibly, and send stronger offers.
+                </p>
+            </div>
+            <div class="kh-hero-panel">
+                <div class="kh-info-row border-0 p-0 mb-3">
+                    <span class="kh-info-icon"><i class="fas fa-tags"></i></span>
+                    <div>
+                        <div class="kh-stat-label">Step 1</div>
+                        <div class="fw-800">Choose a service category</div>
+                    </div>
+                </div>
+                <div class="kh-info-row border-0 p-0 mb-3">
+                    <span class="kh-info-icon"><i class="fas fa-location-dot"></i></span>
+                    <div>
+                        <div class="kh-stat-label">Step 2</div>
+                        <div class="fw-800">Add address and date</div>
+                    </div>
+                </div>
+                <div class="kh-info-row border-0 p-0">
+                    <span class="kh-info-icon"><i class="fas fa-images"></i></span>
+                    <div>
+                        <div class="kh-stat-label">Step 3</div>
+                        <div class="fw-800">Attach helpful photos</div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="k-card">
-            <form asp-action="Create" method="post" enctype="multipart/form-data">
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+    <div class="kh-form-shell">
+        <aside class="kh-guide-panel">
+            <div class="kh-hero-kicker">
+                <i class="fas fa-shield-heart"></i>
+                Better offers start here
+            </div>
+            <h2 class="h4 fw-800 mb-3">Make the request easy to quote.</h2>
+            <p class="mb-3">Include the exact issue, location details, preferred date, and photos when they help explain the work.</p>
+            <ul class="list-unstyled mb-0">
+                <li class="mb-2"><i class="fas fa-check me-2"></i>Use a specific title</li>
+                <li class="mb-2"><i class="fas fa-check me-2"></i>Mention access or timing constraints</li>
+                <li><i class="fas fa-check me-2"></i>Upload clear images when available</li>
+            </ul>
+        </aside>
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-3"></div>
+
+            <section class="kh-form-section">
+                <div class="kh-form-section-title">
+                    <span class="kh-info-icon"><i class="fas fa-clipboard-list"></i></span>
+                    <div>
+                        <h2>Service details</h2>
+                        <p class="text-muted small mb-0">Start with the category and a clear title.</p>
+                    </div>
+                </div>
 
                 <div class="mb-3">
-                    <label asp-for="CategoryId" class="form-label fw-600"></label>
-                    <select asp-for="CategoryId" asp-items="Model.Categories"
-                            class="form-select">
-                        <option value="">— Select a category —</option>
+                    <label asp-for="CategoryId" class="form-label"></label>
+                    <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                        <option value="">Select a category</option>
                     </select>
                     <span asp-validation-for="CategoryId" class="text-danger small"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Title" class="form-label fw-600"></label>
-                    <input asp-for="Title" class="form-control"
-                           placeholder="e.g. Fix leaking kitchen sink" />
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" placeholder="e.g. Fix leaking kitchen sink" />
                     <span asp-validation-for="Title" class="text-danger small"></span>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="Description" class="form-label fw-600"></label>
-                    <textarea asp-for="Description" class="form-control" rows="4"
-                              placeholder="Describe the problem in detail — what's broken, when it started, anything useful for the provider..."></textarea>
+                <div>
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="5"
+                              placeholder="Describe what is happening, when it started, and anything the provider should know."></textarea>
                     <span asp-validation-for="Description" class="text-danger small"></span>
                 </div>
+            </section>
 
-                <div class="row g-3 mb-3">
+            <section class="kh-form-section">
+                <div class="kh-form-section-title">
+                    <span class="kh-info-icon"><i class="fas fa-map-location-dot"></i></span>
+                    <div>
+                        <h2>Location and timing</h2>
+                        <p class="text-muted small mb-0">Help providers understand where and when the job should happen.</p>
+                    </div>
+                </div>
+
+                <div class="row g-3">
                     <div class="col-md-8">
-                        <label asp-for="Address" class="form-label fw-600"></label>
-                        <input asp-for="Address" class="form-control"
-                               placeholder="Street address" />
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control" placeholder="Street address" />
                         <span asp-validation-for="Address" class="text-danger small"></span>
                     </div>
                     <div class="col-md-4">
-                        <label asp-for="City" class="form-label fw-600"></label>
+                        <label asp-for="City" class="form-label"></label>
                         <input asp-for="City" class="form-control" placeholder="City" />
                         <span asp-validation-for="City" class="text-danger small"></span>
                     </div>
+                    <div class="col-md-6">
+                        <label asp-for="PreferredDate" class="form-label"></label>
+                        <input asp-for="PreferredDate" type="date" class="form-control"
+                               min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
+                        <span asp-validation-for="PreferredDate" class="text-danger small"></span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="kh-form-section">
+                <div class="kh-form-section-title">
+                    <span class="kh-info-icon"><i class="fas fa-camera"></i></span>
+                    <div>
+                        <h2>Photos</h2>
+                        <p class="text-muted small mb-0">Optional images can make estimates more accurate.</p>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    <label asp-for="PreferredDate" class="form-label fw-600"></label>
-                    <input asp-for="PreferredDate" type="date" class="form-control"
-                           min="@DateTime.Today.AddDays(1).ToString("yyyy-MM-dd")" />
-                    <span asp-validation-for="PreferredDate" class="text-danger small"></span>
-                    <div class="form-text">Choose a date that works for you — providers will confirm availability.</div>
-                </div>
+                <label asp-for="Images" class="form-label"></label>
+                <input asp-for="Images" id="requestImages" type="file" class="form-control"
+                       accept="image/*" multiple />
+                <div class="form-text">Upload photos of the issue, up to 5 images.</div>
+                <div id="uploadPreview" class="kh-upload-preview"></div>
+            </section>
 
-                <div class="mb-4">
-                    <label asp-for="Images" class="form-label fw-600"></label>
-                    <input asp-for="Images" type="file" class="form-control"
-                           accept="image/*" multiple />
-                    <div class="form-text">Upload photos of the issue (optional, up to 5 images).</div>
-                </div>
-
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary px-4">
-                        <i class="fas fa-paper-plane me-1"></i> Post Request
-                    </button>
-                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
-                </div>
-            </form>
-        </div>
-
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="fas fa-paper-plane me-1"></i> Post request
+                </button>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-times me-1"></i> Cancel
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            const input = document.getElementById('requestImages');
+            const preview = document.getElementById('uploadPreview');
+
+            if (!input || !preview) return;
+
+            input.addEventListener('change', function () {
+                preview.innerHTML = '';
+                const files = Array.from(input.files || []);
+                preview.style.display = files.length ? 'flex' : 'none';
+
+                files.slice(0, 5).forEach(function (file) {
+                    const item = document.createElement('span');
+                    item.className = 'kh-upload-pill';
+                    const icon = document.createElement('i');
+                    icon.className = 'fas fa-image';
+                    item.appendChild(icon);
+                    item.appendChild(document.createTextNode(file.name));
+                    preview.appendChild(item);
+                });
+            });
+        })();
+    </script>
 }

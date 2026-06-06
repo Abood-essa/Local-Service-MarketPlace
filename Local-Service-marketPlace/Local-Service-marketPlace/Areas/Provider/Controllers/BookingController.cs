@@ -1,6 +1,7 @@
 ﻿using Local_Service_marketPlace.Data;
 using Local_Service_marketPlace.Models;
 using Local_Service_marketPlace.Models.Enums;
+using Local_Service_marketPlace.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,16 @@ namespace Local_Service_marketPlace.Areas.Provider.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
 
-        public BookingController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+        public BookingController(
+            ApplicationDbContext db,
+            UserManager<ApplicationUser> userManager,
+            IEmailService emailService)
         {
             _db = db;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         // GET: Provider/Booking/Index
@@ -116,6 +122,17 @@ namespace Local_Service_marketPlace.Areas.Provider.Controllers
 
             await _db.SaveChangesAsync();
 
+            // ── Email: booking status → InProgress ────────────────────────
+            var customerName = $"{booking.Customer.FirstName} {booking.Customer.LastName}";
+            _ = _emailService.SendBookingStatusChangedEmailAsync(
+                booking.Customer.Email!,
+                customerName,
+                booking.ServiceRequest.Title,
+                booking.Id,
+                "InProgress",
+                "Your provider has started working on your service request. We'll notify you when it's done.");
+            // ──────────────────────────────────────────────────────────────
+
             TempData["Success"] = "Booking marked as In Progress.";
             return RedirectToAction(nameof(Details), new { id });
         }
@@ -154,6 +171,17 @@ namespace Local_Service_marketPlace.Areas.Provider.Controllers
             });
 
             await _db.SaveChangesAsync();
+
+            // ── Email: booking status → PendingCompletion ─────────────────
+            var customerName = $"{booking.Customer.FirstName} {booking.Customer.LastName}";
+            _ = _emailService.SendBookingStatusChangedEmailAsync(
+                booking.Customer.Email!,
+                customerName,
+                booking.ServiceRequest.Title,
+                booking.Id,
+                "PendingCompletion",
+                "Your provider has marked the job as done. Please log in and confirm completion to finalize the booking.");
+            // ──────────────────────────────────────────────────────────────
 
             TempData["Success"] = "Job marked as done. Waiting for customer confirmation.";
             return RedirectToAction(nameof(Details), new { id });

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Service Request Details | Khidmati</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-variant": "#dee4e1",
+                    "on-secondary-container": "#00217a",
+                    "outline": "#6d7a77",
+                    "on-background": "#171d1c",
+                    "surface-container": "#eaefed",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#89f5e7",
+                    "tertiary-fixed-dim": "#bec6e0",
+                    "background": "#f5faf8",
+                    "tertiary-container": "#6c748b",
+                    "on-tertiary-fixed": "#131b2e",
+                    "surface-container-low": "#f0f5f2",
+                    "on-tertiary-container": "#fefcff",
+                    "on-surface": "#171d1c",
+                    "on-tertiary-fixed-variant": "#3f465c",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#d6dbd9",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#6bd8cb",
+                    "inverse-surface": "#2c3130",
+                    "primary": "#00685f",
+                    "tertiary": "#545c72",
+                    "surface-container-high": "#e4e9e7",
+                    "surface-container-highest": "#dee4e1",
+                    "surface": "#f5faf8",
+                    "secondary-fixed-dim": "#b8c4ff",
+                    "inverse-primary": "#6bd8cb",
+                    "error": "#ba1a1a",
+                    "on-secondary-fixed-variant": "#173bab",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#00201d",
+                    "surface-tint": "#006a61",
+                    "on-secondary-fixed": "#001453",
+                    "inverse-on-surface": "#edf2f0",
+                    "primary-container": "#008378",
+                    "on-surface-variant": "#3d4947",
+                    "outline-variant": "#bcc9c6",
+                    "secondary": "#3755c3",
+                    "on-error": "#ffffff",
+                    "on-primary-fixed-variant": "#005049",
+                    "secondary-container": "#708cfd",
+                    "on-primary-container": "#f4fffc",
+                    "surface-bright": "#f5faf8",
+                    "secondary-fixed": "#dde1ff",
+                    "tertiary-fixed": "#dae2fd",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "base": "8px",
+                    "lg": "40px",
+                    "xl": "64px",
+                    "margin-desktop": "48px",
+                    "sm": "12px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "max-width": "1280px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-sm": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "body-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.3", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.25", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-dot::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: theme('colors.primary');
+            border-radius: 50%;
+            border: 2px solid white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .step-line {
+            height: 2px;
+            flex-grow: 1;
+            background: theme('colors.outline-variant');
+        }
+        .step-line.active {
+            background: theme('colors.primary');
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="sticky top-0 z-50 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop bg-surface border-b border-outline-variant shadow-sm h-16">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md font-bold text-primary">Khidmati</span>
+</div>
+<div class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#">How it Works</a>
+<a class="text-on-surface-variant font-label-md hover:text-primary transition-colors" href="#">Categories</a>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant p-2 hover:bg-surface-container rounded-full transition-colors">notifications</button>
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container border border-outline-variant">
+<img alt="User Profile" data-alt="A professional headshot of a friendly Middle Eastern woman in her early 30s with a warm smile, wearing business casual attire. The lighting is soft and natural, against a clean, blurred office background. The overall aesthetic is professional, modern, and high-trust, consistent with a premium service marketplace platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1BOM1CUjYIZG5syYdu9EGonqrdhonC4j_AnyqIetXC_SX5fwKApwRu0_WQ_CuT5Gn007UHXyPlOEYr3PZRU7nmAvy3lH6_H8BQGc_B-Y4jupskExggeuZSFhglV9b4aOn2DXdlixxXFUI3HLS20-LnepMHnEH5HD0yV5hll88Rd8259kT9oP7Z79-bN_h-2c7oTtMC_RbQ6dZrxiYRgIAfoVpTF80NR7ZYkBzkNSUilRYPHCaIrhcp_xKVsQvXvtI_wDNuuJXXrE"/>
+</div>
+</div>
+</nav>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-[280px] fixed left-0 top-16 border-r border-outline-variant bg-surface-container-low p-md overflow-y-auto">
+<div class="flex items-center gap-sm mb-lg px-2">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-label-md text-on-surface">Khidmati Admin</p>
+<p class="text-label-sm text-on-surface-variant">System Administrator</p>
+</div>
+</div>
+<nav class="flex flex-col gap-xs flex-grow">
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md" href="#">
+<span class="material-symbols-outlined">group</span>
+                    Users
+                </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md" href="#">
+<span class="material-symbols-outlined">category</span>
+                    Categories
+                </a>
+<!-- Active Item for Service Requests/Bookings logic -->
+<a class="flex items-center gap-md px-4 py-3 bg-secondary-container text-on-secondary-container rounded-lg transition-all font-label-md scale-[0.98]" href="#">
+<span class="material-symbols-outlined">hail</span>
+                    Service Requests
+                </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md" href="#">
+<span class="material-symbols-outlined">event_available</span>
+                    Bookings
+                </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+                    Complaints
+                </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+                    Wallet
+                </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-container-high rounded-lg transition-all font-label-md mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+                    Settings
+                </a>
+</nav>
+<button class="mt-lg w-full bg-primary text-on-primary font-label-md py-3 rounded-lg flex items-center justify-center gap-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined">add</span>
+                New Category
+            </button>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow md:ml-[280px] p-margin-mobile md:p-margin-desktop max-w-max-width mx-auto w-full pb-xl">
+<!-- Breadcrumbs -->
+<nav class="flex items-center gap-xs text-on-surface-variant font-label-sm mb-md">
+<a class="hover:text-primary transition-colors" href="#">My Requests</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface">Request #KH-8291</span>
+</nav>
+<header class="mb-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-xs">Plumbing Emergency: Master Bathroom Leak</h1>
+<div class="flex items-center gap-sm">
+<span class="px-3 py-1 bg-primary-container text-on-primary-container text-label-sm rounded-full font-bold">Estimating</span>
+<span class="text-on-surface-variant font-label-sm">• Posted on Oct 24, 2023</span>
+</div>
+</div>
+<button class="flex items-center gap-sm text-error font-label-md px-4 py-2 hover:bg-error-container/20 rounded-lg transition-colors">
+<span class="material-symbols-outlined">cancel</span>
+                        Cancel Request
+                    </button>
+</div>
+</header>
+<!-- Status Timeline -->
+<section class="bg-surface-container-lowest rounded-xl p-md md:p-lg shadow-sm mb-lg border border-outline-variant">
+<div class="flex items-center justify-between gap-xs">
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary mb-xs">
+<span class="material-symbols-outlined text-[18px]">check</span>
+</div>
+<span class="font-label-md text-on-surface text-center">Posted</span>
+</div>
+<div class="step-line active"></div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary mb-xs relative">
+<div class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-20"></div>
+<span class="material-symbols-outlined text-[18px]">more_horiz</span>
+</div>
+<span class="font-label-md text-primary text-center">Estimating</span>
+</div>
+<div class="step-line"></div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+</div>
+<span class="font-label-md text-on-surface-variant text-center">Inspection</span>
+</div>
+<div class="step-line"></div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant mb-xs">
+<span class="material-symbols-outlined text-[18px]">payments</span>
+</div>
+<span class="font-label-md text-on-surface-variant text-center">Final Price</span>
+</div>
+</div>
+</section>
+<!-- Request Details Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-lg">
+<div class="lg:col-span-2 space-y-md">
+<!-- Description -->
+<div class="bg-surface-container-lowest rounded-xl p-md md:p-lg border border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">description</span>
+                            Description
+                        </h3>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                            I noticed a significant leak under the master bathroom sink this morning. The water seems to be dripping from the supply line connection. I've turned off the main valve for now, but I need someone to come out and replace the faulty hose or fix the valve assembly as soon as possible. The cabinets are starting to show signs of water damage.
+                        </p>
+</div>
+<!-- Photos -->
+<div class="bg-surface-container-lowest rounded-xl p-md md:p-lg border border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm mb-md flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">image</span>
+                            Attached Photos
+                        </h3>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-sm">
+<div class="aspect-square rounded-lg overflow-hidden group cursor-zoom-in relative">
+<img alt="Plumbing leak" class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A close-up photograph showing a leaking pipe under a wooden bathroom sink cabinet. Water droplets are visible on a braided stainless steel supply line, with a small puddle forming on the dark wood floor of the cabinet. The lighting is realistic and focuses on the moisture and the copper valve connection. The scene is clean but urgent." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQhPxqn3xqFQVmfpday_7U-y1UaLR6M97a_6ALVnQmt7SgjjbsRynJmCO-TLVV8wWDRQOxCnxD9klrmDVQF6RJsMTHRITEzEeeQS-EBHyjTx44KjpB8ehUIXS9jMf7WMD2jhEE2L5DP2cGEcPrm_slCQByHsNI-5BgGSx6ElXI8Xv8Dk9v7kxosTZzPF01fe4U3R6Ev5lNT5YJpAGc-AFnzPM0dGuq_Il6r18fRDzc0zUqxt4Y5YBMrKp0P-at5dwU6T9cdtw8MhM"/>
+</div>
+<div class="aspect-square rounded-lg overflow-hidden group cursor-zoom-in relative">
+<img alt="Valve assembly" class="w-full h-full object-cover transition-transform group-hover:scale-105" data-alt="A detailed shot of a shut-off valve assembly behind a toilet or under a sink. The metal valve shows slight mineral buildup and corrosion, indicating a slow, long-term leak. The surrounding tiles are white and bright, with soft natural light hitting the metallic surfaces. High-resolution commercial photography style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgAXUGkcUXiX6yteuKVzrQgZ5oPmopKImmlL1sf5lf91xki0ss1rnvnBnnGVTrCQ5TOc8QvCLJafn5TZCXyDCavBQJ4Ivi7zhVaDWLgUOJQ5Mmo8CI9x_UZ2q17uCYa2ueCQB1NzyTAcPagXWWoTmBaxMZlN0Bg_eS7G9hZZyEmn0voZ7PpdZxe1mAj0GFj5vQ52zzZnftVPti8ZfkP3xrkHWDSH14Hvk8cFzHxrIRC7QXLWJkNjCZBTdRT-LrG52vKq-KEmOnNkE"/>
+</div>
+<div class="aspect-square rounded-lg bg-surface-container flex flex-col items-center justify-center text-on-surface-variant border-2 border-dashed border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-[32px] mb-xs">add_a_photo</span>
+<span class="font-label-sm">Add More</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Summary Sidebar -->
+<div class="lg:col-span-1">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden sticky top-[100px]">
+<div class="p-md bg-surface-container-low border-b border-outline-variant">
+<h3 class="font-headline-sm text-headline-sm">Request Summary</h3>
+</div>
+<div class="p-md space-y-md">
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-body-sm">Category</span>
+<span class="font-label-md text-on-surface">Plumbing</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-body-sm">Location</span>
+<span class="font-label-md text-on-surface">Downtown, Dubai</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-body-sm">Schedule</span>
+<span class="font-label-md text-on-surface">As soon as possible</span>
+</div>
+<hr class="border-outline-variant"/>
+<div class="flex items-center justify-between">
+<span class="text-on-surface-variant font-body-sm">Offers Received</span>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container rounded text-label-sm font-bold">3 New</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Offers Section -->
+<section>
+<div class="flex items-center justify-between mb-md">
+<h2 class="font-headline-md text-headline-md text-on-background">Offers from Providers</h2>
+<div class="flex items-center gap-xs text-on-surface-variant text-label-sm">
+<span class="material-symbols-outlined text-[16px]">info</span>
+                        Estimates include initial call-out fee and basic labor.
+                    </div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-gutter">
+<!-- Provider Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col">
+<div class="flex items-start gap-md mb-md">
+<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-container border border-outline-variant flex-shrink-0">
+<img alt="Ahmad Khan" data-alt="A professional portrait of an expert technician in a navy blue work uniform. He has a friendly and confident expression, appearing highly capable and reliable. The background is a clean, organized tool workshop with soft industrial lighting. The aesthetic is clean, professional, and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3VyZmKOnFbi97xYHPUggPyFQFcz13fAaCb2ipc3sWTDfizF03ZIdbSWv4sOi50GynLEodVDxGG99jUK-JTPmp3SeW0h_qVT-knlj4xADCxK7BmcwvRZM1_mC_0QvhyTFuFFatNXMl3WpFuUchVn3RmqzbaZh-GpZFgzjN5d0WOiZsCOJHP7uJslhPSK9ugj0_gruCovcKQYqytmCX6w6aLu1z1c3pXJEW94uA926b7xLQSBzanL-rBYIPUh2tPR-Nv0OyVEUL6l8"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Ahmad Khan</h4>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-amber-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-on-surface">4.9</span>
+<span class="text-on-surface-variant text-label-sm">(124 reviews)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-sm mb-md flex-grow">
+<p class="text-on-surface-variant font-label-sm mb-xs">Estimated Price Range</p>
+<p class="font-headline-md text-primary">$45.00 - $80.00</p>
+</div>
+<div class="space-y-sm mb-md">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-md">Arrives in 45 mins</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">thumb_up</span>
+<span class="text-label-md">98% Satisfaction rate</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md py-3 rounded-lg hover:brightness-95 transition-all active:scale-95" onclick="this.classList.toggle('bg-primary'); this.classList.toggle('text-on-primary'); this.innerHTML = 'Request Sent';">
+                            Accept for Inspection
+                        </button>
+</div>
+<!-- Provider Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col">
+<div class="flex items-start gap-md mb-md">
+<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-container border border-outline-variant flex-shrink-0">
+<img alt="Elena Petrova" data-alt="A focused female home repair professional in a clean grey work shirt. She has her hair tied back and is smiling warmly at the camera. The background is a modern home interior with bright, high-key lighting. The style is approachable, professional, and community-driven." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmZf2XM_HyBN_5NCYLpGqufVc_ShgWqPe27moAyfN3sYqPDqeA6K7gg-UxwxAXhX-xHkrzhHOV5quuXitXZfXdwE8ZtShoOMEgWdlDgse9f0gKT6PupK8WNG97KnDr8V52LoFncWgYKp1TF56BYR8miEXRTEe1PDqTobEL1Q7pvS02hykVLd1rlplIlT8OAJgKt8FCfFw6eSfoqabnA-FxblTD3HhrUCktLpD2Mlwa_7q8M5Ka7bGtoyT6RmRqTmdeoL13f3E-Gto"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Elena Petrova</h4>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-amber-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-on-surface">4.7</span>
+<span class="text-on-surface-variant text-label-sm">(89 reviews)</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-lg p-sm mb-md flex-grow">
+<p class="text-on-surface-variant font-label-sm mb-xs">Estimated Price Range</p>
+<p class="font-headline-md text-primary">$35.00 - $65.00</p>
+</div>
+<div class="space-y-sm mb-md">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-md">Available tomorrow</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-label-md">Local pro since 2021</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md py-3 rounded-lg hover:brightness-95 transition-all active:scale-95" onclick="this.innerHTML = 'Request Sent';">
+                            Accept for Inspection
+                        </button>
+</div>
+<!-- Provider Card 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-md border border-outline-variant shadow-sm hover:shadow-md transition-shadow flex flex-col">
+<div class="flex items-start gap-md mb-md">
+<div class="w-14 h-14 rounded-full overflow-hidden bg-surface-container border border-outline-variant flex-shrink-0">
+<img alt="Marcus Chen" data-alt="A portrait of a skilled young male professional in a smart polo shirt. He exudes competence and a friendly attitude. The lighting is crisp and modern, set against a neutral, high-quality studio backdrop. The overall mood is dependable and highly professional, reflecting the quality of the Khidmati marketplace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgVuJrsXSh9gr2r0XMGoYVdHIqbSCo5y4SRqsQ_1EEJl9y7nmtYw5eCzVxmoYy9koTBuOIA71c5spT5tvMfCS62xGQtHTU_V_4L29XPliVaFUVkoxBwdvtWb63afsexl5ZjrB5p9dvJ4cAnuXXV7_gdfBNj172NfnWCVij6j_c2-Fo8Yv0pvsiDaUlxDA1Ss0rgHwlHPyrUJuC8lOFTTurwotsvP7ttSEe5TYG2fJxD1nsiLDFMcI1SfXeUsLmqjmJA_gYk9R6QRE"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Marcus Chen</h4>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-amber-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-md text-on-surface">5.0</span>
+<span class="text-on-surface-variant text-label-sm">(42 reviews)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-sm mb-md flex-grow">
+<p class="text-on-surface-variant font-label-sm mb-xs">Estimated Price Range</p>
+<p class="font-headline-md text-primary">$60.00 - $120.00</p>
+</div>
+<div class="space-y-sm mb-md">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span class="text-label-md">Arrives in 2 hours</span>
+</div>
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">construction</span>
+<span class="text-label-md">Master Plumber certified</span>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md py-3 rounded-lg hover:brightness-95 transition-all active:scale-95" onclick="this.innerHTML = 'Request Sent';">
+                            Accept for Inspection
+                        </button>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface rounded-t-xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)] border-t border-outline-variant">
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined">pending_actions</span>
+<span class="text-label-sm">Requests</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">calendar_month</span>
+<span class="text-label-sm">Bookings</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-label-sm">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant p-2" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-sm">Profile</span>
+</a>
+</nav>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin-mobile md:px-margin-desktop mt-lg bg-surface-container-highest border-t border-outline-variant">
+<div class="max-w-max-width mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex flex-col items-center md:items-start gap-xs">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">Khidmati</span>
+<p class="text-body-sm text-on-surface-variant">© 2024 Khidmati Marketplace. All rights reserved.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-md">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">About Us</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-body-sm" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple ripple effect or active state micro-interaction
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', () => {
+                button.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', () => {
+                button.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', () => {
+                button.classList.remove('scale-95');
+            });
+        });
+    </script>
+</body></html>

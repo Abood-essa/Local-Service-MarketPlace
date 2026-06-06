@@ -6,136 +6,496 @@
     Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
 
     var profile = ViewBag.Profile as ProviderProfile;
-    var categories = ViewBag.Categories as List<Category>;
+    var categories = ViewBag.Categories as List<Category> ?? new List<Category>();
+    var requests = Model.ToList();
+    var selectedCategoryId = ViewBag.CategoryId as int?;
 }
 
-<div class="page-header d-flex justify-content-between align-items-start">
-    <div>
-        <h2><i class="fas fa-search text-primary me-2"></i>Browse Service Requests</h2>
-        <p>Open requests matching your service categories.</p>
-    </div>
-</div>
-
-@if (!profile?.IsVerified == true)
-{
-    <div class="verified-banner mb-4">
-        <i class="fas fa-eye me-2"></i>
-        You can browse requests but <strong>cannot submit offers</strong> until your profile is verified by admin.
-    </div>
-}
-
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show">
-        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show">
-        <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-
-@* Filters *@
-<form method="get" class="k-card mb-4 py-2">
-    <div class="row g-2 align-items-center">
-        <div class="col-md-5">
-            <div class="input-group">
-                <span class="input-group-text bg-white border-end-0">
-                    <i class="fas fa-map-marker-alt text-muted"></i>
-                </span>
-                <input type="text" name="city" value="@ViewBag.City"
-                       class="form-control border-start-0"
-                       placeholder="Filter by city..." />
-            </div>
-        </div>
-        <div class="col-md-4">
-            <select name="categoryId" class="form-select">
-                <option value="">All My Categories</option>
-                @if (categories != null)
-                {
-                    @foreach (var cat in categories)
-                    {
-                        <option value="@cat.Id"
-                                selected="@(ViewBag.CategoryId?.ToString() == cat.Id.ToString())">
-                            @cat.Name
-                        </option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-filter me-1"></i> Filter
-            </button>
-        </div>
-        <div class="col-md-1">
-            <a asp-action="Index" class="btn btn-outline-secondary w-100" title="Clear">
-                <i class="fas fa-times"></i>
-            </a>
-        </div>
-    </div>
-</form>
-
-@if (!Model.Any())
-{
-    <div class="empty-state">
-        <i class="fas fa-clipboard-list"></i>
-        <h5>No open requests</h5>
-        <p>There are no open requests matching your categories right now. Check back later.</p>
-    </div>
-}
-else
-{
-    <div class="row g-3">
-        @foreach (var req in Model)
-        {
-            <div class="col-md-6 col-lg-4">
-                <div class="k-card h-100">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <span class="badge bg-primary badge-status">
-                            <i class="fas fa-tag me-1"></i>@req.Category?.Name
-                        </span>
-                        <small class="text-muted">@req.CreatedAt.ToString("MMM dd")</small>
-                    </div>
-
-                    <h6 class="fw-700 mb-1">@req.Title</h6>
-                    <p class="text-muted small mb-2" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-                        @req.Description
-                    </p>
-
-                    <ul class="list-unstyled small text-muted mb-3">
-                        <li class="mb-1">
-                            <i class="fas fa-map-marker-alt me-2 text-primary"></i>@req.City
-                        </li>
-                        <li>
-                            <i class="fas fa-calendar me-2 text-primary"></i>
-                            @req.PreferredDate.ToString("MMM dd, yyyy")
-                        </li>
-                    </ul>
-
-                    @if (req.Images != null && req.Images.Any())
-                    {
-                        <div class="row g-1 mb-3">
-                            @foreach (var img in req.Images.Take(3))
-                            {
-                                <div class="col-4">
-                                    <img src="@img.ImageUrl" class="img-fluid rounded"
-                                         style="height:50px;width:100%;object-fit:cover;" />
-                                </div>
-                            }
-                        </div>
-                    }
-
-                    <a asp-action="Details" asp-route-id="@req.Id"
-                       class="btn btn-sm btn-outline-primary w-100">
-                        View & Submit Offer <i class="fas fa-arrow-right ms-1"></i>
-                    </a>
+<div class="marketplace-page">
+    <section class="kh-page-hero">
+        <div class="kh-hero-grid">
+            <div>
+                <div class="kh-hero-kicker">
+                    <i class="fas fa-compass"></i>
+                    Provider marketplace
+                </div>
+                <h1 class="kh-page-title">Find service requests that match your craft.</h1>
+                <p class="kh-page-copy">
+                    Browse open jobs in your categories, narrow by city, and quickly scan
+                    the requests where your offer can stand out.
+                </p>
+                <div class="kh-hero-actions">
+                    <span class="kh-status-badge kh-status-soft-success">
+                        <i class="fas fa-list-check"></i>
+                        @requests.Count open request@(requests.Count == 1 ? "" : "s")
+                    </span>
+                    <span class="kh-status-badge kh-status-soft-blue">
+                        <i class="fas fa-tags"></i>
+                        @categories.Count service categor@(categories.Count == 1 ? "y" : "ies")
+                    </span>
                 </div>
             </div>
+
+            <form method="get" class="kh-hero-panel" aria-label="Request filters">
+                <div class="kh-filter-title">
+                    <i class="fas fa-sliders"></i>
+                    Search and filter
+                </div>
+                <div class="mb-3">
+                    <label for="requestQuickSearch" class="form-label">Search requests</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-search text-primary"></i>
+                        </span>
+                        <input id="requestQuickSearch" type="search" class="form-control"
+                               placeholder="Search title, category, city..." autocomplete="off" />
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-sm-6">
+                        <label for="cityFilter" class="form-label">City</label>
+                        <input id="cityFilter" type="text" name="city" value="@ViewBag.City"
+                               class="form-control" placeholder="Any city" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label for="categoryFilter" class="form-label">Category</label>
+                        <select id="categoryFilter" name="categoryId" class="form-select">
+                            <option value="">All my categories</option>
+                            @foreach (var cat in categories)
+                            {
+                                <option value="@cat.Id" selected="@(selectedCategoryId == cat.Id)">
+                                    @cat.Name
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" class="btn btn-primary flex-fill">
+                        <i class="fas fa-filter me-1"></i> Apply
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary" title="Clear filters">
+                        <i class="fas fa-rotate-left"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    @if (profile?.IsVerified != true)
+    {
+        <div class="verified-banner mb-4">
+            <i class="fas fa-eye me-2"></i>
+            You can browse requests but <strong>cannot submit offers</strong> until your profile is verified by admin.
+        </div>
+    }
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @* ── Categories — identical to home page ── *@
+    @if (categories.Any())
+    {
+        <section class="mb-5">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div class="section-heading mb-0">
+                    <h2 class="mb-1 text-primary">Your service categories</h2>
+                    <p class="mb-0">The categories your profile is registered under.</p>
+                </div>
+                @if (categories.Count > 4)
+                {
+                    <div class="d-flex gap-2">
+                        <button id="catPrev" class="cat-nav-btn" aria-label="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button id="catNext" class="cat-nav-btn cat-nav-btn--active" aria-label="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <div class="cat-slider-outer">
+                <div class="cat-track" id="catTrack">
+                    @foreach (var cat in categories)
+                    {
+                        <div class="cat-slide">
+                            <div class="cat-card">
+                                <div class="cat-card-img">
+                                    @if (!string.IsNullOrEmpty(cat.ImageUrl))
+                                    {
+                                        <img src="@cat.ImageUrl" alt="@cat.Name" />
+                                    }
+                                    else
+                                    {
+                                        <div class="cat-card-img-placeholder">
+                                            <i class="fas fa-tools"></i>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="cat-card-body">
+                                    <h5 class="cat-card-title">@cat.Name</h5>
+                                    @if (!string.IsNullOrEmpty(cat.Description))
+                                    {
+                                        <p class="cat-card-desc">
+                                            @(cat.Description.Length > 65
+                                                                            ? cat.Description.Substring(0, 65) + "…"
+                                                                            : cat.Description)
+                            </p>
+                                                        }
+                                    <span class="cat-card-link">
+                                        Your specialty <i class="fas fa-check ms-1"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (categories.Count > 4)
+            {
+                <div class="cat-dots" id="catDots">
+                    @{
+                        int catPages = (int)Math.Ceiling(categories.Count / 4.0);
+                        for (int d = 0; d < catPages; d++)
+                        {
+                            <button class="cat-dot @(d == 0 ? "cat-dot--active" : "")"
+                                    data-page="@d" aria-label="Page @(d + 1)"></button>
+                        }
+                    }
+                </div>
+            }
+        </section>
+    }
+
+    @* ── Open Requests ── *@
+    <section>
+        <div class="kh-section-head">
+            <div>
+                <h2 class="kh-section-title">Open requests</h2>
+                <p class="kh-section-copy">
+                    Review the essentials, inspect photos, and submit an offer when the fit is right.
+                </p>
+            </div>
+        </div>
+
+        @if (!requests.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-clipboard-list"></i>
+                <h5>No open requests</h5>
+                <p>There are no open requests matching your categories right now. Check back later.</p>
+            </div>
         }
-    </div>
+        else
+        {
+            <div class="kh-card-grid" id="requestCardGrid">
+                @foreach (var req in requests)
+                {
+                    var searchText = $"{req.Title} {req.Description} {req.City} {req.Category?.Name}";
+                    <article class="kh-request-card" data-request-card data-search="@searchText">
+                        <div class="kh-card-topline">
+                            <span class="kh-status-badge kh-status-soft-primary">
+                                <i class="fas fa-tag"></i>@req.Category?.Name
+                            </span>
+                            <small class="text-muted">@req.CreatedAt.ToString("MMM dd")</small>
+                        </div>
+
+                        <div>
+                            <h3 class="kh-card-title">@req.Title</h3>
+                            <p class="text-muted small mb-0 kh-clamp-2">@req.Description</p>
+                        </div>
+
+                        <ul class="kh-meta-list">
+                            <li>
+                                <i class="fas fa-location-dot"></i>
+                                <span>@req.City</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-calendar-day"></i>
+                                <span>@req.PreferredDate.ToString("MMM dd, yyyy")</span>
+                            </li>
+                        </ul>
+
+                        @if (req.Images != null && req.Images.Any())
+                        {
+                            <div class="kh-thumb-strip">
+                                @foreach (var img in req.Images.Take(3))
+                                {
+                                    <img src="@img.ImageUrl" alt="@req.Title" />
+                                }
+                            </div>
+                        }
+
+                        <div class="kh-card-footer mt-auto">
+                            <span class="small text-muted">
+                                <i class="fas fa-clock me-1 text-primary"></i>
+                                Posted @req.CreatedAt.ToString("MMM dd")
+                            </span>
+                            <a asp-action="Details" asp-route-id="@req.Id"
+                               class="btn btn-outline-primary">
+                                View & submit <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </article>
+                }
+            </div>
+
+            <div id="requestSearchEmpty" class="empty-state mt-3" style="display:none;">
+                <i class="fas fa-search"></i>
+                <h5>No matching requests</h5>
+                <p>Try another search term or clear the filters.</p>
+            </div>
+        }
+    </section>
+</div>
+
+@* ── Exact same category styles as home page ── *@
+<style>
+    .cat-slider-outer {
+        overflow: hidden;
+    }
+
+    .cat-track {
+        display: flex;
+        gap: 1.1rem;
+        transition: transform .38s cubic-bezier(.4, 0, .2, 1);
+        will-change: transform;
+    }
+
+    .cat-slide {
+        flex: 0 0 calc(25% - 0.825rem);
+        min-width: 0;
+    }
+
+    .cat-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: var(--kh-surface-container);
+        border: 1px solid rgba(188, 201, 198, 0.8);
+        border-radius: var(--kh-radius-lg);
+        box-shadow: var(--kh-shadow);
+        overflow: hidden;
+        transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+        .cat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--kh-shadow-strong);
+        }
+
+    .cat-card-img {
+        width: 100%;
+        height: 168px;
+        overflow: hidden;
+        background: var(--kh-surface-low);
+        flex-shrink: 0;
+    }
+
+        .cat-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .32s ease;
+        }
+
+    .cat-card:hover .cat-card-img img {
+        transform: scale(1.06);
+    }
+
+    .cat-card-img-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .cat-card-img-placeholder i {
+            font-size: 2rem;
+            color: var(--kh-primary);
+            opacity: .35;
+        }
+
+    .cat-card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 1.1rem 1.2rem 1.2rem;
+    }
+
+    .cat-card-title {
+        font-size: 1rem;
+        font-weight: 800;
+        color: var(--kh-text);
+        margin-bottom: .35rem;
+    }
+
+    .cat-card-desc {
+        font-size: .84rem;
+        color: var(--kh-muted);
+        flex: 1;
+        margin-bottom: .75rem;
+        line-height: 1.55;
+    }
+
+    .cat-card-link {
+        font-size: .875rem;
+        font-weight: 700;
+        color: var(--kh-primary);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: .3rem;
+    }
+
+    .cat-nav-btn {
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 104, 95, .3);
+        background: #ffffff;
+        color: var(--kh-muted);
+        font-size: .85rem;
+        cursor: pointer;
+        transition: background .18s, color .18s, border-color .18s, transform .18s;
+    }
+
+        .cat-nav-btn:hover, .cat-nav-btn--active {
+            background: var(--kh-primary);
+            border-color: var(--kh-primary);
+            color: #ffffff;
+        }
+
+        .cat-nav-btn:hover {
+            transform: translateY(-1px);
+        }
+
+    .cat-dots {
+        display: flex;
+        justify-content: center;
+        gap: .55rem;
+        margin-top: 1.6rem;
+    }
+
+    .cat-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 999px;
+        border: none;
+        padding: 0;
+        background: var(--kh-surface-variant);
+        cursor: pointer;
+        transition: background .2s, width .2s;
+    }
+
+    .cat-dot--active {
+        background: var(--kh-primary);
+        width: 22px;
+    }
+
+    @@media (max-width: 991.98px) {
+        .cat-slide {
+            flex: 0 0 calc(33.333% - 0.733rem);
+        }
+    }
+
+    @@media (max-width: 767.98px) {
+        .cat-slide {
+            flex: 0 0 calc(50% - 0.55rem);
+        }
+
+        .cat-card-img {
+            height: 130px;
+        }
+    }
+
+    @@media (max-width: 479.98px) {
+        .cat-slide {
+            flex: 0 0 100%;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        (function () {
+            // ── Category slider (identical to home page) ──
+            const track = document.getElementById('catTrack');
+            const dots  = document.querySelectorAll('.cat-dot');
+            const prev  = document.getElementById('catPrev');
+            const next  = document.getElementById('catNext');
+
+            if (track) {
+                let current = 0;
+
+                function perPage() {
+                    const w = window.innerWidth;
+                    if (w <= 479) return 1;
+                    if (w <= 767) return 2;
+                    if (w <= 991) return 3;
+                    return 4;
+                }
+
+                function totalPages() {
+                    return Math.ceil(track.children.length / perPage());
+                }
+
+                function goTo(page) {
+                    const pp = perPage();
+                    current  = Math.max(0, Math.min(page, totalPages() - 1));
+                    const containerWidth = track.parentElement.offsetWidth;
+                    const gap = 1.1 * 16;
+                    const slideWidth = (containerWidth - (pp - 1) * gap) / pp;
+                    track.style.transform = `translateX(-${current * pp * (slideWidth + gap)}px)`;
+                    dots.forEach((d, i) => d.classList.toggle('cat-dot--active', i === current));
+                }
+
+                if (prev) prev.addEventListener('click', () => goTo(current - 1));
+                if (next) next.addEventListener('click', () => goTo(current + 1));
+                dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.page)));
+
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(() => goTo(0), 120);
+                });
+            }
+
+            // ── Request quick search ──
+            const search = document.getElementById('requestQuickSearch');
+            const cards  = Array.from(document.querySelectorAll('[data-request-card]'));
+            const empty  = document.getElementById('requestSearchEmpty');
+
+            if (search && cards.length) {
+                search.addEventListener('input', function () {
+                    const term = search.value.trim().toLowerCase();
+                    let visible = 0;
+                    cards.forEach(function (card) {
+                        const match = !term || (card.dataset.search || '').toLowerCase().includes(term);
+                        card.style.display = match ? '' : 'none';
+                        if (match) visible++;
+                    });
+                    if (empty) empty.style.display = visible === 0 ? '' : 'none';
+                });
+            }
+        })();
+    </script>
 }

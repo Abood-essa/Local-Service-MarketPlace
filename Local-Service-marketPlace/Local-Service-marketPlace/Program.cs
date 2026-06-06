@@ -1,5 +1,6 @@
 ﻿using Local_Service_marketPlace.Data;
 using Local_Service_marketPlace.Models;
+using Local_Service_marketPlace.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,6 +30,9 @@ namespace Local_Service_marketPlace
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+
+            builder.Services.AddTransient<IEmailService, EmailService>();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             builder.Services.AddControllersWithViews();
