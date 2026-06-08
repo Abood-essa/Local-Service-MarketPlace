@@ -197,7 +197,7 @@
                     <h2 class="h5 fw-800 mb-2"><i class="fas fa-play-circle text-primary me-2"></i>Start the job</h2>
                     <p class="text-muted small mb-3">Head to the customer's location and mark the booking as in progress.</p>
                     <form asp-action="MarkInProgress" asp-route-id="@Model.Id" method="post"
-                          onsubmit="return confirm('Mark this job as In Progress?')">
+                          data-confirm="Mark this job as In Progress?">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-play me-1"></i> Mark as in progress
@@ -212,7 +212,7 @@
                     <h2 class="h5 fw-800 mb-2"><i class="fas fa-check text-success me-2"></i>Mark job as done</h2>
                     <p class="text-muted small mb-3">When the work is finished, send it to the customer for completion confirmation.</p>
                     <form asp-action="MarkDone" asp-route-id="@Model.Id" method="post"
-                          onsubmit="return confirm('Mark this job as completed?')">
+                          data-confirm="Mark this job as completed?">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check-double me-1"></i> Mark as done

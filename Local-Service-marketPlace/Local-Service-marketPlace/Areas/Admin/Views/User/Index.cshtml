@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @model IEnumerable<Local_Service_marketPlace.Models.ApplicationUser>
 @inject UserManager<Local_Service_marketPlace.Models.ApplicationUser> UserManager
 @inject Local_Service_marketPlace.Data.ApplicationDbContext Db
@@ -27,8 +27,45 @@
             </div>
         }
 
+        <div class="p-3 mb-4 rounded text-start" style="background-color: var(--kh-surface-low); border: 1px solid var(--kh-outline);">
+            <div class="row g-2">
+                <div class="col-12 col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-muted" style="border-color: var(--kh-outline);">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" id="userSearchInput" class="form-control border-start-0 ps-0" placeholder="Search by name, email, phone..." />
+                    </div>
+                </div>
+                <div class="col-6 col-md-3">
+                    <select id="userRoleFilter" class="form-select">
+                        <option value="">All Roles</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Provider">Provider</option>
+                        <option value="Customer">Customer</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-3">
+                    <select id="userStatusFilter" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Active">Active</option>
+                        <option value="Deactivated">Deactivated</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <select id="userVerificationFilter" class="form-select">
+                        <option value="">Verification</option>
+                        <option value="Verified">Verified</option>
+                        <option value="Pending">Pending</option>
+                        <option value="No Profile Yet">No Profile</option>
+                        <option value="N/A">N/A</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
         <div class="table-responsive">
-            <table class="table text-start align-middle table-bordered table-hover mb-0">
+            <table id="users-table" class="table text-start align-middle table-bordered table-hover mb-0">
                 <thead>
                     <tr class="text-white">
                         <th>Name</th>
@@ -50,7 +87,15 @@
                         if (isProvider)
                             profile = Db.ProviderProfiles.FirstOrDefault(p => p.UserId == user.Id);
 
-                        <tr>
+                        var verificationState = !isProvider ? "N/A" : (profile == null ? "No Profile Yet" : (profile.IsVerified ? "Verified" : "Pending"));
+
+                        <tr class="user-row"
+                            data-name="@(($"{user.FirstName} {user.LastName}").ToLower())"
+                            data-email="@(user.Email?.ToLower())"
+                            data-phone="@(user.PhoneNumber ?? "")"
+                            data-roles="@(string.Join(",", roles))"
+                            data-status="@(user.IsActive ? "Active" : "Deactivated")"
+                            data-verification="@verificationState">
                             <td class="fw-600">@user.FirstName @user.LastName</td>
                             <td>@user.Email</td>
                             <td>@user.PhoneNumber</td>
@@ -110,7 +155,7 @@
                                         @Html.AntiForgeryToken()
                                         <button type="submit"
                                                 class="btn btn-sm @(user.IsActive ? "btn-outline-danger" : "btn-outline-success")"
-                                                onclick="return confirm('@(user.IsActive ? "Deactivate" : "Activate") this user?')">
+                                                data-confirm="@(user.IsActive ? "Deactivate" : "Activate") this user?">
                                             @(user.IsActive ? "Deactivate" : "Activate")
                                         </button>
                                     </form>
@@ -123,7 +168,7 @@
                                             @Html.AntiForgeryToken()
                                             <button type="submit"
                                                     class="btn btn-sm @(profile.IsVerified ? "btn-outline-warning" : "btn-outline-primary")"
-                                                    onclick="return confirm('@(profile.IsVerified ? "Revoke verification for" : "Verify") this provider?')">
+                                                    data-confirm="@(profile.IsVerified ? "Revoke verification for" : "Verify") this provider?">
                                                 <i class="fas fa-@(profile.IsVerified ? "times" : "shield-alt") me-1"></i>
                                                 @(profile.IsVerified ? "Revoke" : "Verify")
                                             </button>

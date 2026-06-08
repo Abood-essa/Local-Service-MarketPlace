@@ -17,6 +17,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Khidmati</title>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('khidmati-theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/khidmati-theme.css" asp-append-version="true" />
@@ -45,6 +56,9 @@
             </div>
 
             <div class="app-nav-actions">
+                <button type="button" class="notif-bell theme-toggle border-0" aria-label="Toggle theme" style="cursor: pointer; outline: none;">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
                 <a asp-area="Customer" asp-controller="Notification" asp-action="Index" class="notif-bell" aria-label="Notifications">
                     <i class="fas fa-bell"></i>
                     @if (unreadCount > 0)
@@ -67,6 +81,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
 
 

@@ -3,6 +3,11 @@
 @inject UserManager<ApplicationUser> UserManager
 
 <ul class="public-auth-nav">
+    <li class="nav-item">
+        <button type="button" class="public-nav-link theme-toggle border-0 bg-transparent" aria-label="Toggle theme" style="cursor: pointer; outline: none;">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+    </li>
     @if (SignInManager.IsSignedIn(User))
     {
         @if (User.IsInRole("Admin"))

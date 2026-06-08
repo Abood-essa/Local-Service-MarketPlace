@@ -336,7 +336,7 @@
                         The provider marked this job as done. Confirm completion to finalize the booking and release payment.
                     </p>
                     <form asp-action="ConfirmCompletion" asp-route-id="@Model.Id" method="post"
-                          onsubmit="return confirm('Confirm this job is completed?')">
+                          data-confirm="Confirm this job is completed?">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check-double me-1"></i> Yes, job is done

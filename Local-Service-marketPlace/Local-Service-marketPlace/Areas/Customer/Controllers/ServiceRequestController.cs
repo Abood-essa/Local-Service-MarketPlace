@@ -1,4 +1,4 @@
-﻿using Local_Service_marketPlace.Data;
+using Local_Service_marketPlace.Data;
 using Local_Service_marketPlace.Models;
 using Local_Service_marketPlace.Models.Enums;
 using Local_Service_marketPlace.Models.ViewModels;
@@ -35,7 +35,7 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
             _emailService = emailService;
         }
 
-        public async Task<IActionResult> Index(string? status)
+        public async Task<IActionResult> Index(string? status, int page = 1)
         {
             var userId = _userManager.GetUserId(User);
 
@@ -51,11 +51,30 @@ namespace Local_Service_marketPlace.Areas.Customer.Controllers
 
             ViewBag.Status = status;
 
-            var requests = await query
+            var allRequests = await query
                 .OrderByDescending(r => r.CreatedAt)
                 .ToListAsync();
 
-            return View(requests);
+            ViewBag.TotalRequestsCount = allRequests.Count;
+            ViewBag.TotalOffersCount = allRequests.Sum(r => r.Offers?.Count ?? 0);
+            ViewBag.ActiveRequestsCount = allRequests.Count(r => r.Status == ServiceRequestStatus.Confirmed || r.Status == ServiceRequestStatus.InProgress);
+            ViewBag.WaitingRequestsCount = allRequests.Count(r => r.Status == ServiceRequestStatus.OfferReceived || r.Status == ServiceRequestStatus.WaitingForConfirmation);
+
+            int pageSize = 9;
+            int totalItems = allRequests.Count;
+            int totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            if (page < 1) page = 1;
+            if (page > totalPages && totalPages > 0) page = totalPages;
+
+            var paginatedRequests = allRequests
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(paginatedRequests);
         }
 
         public async Task<IActionResult> Create()

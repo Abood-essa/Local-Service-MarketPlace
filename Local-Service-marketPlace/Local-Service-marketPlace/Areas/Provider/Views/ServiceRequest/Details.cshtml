@@ -1,4 +1,4 @@
-﻿@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models
 @using Local_Service_marketPlace.Models.Enums
 @model Local_Service_marketPlace.Models.ServiceRequest
 @{
@@ -157,7 +157,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100"
-                            onclick="return confirm('Submit this offer?')">
+                            data-confirm="Submit this offer?">
                         <i class="fas fa-paper-plane me-1"></i> Submit Offer
                     </button>
                 </form>

@@ -47,7 +47,7 @@
             @if (canCancel)
             {
                 <form asp-action="Cancel" asp-route-id="@Model.Id" method="post"
-                      onsubmit="return confirm('Cancel this request?')">
+                      data-confirm="Cancel this request?">
                     @Html.AntiForgeryToken()
                     <button class="btn btn-outline-light btn-sm">
                         <i class="fas fa-times me-1"></i> Cancel request
@@ -282,7 +282,7 @@
                                             @Html.AntiForgeryToken()
                                             <input type="hidden" name="offerId" value="@offer.Id" />
                                             <button type="submit" class="btn btn-success btn-sm"
-                                                    onclick="return confirm('Accept this final price of @offer.FinalPrice JD?')">
+                                                    data-confirm="Accept this final price of @offer.FinalPrice JD?">
                                                 <i class="fas fa-check me-1"></i> Accept @offer.FinalPrice JD
                                             </button>
                                         </form>

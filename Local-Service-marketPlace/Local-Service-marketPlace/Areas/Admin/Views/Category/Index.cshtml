@@ -1,4 +1,4 @@
-﻿@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models
 @model IEnumerable<Category>
 @{
     ViewData["Title"] = "Categories";
@@ -20,7 +20,20 @@
     }
     <div class="card shadow">
         <div class="card-body">
-            <table class="table table-hover align-middle">
+            <div class="p-3 mb-4 rounded text-start" style="background-color: var(--kh-surface-low); border: 1px solid var(--kh-outline);">
+                <div class="row g-2">
+                    <div class="col-12 col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-transparent border-end-0 text-muted" style="border-color: var(--kh-outline);">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input type="text" id="categorySearchInput" class="form-control border-start-0 ps-0" placeholder="Search by name, description..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <table id="categories-table" class="table table-hover align-middle">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
@@ -34,7 +47,9 @@
                 <tbody>
                     @foreach (var cat in Model)
                     {
-                        <tr>
+                        <tr class="category-row"
+                            data-name="@cat.Name.ToLower()"
+                            data-description="@(cat.Description?.ToLower() ?? "")">
                             <td>@cat.Id</td>
                             <td>
                                 @if (!string.IsNullOrEmpty(cat.ImageUrl))
@@ -57,7 +72,7 @@
                                 </a>
                                 <form asp-action="Delete" asp-route-id="@cat.Id"
                                       method="post" class="d-inline"
-                                      onsubmit="return confirm('Delete this category?')">
+                                      data-confirm="Delete this category?">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-danger">
                                         <i class="fas fa-trash"></i> Delete

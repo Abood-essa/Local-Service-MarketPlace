@@ -11,6 +11,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - Khidmati</title>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('khidmati-theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/khidmati-theme.css" asp-append-version="true" />
@@ -18,7 +29,12 @@
 <body class="auth-shell">
     <div class="auth-frame">
         <aside class="auth-panel">
-            <a asp-controller="Home" asp-action="Index" class="auth-brand">Khid<span>mati</span></a>
+            <div class="d-flex align-items-center justify-content-between w-100 mb-3">
+                <a asp-controller="Home" asp-action="Index" class="auth-brand">Khid<span>mati</span></a>
+                <button type="button" class="theme-toggle border-0 bg-transparent text-white p-0" aria-label="Toggle theme" style="cursor: pointer; outline: none; font-size: 1.25rem;">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
             <div class="auth-panel-copy">
                 <h1>Welcome back to your service command center.</h1>
                 <p>
@@ -43,12 +59,12 @@
 
                 <div class="mb-3">
                     <label asp-for="Email" class="form-label"></label>
-                    <input asp-for="Email" class="form-control" placeholder="you@example.com" />
+                    <input asp-for="Email" type="email" class="form-control" placeholder="you@example.com" />
                 </div>
 
                 <div class="mb-3">
                     <label asp-for="Password" class="form-label"></label>
-                    <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" />
                 </div>
 
                 <div class="d-flex align-items-center justify-content-between gap-3 mb-4">
@@ -69,5 +85,6 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>

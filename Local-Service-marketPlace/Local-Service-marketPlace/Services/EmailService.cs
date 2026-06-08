@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using System.Net.Mail;
 
 namespace Local_Service_marketPlace.Services
@@ -14,6 +14,7 @@ namespace Local_Service_marketPlace.Services
         private string Password => _config["EmailSettings:Password"]!;
         private string FromName => _config["EmailSettings:FromName"]!;
         private string FromEmail => _config["EmailSettings:FromEmail"]!;
+        private string AdminEmail => _config["EmailSettings:AdminEmail"] ?? "admin@khdmati.com";
 
         public EmailService(IConfiguration config, ILogger<EmailService> logger)
         {
@@ -300,6 +301,27 @@ namespace Local_Service_marketPlace.Services
 
             var html = Wrap(accent, emoji, $"Complaint Update — {newStatus}", body);
             await SendAsync(toEmail, fullName, $"Your Complaint Status: {newStatus}", html);
+        }
+
+        public async Task SendContactEmailAsync(string fromName, string fromEmail, string subject, string message)
+        {
+            var body = $@"
+<h2 style=""margin:16px 0 8px;font-size:20px;color:#1e293b;"">New Contact Us Message ✉️</h2>
+<p style=""margin:0 0 16px;font-size:15px;color:#475569;line-height:1.6;"">
+  You have received a new message from the Contact Us form on the Khidmati portal.
+</p>
+{InfoTable(
+    InfoRow("Sender Name", fromName) +
+    InfoRow("Sender Email", fromEmail) +
+    InfoRow("Subject", subject)
+)}
+<div style=""margin-top:20px;padding:16px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;font-size:15px;color:#1e293b;line-height:1.6;"">
+  <strong>Message:</strong><br/>
+  {message.Replace("\n", "<br/>")}
+</div>";
+
+            var html = Wrap("#3b82f6", "✉️", "Contact Message Received", body);
+            await SendAsync(AdminEmail, "Admin", $"Contact Us: {subject}", html);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model List<Local_Service_marketPlace.Models.Notification>
+@model List<Local_Service_marketPlace.Models.Notification>
 @{
     ViewData["Title"] = "Notifications";
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
@@ -46,8 +46,8 @@ else
         {
             <div class="d-flex align-items-start p-3 notification-item @(!notification.IsRead ? "unread" : "")"
                  data-id="@notification.Id"
-                 style="border-bottom:1px solid var(--border);
-                                background: @(!notification.IsRead ? "#eff6ff" : "transparent");
+                 style="border-bottom:1px solid var(--kh-outline);
+                                background: @(!notification.IsRead ? "var(--kh-primary-soft)" : "transparent");
                                 cursor: pointer;"
                  onclick="markRead(@notification.Id, this)">
 

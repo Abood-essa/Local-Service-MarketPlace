@@ -1,4 +1,4 @@
-﻿using Local_Service_marketPlace.Data;
+using Local_Service_marketPlace.Data;
 using Local_Service_marketPlace.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +22,8 @@ namespace Local_Service_marketPlace.Areas.Admin.Controllers
             var requests = await _context.ServiceRequests
                 .Include(r => r.Customer)
                 .Include(r => r.Category)
+                .Include(r => r.Offers)
+                .Include(r => r.Booking)
                 .OrderByDescending(r => r.CreatedAt)
                 .ToListAsync();
 

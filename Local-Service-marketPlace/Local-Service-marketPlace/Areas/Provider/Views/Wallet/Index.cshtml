@@ -1,4 +1,4 @@
-﻿@using Local_Service_marketPlace.Models
+@using Local_Service_marketPlace.Models
 @{
     ViewData["Title"] = "My Wallet";
     Layout = "~/Areas/Provider/Views/Shared/_ProviderLayout.cshtml";
@@ -85,7 +85,7 @@
                     }
                 </div>
                 <button type="submit" class="btn btn-primary w-100"
-                        onclick="return confirm('Add this amount to your wallet?')">
+                        data-confirm="Add this amount to your wallet?">
                     <i class="fas fa-plus-circle me-1"></i> Top Up Wallet
                 </button>
             </form>

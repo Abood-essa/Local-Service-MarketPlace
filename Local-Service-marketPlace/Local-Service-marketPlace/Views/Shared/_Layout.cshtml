@@ -4,6 +4,17 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Khidmati</title>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('khidmati-theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } else {
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -25,8 +36,8 @@
                 <a class="public-nav-link" href="/#how-it-works">
                     <i class="fa-solid fa-route"></i> How it works
                 </a>
-                <a class="public-nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
-                    <i class="fa-solid fa-shield-halved"></i> Privacy
+                <a class="public-nav-link" asp-area="" asp-controller="Home" asp-action="Contact">
+                    <i class="fa-solid fa-envelope"></i> Contact Us
                 </a>
             </div>
 
@@ -38,17 +49,52 @@
         @RenderBody()
     </main>
 
-    <footer class="section-band section-band-soft py-4">
+    <footer class="section-band section-band-soft pt-5 pb-4 border-top">
         <div class="container">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                <a class="brand-mark" asp-area="" asp-controller="Home" asp-action="Index">Khid<span>mati</span></a>
-                <div class="text-muted small">
-                    &copy; 2026 Khidmati. Local service marketplace.
+            <div class="row g-4 mb-4">
+                <div class="col-lg-4 col-md-6">
+                    <a class="brand-mark mb-3 d-inline-flex" asp-area="" asp-controller="Home" asp-action="Index">Khid<span>mati</span></a>
+                    <p class="text-muted small">Connecting you with trusted local experts for all your repair, maintenance, and home service needs. Easy bookings, secure wallet tracking, and verified reviews.</p>
                 </div>
-                <a asp-area="" asp-controller="Home" asp-action="Privacy" class="public-nav-link p-0">Privacy</a>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 class="fw-800 text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">Discover</h6>
+                    <ul class="list-unstyled d-grid gap-2 small">
+                        <li><a href="/#categories" class="text-muted text-decoration-none">Service Categories</a></li>
+                        <li><a href="/#how-it-works" class="text-muted text-decoration-none">How It Works</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register" class="text-muted text-decoration-none">Hire a Pro</a></li>
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register" class="text-muted text-decoration-none">Become a Provider</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h6 class="fw-800 text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">Trust & Safety</h6>
+                    <ul class="list-unstyled d-grid gap-2 small">
+                        <li><span class="text-muted"><i class="fa-solid fa-check-double text-success me-1"></i> Verified Pros</span></li>
+                        <li><span class="text-muted"><i class="fa-solid fa-wallet text-success me-1"></i> Wallet System</span></li>
+                        <li><span class="text-muted"><i class="fa-solid fa-star text-warning me-1"></i> Star Reviews</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <h6 class="fw-800 text-primary mb-3 text-uppercase small" style="letter-spacing: 1px;">Get in Touch</h6>
+                    <p class="text-muted small mb-2"><i class="fa-solid fa-envelope me-2"></i> support@khidmati.local</p>
+                    <p class="text-muted small"><i class="fa-solid fa-phone me-2"></i> +1 (555) 019-9000</p>
+                </div>
+            </div>
+            <hr class="my-4" style="border-top-color: var(--kh-outline); opacity: 0.3;">
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                <div class="text-muted small">
+                    &copy; 2026 Khidmati. All rights reserved.
+                </div>
+                <div class="d-flex gap-3">
+                    <a asp-area="" asp-controller="Home" asp-action="Contact" class="text-muted small text-decoration-none">Contact Us</a>
+                    <a href="#" class="text-muted small text-decoration-none">Terms of Service</a>
+                </div>
             </div>
         </div>
     </footer>
+
+    <button type="button" id="scrollTopBtn" class="btn btn-primary back-to-top-public" aria-label="Scroll to top" style="display: none; position: fixed; bottom: 25px; right: 25px; z-index: 999; border-radius: 50%; width: 48px; height: 48px; align-items: center; justify-content: center; box-shadow: var(--kh-shadow-strong); cursor: pointer; border: none;">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

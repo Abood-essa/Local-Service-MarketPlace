@@ -5,9 +5,10 @@
     Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
 
     var requests = Model.ToList();
-    var totalOffers = requests.Sum(r => r.Offers?.Count ?? 0);
-    var activeRequests = requests.Count(r => r.Status == ServiceRequestStatus.Confirmed || r.Status == ServiceRequestStatus.InProgress);
-    var waitingRequests = requests.Count(r => r.Status == ServiceRequestStatus.OfferReceived || r.Status == ServiceRequestStatus.WaitingForConfirmation);
+    var totalRequestsCount = ViewBag.TotalRequestsCount ?? requests.Count;
+    var totalOffers = ViewBag.TotalOffersCount ?? requests.Sum(r => r.Offers?.Count ?? 0);
+    var activeRequests = ViewBag.ActiveRequestsCount ?? requests.Count(r => r.Status == ServiceRequestStatus.Confirmed || r.Status == ServiceRequestStatus.InProgress);
+    var waitingRequests = ViewBag.WaitingRequestsCount ?? requests.Count(r => r.Status == ServiceRequestStatus.OfferReceived || r.Status == ServiceRequestStatus.WaitingForConfirmation);
     var currentStatus = ViewBag.Status as string;
 }
 
@@ -60,7 +61,7 @@
     <section class="kh-metric-grid">
         <article class="kh-metric">
             <span class="kh-metric-icon"><i class="fas fa-clipboard-list"></i></span>
-            <div class="kh-metric-number">@requests.Count</div>
+            <div class="kh-metric-number">@totalRequestsCount</div>
             <div class="kh-metric-label">Total requests</div>
         </article>
         <article class="kh-metric">
@@ -177,5 +178,29 @@
                 </article>
             }
         </section>
+        
+        @if (ViewBag.TotalPages > 1)
+        {
+            <nav aria-label="Page navigation" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { status = ViewBag.Status, page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { status = ViewBag.Status, page = i })">@i</a>
+                        </li>
+                    }
+                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                        <a class="page-link" href="@Url.Action("Index", new { status = ViewBag.Status, page = ViewBag.CurrentPage + 1 })" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        }
     }
 </div>
